@@ -1,0 +1,303 @@
+import { useMemo, useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { Link, useParams } from "react-router-dom";
+import { ArrowLeft, Copy, Download, Filter, MessageSquareText, X } from "lucide-react";
+import { api, type NegotiationOut, type SortKey } from "../lib/api";
+import { eur } from "../lib/utils";
+import { toast } from "../lib/toast";
+import { Button, Card, CardHeader, EmptyState, Input, Label, Select, Skeleton } from "../components/ui";
+import ListingCard from "../components/ListingCard";
+
+const SORTS: { value: SortKey; label: string }[] = [
+  { value: "best_deal", label: "Best deal" },
+  { value: "price_asc", label: "Lowest price" },
+  { value: "price_desc", label: "Highest price" },
+  { value: "ram_desc", label: "Most RAM" },
+  { value: "match_desc", label: "Best hardware match" },
+  { value: "acquisition_desc", label: "Best acquisition" },
+  { value: "newest", label: "Newest" },
+  { value: "landed_asc", label: "Lowest landed cost" },
+];
+
+export default function Results() {
+  const { id } = useParams();
+  const searchId = Number(id);
+  const [sort, setSort] = useState<SortKey>("best_deal");
+  const [showFilters, setShowFilters] = useState(true);
+  const [selected, setSelected] = useState<number[]>([]);
+  const [tone, setTone] = useState<"friendly" | "direct" | "firm">("friendly");
+  const [messages, setMessages] = useState<NegotiationOut[] | null>(null);
+
+  const [filters, setFilters] = useState({
+    min_price: "",
+    max_price: "",
+    min_ram: "",
+    min_storage: "",
+    brand: "",
+    condition: "",
+    city: "",
+    hide_missing_specs: false,
+  });
+
+  const params = useMemo(
+    () => ({
+      sort,
+      min_price: filters.min_price || undefined,
+      max_price: filters.max_price || undefined,
+      min_ram: filters.min_ram || undefined,
+      min_storage: filters.min_storage || undefined,
+      brand: filters.brand || undefined,
+      condition: filters.condition || undefined,
+      city: filters.city || undefined,
+      hide_missing_specs: filters.hide_missing_specs || undefined,
+    }),
+    [sort, filters],
+  );
+
+  const search = useQuery({ queryKey: ["search", searchId], queryFn: () => api.searches.get(searchId) });
+  const results = useQuery({
+    queryKey: ["results", searchId, params],
+    queryFn: () => api.searches.results(searchId, params),
+  });
+
+  const negotiateMutation = useMutation({
+    mutationFn: () => api.listings.bulkNegotiate(selected, tone),
+    onSuccess: (data) => {
+      setMessages(data);
+      toast(`${data.length} negotiation message(s) generated`, "success");
+    },
+    onError: (error) => toast(error instanceof Error ? error.message : "Generation failed", "error"),
+  });
+
+  function toggle(id: number) {
+    setSelected((current) => (current.includes(id) ? current.filter((value) => value !== id) : [...current, id]));
+  }
+
+  const items = results.data?.items || [];
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-start justify-between gap-2">
+        <div className="flex items-start gap-2">
+          <Link to="/searches">
+            <Button size="sm" variant="ghost">
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
+          </Link>
+          <div>
+            <h1 className="text-xl font-semibold">{search.data?.name || `Search #${searchId}`}</h1>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">
+              {results.data ? `${results.data.total} listings` : "Loading…"}
+              {search.data?.last_run_at ? ` · last check ${new Date(search.data.last_run_at + "Z").toLocaleString("en-GB")}` : ""}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button size="sm" variant="secondary" onClick={() => setShowFilters((value) => !value)}>
+            <Filter className="h-4 w-4" /> Filters
+          </Button>
+          <a href={api.searches.exportUrl(searchId)}>
+            <Button size="sm" variant="secondary">
+              <Download className="h-4 w-4" /> CSV
+            </Button>
+          </a>
+          <Button size="sm" variant="primary" onClick={() => api.searches.run(searchId).then(() => results.refetch())}>
+            Run now
+          </Button>
+        </div>
+      </div>
+
+      {showFilters ? (
+        <Card>
+          <CardHeader title="Filter & sort" subtitle="Filters apply to the stored results of this search" />
+          <div className="grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div>
+              <Label htmlFor="sort">Sort</Label>
+              <Select id="sort" value={sort} onChange={(event) => setSort(event.target.value as SortKey)}>
+                {SORTS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </Select>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <Label>Price min</Label>
+                <Input
+                  type="number"
+                  value={filters.min_price}
+                  onChange={(event) => setFilters((current) => ({ ...current, min_price: event.target.value }))}
+                  placeholder="€"
+                />
+              </div>
+              <div>
+                <Label>Price max</Label>
+                <Input
+                  type="number"
+                  value={filters.max_price}
+                  onChange={(event) => setFilters((current) => ({ ...current, max_price: event.target.value }))}
+                  placeholder="€"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <Label>RAM min</Label>
+                <Input
+                  type="number"
+                  value={filters.min_ram}
+                  onChange={(event) => setFilters((current) => ({ ...current, min_ram: event.target.value }))}
+                  placeholder="GB"
+                />
+              </div>
+              <div>
+                <Label>Disk min</Label>
+                <Input
+                  type="number"
+                  value={filters.min_storage}
+                  onChange={(event) => setFilters((current) => ({ ...current, min_storage: event.target.value }))}
+                  placeholder="GB"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <Label>Brand</Label>
+                <Input
+                  value={filters.brand}
+                  onChange={(event) => setFilters((current) => ({ ...current, brand: event.target.value }))}
+                  placeholder="Lenovo"
+                />
+              </div>
+              <div>
+                <Label>City</Label>
+                <Input
+                  value={filters.city}
+                  onChange={(event) => setFilters((current) => ({ ...current, city: event.target.value }))}
+                  placeholder="Paris"
+                />
+              </div>
+            </div>
+            <div>
+              <Label>Condition</Label>
+              <Select
+                value={filters.condition}
+                onChange={(event) => setFilters((current) => ({ ...current, condition: event.target.value }))}
+              >
+                <option value="">Any</option>
+                <option value="new">New</option>
+                <option value="like_new">Like new</option>
+                <option value="very_good">Very good</option>
+                <option value="good">Good</option>
+                <option value="fair">Fair</option>
+                <option value="parts">For parts</option>
+              </Select>
+            </div>
+            <label className="flex items-end gap-2 pb-2 text-xs text-zinc-600 dark:text-zinc-400">
+              <input
+                type="checkbox"
+                className="h-4 w-4 accent-zinc-900 dark:accent-zinc-100"
+                checked={filters.hide_missing_specs}
+                onChange={(event) => setFilters((current) => ({ ...current, hide_missing_specs: event.target.checked }))}
+              />
+              Hide listings without CPU
+            </label>
+          </div>
+        </Card>
+      ) : null}
+
+      {results.isLoading ? (
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <Skeleton key={index} className="h-72" />
+          ))}
+        </div>
+      ) : results.isError ? (
+        <Card>
+          <EmptyState title="Could not load results" description={results.error instanceof Error ? results.error.message : undefined} />
+        </Card>
+      ) : !items.length ? (
+        <Card>
+          <EmptyState
+            title="No listings for this search"
+            description="Run the search now, or import a CSV export from Leboncoin when r.jina.ai is blocked."
+            action={<Button onClick={() => api.searches.run(searchId).then(() => results.refetch())}>Run now</Button>}
+          />
+        </Card>
+      ) : (
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {items.map((card) => (
+            <ListingCard
+              key={card.id}
+              card={card}
+              selectable
+              selected={selected.includes(card.id)}
+              onToggle={toggle}
+            />
+          ))}
+        </div>
+      )}
+
+      {selected.length ? (
+        <div className="fixed bottom-16 left-0 right-0 z-30 px-3 lg:bottom-4">
+          <div className="mx-auto flex max-w-3xl flex-wrap items-center gap-2 rounded-xl border border-zinc-200 bg-white/95 p-2 shadow-lg backdrop-blur dark:border-zinc-700 dark:bg-zinc-900/95">
+            <span className="px-2 text-xs font-medium">{selected.length} selected</span>
+            <Select value={tone} onChange={(event) => setTone(event.target.value as typeof tone)} className="h-8 w-32 py-1 text-xs">
+              <option value="friendly">Friendly</option>
+              <option value="direct">Direct</option>
+              <option value="firm">Firm</option>
+            </Select>
+            <Button size="sm" variant="primary" onClick={() => negotiateMutation.mutate()} disabled={negotiateMutation.isPending}>
+              <MessageSquareText className="h-3.5 w-3.5" />
+              {negotiateMutation.isPending ? "Generating…" : "Generate messages"}
+            </Button>
+            <Button size="sm" variant="ghost" onClick={() => setSelected([])}>
+              <X className="h-3.5 w-3.5" /> Clear
+            </Button>
+            <span className="ml-auto hidden text-[11px] text-zinc-500 dark:text-zinc-400 sm:block">
+              approx. {eur(items.filter((item) => selected.includes(item.id)).reduce((sum, item) => sum + (item.price_eur || 0), 0))}
+            </span>
+          </div>
+        </div>
+      ) : null}
+
+      {messages ? (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4">
+          <div className="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-t-2xl bg-white p-4 shadow-xl dark:bg-zinc-900 sm:rounded-2xl">
+            <div className="mb-3 flex items-center justify-between">
+              <h2 className="text-sm font-semibold">Negotiation messages ({messages.length})</h2>
+              <Button size="sm" variant="ghost" onClick={() => setMessages(null)}>
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+            <div className="space-y-3">
+              {messages.map((message) => (
+                <div key={message.id} className="rounded-lg border border-zinc-200 p-3 dark:border-zinc-800">
+                  <div className="mb-2 flex flex-wrap items-center gap-2 text-[11px] text-zinc-500 dark:text-zinc-400">
+                    <span>ask {eur(message.ask_price_eur)}</span>
+                    <span>→ offer {eur(message.offer_price_eur)}</span>
+                    <span>target {eur(message.target_price_eur)}</span>
+                    <span>max {eur(message.max_price_eur)}</span>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="ml-auto"
+                      onClick={() => {
+                        navigator.clipboard.writeText(message.message_fr);
+                        toast("Copied", "success");
+                      }}
+                    >
+                      <Copy className="h-3 w-3" /> Copy
+                    </Button>
+                  </div>
+                  <p className="whitespace-pre-wrap text-sm">{message.message_fr}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
