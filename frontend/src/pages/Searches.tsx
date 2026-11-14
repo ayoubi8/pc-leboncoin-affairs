@@ -20,7 +20,7 @@ import { Badge, Button, Card, EmptyState, Skeleton } from "../components/ui";
 function IntervalBadge({ search }: { search: Search }) {
   if (!search.auto_check_enabled) return <Badge>manual</Badge>;
   return (
-    <Badge className="border-emerald-200 bg-emerald-100 text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/15 dark:text-emerald-300">
+    <Badge className="border-success-border bg-success-bg text-success-ink">
       auto · {search.interval}
     </Badge>
   );
@@ -36,17 +36,17 @@ function QueryPreview({ searchId }: { searchId: number }) {
   if (!data) return null;
 
   return (
-    <div className="mx-4 mb-4 rounded-lg border border-zinc-200 bg-zinc-50 p-3 text-xs dark:border-zinc-800 dark:bg-zinc-950/40">
+    <div className="mx-4 mb-4 rounded-lg border border-border bg-surface-inset p-3 text-xs">
       <p className="mb-2 font-medium">Queries ({data.queries.length})</p>
       <ul className="space-y-1">
         {data.queries.map((query, index) => (
           <li key={`${query}-${index}`} className="flex items-start justify-between gap-3">
-            <code className="break-all text-[11px] text-zinc-700 dark:text-zinc-300">{query}</code>
+            <code className="break-all text-[11px] text-ink-strong">{query}</code>
             <a
               href={data.leboncoin_urls[index]}
               target="_blank"
               rel="noreferrer"
-              className="shrink-0 text-[11px] text-sky-600 hover:underline dark:text-sky-400"
+              className="shrink-0 text-[11px] text-link hover:underline"
             >
               open
             </a>
@@ -101,7 +101,7 @@ export default function Searches() {
       <div className="flex flex-wrap items-end justify-between gap-2">
         <div>
           <h1 className="text-xl font-semibold">Searches</h1>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">Saved filters, run history, CSV fallback.</p>
+          <p className="text-xs text-ink-muted">Saved filters, run history, CSV fallback.</p>
         </div>
         <Link to="/searches/new">
           <Button variant="primary" size="sm">
@@ -146,7 +146,7 @@ export default function Searches() {
                     ) : null}
                     <Badge>{search.result_count} listings</Badge>
                   </div>
-                  <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+                  <p className="mt-1 text-xs text-ink-muted">
                     {[
                       search.keyword,
                       search.cpu || search.cpu_family,
@@ -159,7 +159,7 @@ export default function Searches() {
                       .filter(Boolean)
                       .join(" · ") || "No filters"}
                   </p>
-                  <p className="mt-1 text-[11px] text-zinc-400">
+                  <p className="mt-1 text-[11px] text-ink-faint">
                     Last run {timeAgo(search.last_run_at)}
                     {search.created_at ? ` · created ${dateShort(search.created_at)}` : ""}
                   </p>
@@ -219,7 +219,7 @@ export default function Searches() {
                     size="sm"
                     variant="ghost"
                     title="Delete"
-                    className="text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-500/10"
+                    className="text-danger-text hover:bg-danger-ghost-hover"
                     onClick={() => {
                       if (window.confirm(`Delete “${search.name}” and its links? Shared listings are kept.`)) {
                         deleteMutation.mutate(search.id);

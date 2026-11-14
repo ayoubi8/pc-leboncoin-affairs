@@ -86,7 +86,7 @@ export default function Results() {
           </Link>
           <div>
             <h1 className="text-xl font-semibold">{search.data?.name || `Search #${searchId}`}</h1>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400">
+            <p className="text-xs text-ink-muted">
               {results.data ? `${results.data.total} listings` : "Loading…"}
               {search.data?.last_run_at ? ` · last check ${new Date(search.data.last_run_at + "Z").toLocaleString("en-GB")}` : ""}
             </p>
@@ -194,10 +194,10 @@ export default function Results() {
                 <option value="parts">For parts</option>
               </Select>
             </div>
-            <label className="flex items-end gap-2 pb-2 text-xs text-zinc-600 dark:text-zinc-400">
+            <label className="flex items-end gap-2 pb-2 text-xs text-ink-label">
               <input
                 type="checkbox"
-                className="h-4 w-4 accent-zinc-900 dark:accent-zinc-100"
+                className="h-4 w-4 accent-primary"
                 checked={filters.hide_missing_specs}
                 onChange={(event) => setFilters((current) => ({ ...current, hide_missing_specs: event.target.checked }))}
               />
@@ -241,7 +241,7 @@ export default function Results() {
 
       {selected.length ? (
         <div className="fixed bottom-16 left-0 right-0 z-30 px-3 lg:bottom-4">
-          <div className="mx-auto flex max-w-3xl flex-wrap items-center gap-2 rounded-xl border border-zinc-200 bg-white/95 p-2 shadow-lg backdrop-blur dark:border-zinc-700 dark:bg-zinc-900/95">
+          <div className="mx-auto flex max-w-3xl flex-wrap items-center gap-2 rounded-xl border border-border-control bg-surface/95 p-2 shadow-lg backdrop-blur">
             <span className="px-2 text-xs font-medium">{selected.length} selected</span>
             <Select value={tone} onChange={(event) => setTone(event.target.value as typeof tone)} className="h-8 w-32 py-1 text-xs">
               <option value="friendly">Friendly</option>
@@ -255,7 +255,7 @@ export default function Results() {
             <Button size="sm" variant="ghost" onClick={() => setSelected([])}>
               <X className="h-3.5 w-3.5" /> Clear
             </Button>
-            <span className="ml-auto hidden text-[11px] text-zinc-500 dark:text-zinc-400 sm:block">
+            <span className="ml-auto hidden text-[11px] text-ink-muted sm:block">
               approx. {eur(items.filter((item) => selected.includes(item.id)).reduce((sum, item) => sum + (item.price_eur || 0), 0))}
             </span>
           </div>
@@ -263,8 +263,8 @@ export default function Results() {
       ) : null}
 
       {messages ? (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4">
-          <div className="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-t-2xl bg-white p-4 shadow-xl dark:bg-zinc-900 sm:rounded-2xl">
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-scrim p-0 sm:items-center sm:p-4">
+          <div className="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-t-2xl bg-surface p-4 shadow-xl sm:rounded-2xl">
             <div className="mb-3 flex items-center justify-between">
               <h2 className="text-sm font-semibold">Negotiation messages ({messages.length})</h2>
               <Button size="sm" variant="ghost" onClick={() => setMessages(null)}>
@@ -273,8 +273,8 @@ export default function Results() {
             </div>
             <div className="space-y-3">
               {messages.map((message) => (
-                <div key={message.id} className="rounded-lg border border-zinc-200 p-3 dark:border-zinc-800">
-                  <div className="mb-2 flex flex-wrap items-center gap-2 text-[11px] text-zinc-500 dark:text-zinc-400">
+                <div key={message.id} className="rounded-lg border border-border p-3">
+                  <div className="mb-2 flex flex-wrap items-center gap-2 text-[11px] text-ink-muted">
                     <span>ask {eur(message.ask_price_eur)}</span>
                     <span>→ offer {eur(message.offer_price_eur)}</span>
                     <span>target {eur(message.target_price_eur)}</span>

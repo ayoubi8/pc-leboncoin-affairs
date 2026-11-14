@@ -61,11 +61,11 @@ export function timeAgo(iso?: string | null): string {
 
 export const DEAL_STYLES: Record<string, string> = {
   excellent:
-    "bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-500/15 dark:text-emerald-300 dark:border-emerald-500/30",
-  good: "bg-sky-100 text-sky-800 border-sky-200 dark:bg-sky-500/15 dark:text-sky-300 dark:border-sky-500/30",
-  fair: "bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-500/15 dark:text-amber-300 dark:border-amber-500/30",
+    "bg-success-bg text-success-ink border-success-border",
+  good: "bg-info-bg text-info-ink border-info-border",
+  fair: "bg-warning-bg text-warning-ink border-warning-border",
   overpriced:
-    "bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-500/15 dark:text-rose-300 dark:border-rose-500/30",
+    "bg-danger-bg text-danger-ink border-danger-border",
 };
 
 export const CONDITION_LABELS: Record<string, string> = {
@@ -83,11 +83,11 @@ export function conditionLabel(value?: string | null): string {
 }
 
 export function scoreColor(value?: number | null): string {
-  if (value === null || value === undefined) return "text-zinc-400";
-  if (value >= 80) return "text-emerald-600 dark:text-emerald-400";
-  if (value >= 60) return "text-sky-600 dark:text-sky-400";
-  if (value >= 40) return "text-amber-600 dark:text-amber-400";
-  return "text-rose-600 dark:text-rose-400";
+  if (value === null || value === undefined) return "text-ink-faint";
+  if (value >= 80) return "text-score-high";
+  if (value >= 60) return "text-score-good";
+  if (value >= 40) return "text-score-fair";
+  return "text-score-low";
 }
 
 export function imageUrl(image: any): string | null {

@@ -22,7 +22,7 @@ function NumberField({
     <div>
       <Label>
         {label}
-        {suffix ? <span className="ml-1 font-normal text-zinc-400">({suffix})</span> : null}
+        {suffix ? <span className="ml-1 font-normal text-ink-faint">({suffix})</span> : null}
       </Label>
       <Input type="number" step={step} value={Number.isFinite(value) ? value : 0} onChange={(event) => onChange(Number(event.target.value))} />
     </div>
@@ -109,7 +109,7 @@ export default function Settings() {
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
           <h1 className="text-xl font-semibold">Settings</h1>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">Rates, customs, Porsay tariff, and LLM access.</p>
+          <p className="text-xs text-ink-muted">Rates, customs, Porsay tariff, and LLM access.</p>
         </div>
         <Button type="submit" variant="primary" size="sm" disabled={saveMutation.isPending}>
           <Save className="h-4 w-4" /> {saveMutation.isPending ? "Saving…" : "Save settings"}
@@ -187,14 +187,14 @@ export default function Settings() {
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="mb-0.5 text-rose-600 dark:text-rose-400"
+                className="mb-0.5 text-danger-text"
                 onClick={() => set("porsay_tariff", form.porsay_tariff.filter((_, position) => position !== index))}
               >
                 <Trash2 className="h-3.5 w-3.5" />
               </Button>
             </div>
           ))}
-          <div className="grid gap-4 border-t border-zinc-100 pt-3 dark:border-zinc-800 sm:grid-cols-3">
+          <div className="grid gap-4 border-t border-border-subtle pt-3 sm:grid-cols-3">
             <NumberField label="Price per kg over last tier" value={form.porsay_per_kg_over} step={0.5} suffix="EUR" onChange={(value) => set("porsay_per_kg_over", value)} />
             <NumberField label="Handling fee" value={form.porsay_handling_eur} step={1} suffix="EUR" onChange={(value) => set("porsay_handling_eur", value)} />
             <NumberField label="Packaging weight" value={form.default_packaging_kg} step={0.1} suffix="kg" onChange={(value) => set("default_packaging_kg", value)} />
@@ -234,7 +234,7 @@ export default function Settings() {
               onChange={(event) => set("llm_api_key", event.target.value)}
               placeholder="sk-or-v1-…"
             />
-            <p className="mt-1 text-[11px] text-zinc-400">Stored in backend/.env / database; leave the masked value to keep it.</p>
+            <p className="mt-1 text-[11px] text-ink-faint">Stored in backend/.env / database; leave the masked value to keep it.</p>
           </div>
         </div>
       </Card>

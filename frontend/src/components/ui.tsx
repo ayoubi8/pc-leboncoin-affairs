@@ -7,11 +7,11 @@ type ButtonSize = "sm" | "md";
 
 const BUTTON_VARIANTS: Record<ButtonVariant, string> = {
   primary:
-    "bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200",
+    "bg-primary text-on-primary hover:bg-primary-hover",
   secondary:
-    "border border-zinc-200 bg-white text-zinc-800 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800",
-  ghost: "text-zinc-600 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800",
-  danger: "bg-rose-600 text-white hover:bg-rose-700",
+    "border border-border-control bg-surface text-ink-soft hover:bg-surface-hover",
+  ghost: "text-ink-secondary hover:bg-surface-muted",
+  danger: "bg-danger text-on-danger hover:bg-danger-hover",
 };
 
 const BUTTON_SIZES: Record<ButtonSize, string> = {
@@ -28,7 +28,7 @@ export function Button({
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center gap-1.5 rounded-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 disabled:cursor-not-allowed disabled:opacity-50",
+        "inline-flex items-center justify-center gap-1.5 rounded-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring disabled:cursor-not-allowed disabled:opacity-50",
         BUTTON_VARIANTS[variant],
         BUTTON_SIZES[size],
         className,
@@ -42,7 +42,7 @@ export function Card({ className, children }: { className?: string; children: Re
   return (
     <div
       className={cn(
-        "rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900",
+        "rounded-xl border border-border bg-surface shadow-sm",
         className,
       )}
     >
@@ -53,10 +53,10 @@ export function Card({ className, children }: { className?: string; children: Re
 
 export function CardHeader({ title, subtitle, action }: { title: ReactNode; subtitle?: ReactNode; action?: ReactNode }) {
   return (
-    <div className="flex items-start justify-between gap-3 border-b border-zinc-200 px-4 py-3 dark:border-zinc-800">
+    <div className="flex items-start justify-between gap-3 border-b border-border px-4 py-3">
       <div>
         <h2 className="text-sm font-semibold">{title}</h2>
-        {subtitle ? <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">{subtitle}</p> : null}
+        {subtitle ? <p className="mt-0.5 text-xs text-ink-muted">{subtitle}</p> : null}
       </div>
       {action}
     </div>
@@ -68,7 +68,7 @@ export function Badge({ className, children }: { className?: string; children: R
     <span
       className={cn(
         "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium",
-        "border-zinc-200 bg-zinc-100 text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300",
+        "border-border-control bg-surface-muted text-ink-strong",
         className,
       )}
     >
@@ -89,14 +89,14 @@ export function DealBadge({ label, score }: { label?: string | null; score?: num
 
 export function Label({ children, htmlFor, className }: { children: ReactNode; htmlFor?: string; className?: string }) {
   return (
-    <label htmlFor={htmlFor} className={cn("mb-1 block text-xs font-medium text-zinc-600 dark:text-zinc-400", className)}>
+    <label htmlFor={htmlFor} className={cn("mb-1 block text-xs font-medium text-ink-label", className)}>
       {children}
     </label>
   );
 }
 
 const FIELD_CLASS =
-  "w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-200 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-zinc-500 dark:focus:ring-zinc-800";
+  "w-full rounded-lg border border-border-control bg-surface px-3 py-2 text-sm text-ink placeholder:text-placeholder focus:border-border-strong focus:outline-none focus:ring-2 focus:ring-field-ring";
 
 export function Input({ className, ...props }: InputHTMLAttributes<HTMLInputElement>) {
   return <input className={cn(FIELD_CLASS, className)} {...props} />;
@@ -129,17 +129,17 @@ export function Switch({
       role="switch"
       aria-checked={checked}
       onClick={() => onChange(!checked)}
-      className="inline-flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-300"
+      className="inline-flex items-center gap-2 text-sm text-ink-strong"
     >
       <span
         className={cn(
           "relative h-5 w-9 rounded-full transition-colors",
-          checked ? "bg-emerald-500" : "bg-zinc-300 dark:bg-zinc-700",
+          checked ? "bg-toggle-on" : "bg-toggle-off",
         )}
       >
         <span
           className={cn(
-            "absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-transform",
+            "absolute top-0.5 h-4 w-4 rounded-full bg-toggle-thumb shadow transition-transform",
             checked ? "translate-x-4" : "translate-x-0.5",
           )}
         />
@@ -150,7 +150,7 @@ export function Switch({
 }
 
 export function Skeleton({ className }: { className?: string }) {
-  return <div className={cn("animate-pulse rounded-md bg-zinc-200 dark:bg-zinc-800", className)} />;
+  return <div className={cn("animate-pulse rounded-md bg-skeleton", className)} />;
 }
 
 export function EmptyState({
@@ -165,7 +165,7 @@ export function EmptyState({
   return (
     <div className="flex flex-col items-center justify-center gap-2 px-6 py-14 text-center">
       <p className="text-sm font-medium">{title}</p>
-      {description ? <p className="max-w-md text-xs text-zinc-500 dark:text-zinc-400">{description}</p> : null}
+      {description ? <p className="max-w-md text-xs text-ink-muted">{description}</p> : null}
       {action ? <div className="mt-2">{action}</div> : null}
     </div>
   );
@@ -175,11 +175,20 @@ export function ScoreRing({ value, size = 52 }: { value?: number | null; size?: 
   const score = value ?? 0;
   const radius = (size - 6) / 2;
   const circumference = 2 * Math.PI * radius;
-  const color = value === null || value === undefined ? "#a1a1aa" : score >= 80 ? "#10b981" : score >= 60 ? "#0ea5e9" : score >= 40 ? "#f59e0b" : "#f43f5e";
+  const arcClass =
+    value === null || value === undefined
+      ? "stroke-ring-empty"
+      : score >= 80
+        ? "stroke-ring-high"
+        : score >= 60
+          ? "stroke-ring-good"
+          : score >= 40
+            ? "stroke-ring-fair"
+            : "stroke-ring-low";
   return (
     <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="-rotate-90">
-        <circle cx={size / 2} cy={size / 2} r={radius} fill="none" strokeWidth="4" className="stroke-zinc-200 dark:stroke-zinc-800" />
+        <circle cx={size / 2} cy={size / 2} r={radius} fill="none" strokeWidth="4" className="stroke-ring-track" />
         <circle
           cx={size / 2}
           cy={size / 2}
@@ -187,7 +196,7 @@ export function ScoreRing({ value, size = 52 }: { value?: number | null; size?: 
           fill="none"
           strokeWidth="4"
           strokeLinecap="round"
-          stroke={color}
+          className={arcClass}
           strokeDasharray={circumference}
           strokeDashoffset={circumference * (1 - score / 100)}
         />
@@ -207,10 +216,10 @@ export function Toaster() {
           className={cn(
             "animate-fade-in pointer-events-auto rounded-lg border px-3 py-2 text-sm shadow-lg",
             item.tone === "error"
-              ? "border-rose-200 bg-rose-50 text-rose-800 dark:border-rose-500/30 dark:bg-rose-500/15 dark:text-rose-200"
+              ? "border-danger-border bg-danger-soft text-danger-soft-ink"
               : item.tone === "success"
-                ? "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/15 dark:text-emerald-200"
-                : "border-zinc-200 bg-white text-zinc-800 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100",
+                ? "border-success-border bg-success-soft text-success-soft-ink"
+                : "border-border-control bg-surface text-ink-soft",
           )}
         >
           {item.message}
