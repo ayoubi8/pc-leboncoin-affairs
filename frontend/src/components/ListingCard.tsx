@@ -21,17 +21,17 @@ export default function ListingCard({
   return (
     <div
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-xl border bg-white transition-shadow hover:shadow-md dark:bg-zinc-900",
+        "group relative flex flex-col overflow-hidden rounded-xl border bg-surface transition-shadow hover:shadow-md",
         selected
-          ? "border-zinc-900 ring-1 ring-zinc-900 dark:border-zinc-100 dark:ring-zinc-100"
-          : "border-zinc-200 dark:border-zinc-800",
+          ? "border-primary ring-1 ring-primary"
+          : "border-border",
       )}
     >
       {selectable ? (
-        <label className="absolute left-2 top-2 z-10 flex h-6 w-6 cursor-pointer items-center justify-center rounded-md border border-zinc-300 bg-white/95 dark:border-zinc-600 dark:bg-zinc-900/95">
+        <label className="absolute left-2 top-2 z-10 flex h-6 w-6 cursor-pointer items-center justify-center rounded-md border border-border-control bg-surface/95">
           <input
             type="checkbox"
-            className="h-4 w-4 accent-zinc-900 dark:accent-zinc-100"
+            className="h-4 w-4 accent-primary"
             checked={selected}
             onChange={() => onToggle?.(card.id)}
           />
@@ -39,7 +39,7 @@ export default function ListingCard({
       ) : null}
 
       <Link to={`/listings/${card.id}`} className="block">
-        <div className="relative aspect-video overflow-hidden bg-zinc-100 dark:bg-zinc-800">
+        <div className="relative aspect-video overflow-hidden bg-surface-muted">
           {image ? (
             <img
               src={image}
@@ -49,11 +49,11 @@ export default function ListingCard({
               className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
             />
           ) : (
-            <div className="flex h-full items-center justify-center text-xs text-zinc-400">No image</div>
+            <div className="flex h-full items-center justify-center text-xs text-ink-faint">No image</div>
           )}
           <div className="absolute bottom-2 left-2 flex flex-wrap gap-1">
             {card.is_new ? (
-              <Badge className="border-emerald-200 bg-emerald-100 text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/20 dark:text-emerald-200">
+              <Badge className="border-success-border bg-success-bg text-success-soft-ink">
                 <Sparkles className="h-3 w-3" /> New
               </Badge>
             ) : null}
@@ -73,14 +73,14 @@ export default function ListingCard({
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-base font-semibold">{eur(card.price_eur)}</span>
           {card.market_median_eur ? (
-            <span className="text-xs text-zinc-500 dark:text-zinc-400">median {eur(card.market_median_eur)}</span>
+            <span className="text-xs text-ink-muted">median {eur(card.market_median_eur)}</span>
           ) : null}
           <DealBadge label={card.deal_label} />
         </div>
 
-        {summary ? <p className="text-xs text-zinc-600 dark:text-zinc-400">{summary}</p> : null}
+        {summary ? <p className="text-xs text-ink-label">{summary}</p> : null}
 
-        <div className="mt-auto flex items-center justify-between pt-1 text-[11px] text-zinc-500 dark:text-zinc-400">
+        <div className="mt-auto flex items-center justify-between pt-1 text-[11px] text-ink-muted">
           <span className="flex items-center gap-1">
             <MapPin className="h-3 w-3" />
             {card.city || "—"}
@@ -88,7 +88,7 @@ export default function ListingCard({
           <span>{timeAgo(card.found_at || card.first_publication_date)}</span>
         </div>
 
-        <div className="flex items-center justify-between border-t border-zinc-100 pt-2 text-[11px] dark:border-zinc-800">
+        <div className="flex items-center justify-between border-t border-border-subtle pt-2 text-[11px]">
           <span className={cn("font-medium", scoreColor(card.match_score))}>match {card.match_score ?? "—"}</span>
           <span className={cn("font-medium", scoreColor(card.acquisition_score))}>
             landed {card.acquisition_score ?? "—"}
@@ -98,7 +98,7 @@ export default function ListingCard({
             target="_blank"
             rel="noreferrer"
             onClick={(event) => event.stopPropagation()}
-            className="flex items-center gap-1 text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+            className="flex items-center gap-1 text-ink-muted hover:text-ink"
           >
             <ExternalLink className="h-3 w-3" /> ad
           </a>

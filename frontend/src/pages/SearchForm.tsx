@@ -113,7 +113,7 @@ export default function SearchForm() {
           </Link>
           <div>
             <h1 className="text-xl font-semibold">{editing ? "Edit search" : "New search"}</h1>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400">Every field except the name is optional.</p>
+            <p className="text-xs text-ink-muted">Every field except the name is optional.</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -134,12 +134,12 @@ export default function SearchForm() {
           {preview.isLoading ? (
             <Skeleton className="m-4 h-16" />
           ) : (
-            <ul className="divide-y divide-zinc-100 dark:divide-zinc-800">
+            <ul className="divide-y divide-border-subtle">
               {(preview.data?.queries || []).map((query, index) => (
                 <li key={index} className="flex items-center justify-between gap-3 px-4 py-2 text-xs">
                   <code className="break-all">{query}</code>
                   <a
-                    className="shrink-0 text-sky-600 hover:underline dark:text-sky-400"
+                    className="shrink-0 text-link hover:underline"
                     href={preview.data?.leboncoin_urls[index]}
                     target="_blank"
                     rel="noreferrer"

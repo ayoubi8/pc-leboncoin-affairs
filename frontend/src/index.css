@@ -2,16 +2,193 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-@theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-}
-
+/* Design tokens — Deal Finder design system (tokens.json). Light values on :root, dark overrides on .dark.
+   Use them through the semantic utilities below (bg-surface, text-ink-muted, border-border-control, …),
+   never raw zinc/emerald/sky/amber/rose classes. Spacing, radius and shadow use Tailwind's defaults,
+   which are the system's values. */
 :root {
   color-scheme: light;
+  --page: oklch(98.5% 0 0);
+  --surface: #ffffff;
+  --surface-muted: oklch(96.7% 0.001 286.375);
+  --surface-hover: oklch(98.5% 0 0);
+  --surface-sunken: oklch(98.5% 0 0);
+  --surface-inset: oklch(98.5% 0 0);
+  --scrim: rgb(0 0 0 / 0.4);
+  --skeleton: oklch(92% 0.004 286.32);
+  --border: oklch(92% 0.004 286.32);
+  --border-control: oklch(92% 0.004 286.32);
+  --border-subtle: oklch(96.7% 0.001 286.375);
+  --border-strong: oklch(70.5% 0.015 286.067);
+  --ink: oklch(21% 0.006 285.885);
+  --ink-soft: oklch(27.4% 0.006 286.033);
+  --ink-strong: oklch(37% 0.013 285.805);
+  --ink-secondary: oklch(44.2% 0.017 285.786);
+  --ink-label: oklch(44.2% 0.017 285.786);
+  --ink-muted: oklch(55.2% 0.016 285.938);
+  --ink-faint: oklch(70.5% 0.015 286.067);
+  --placeholder: oklch(70.5% 0.015 286.067);
+  --primary: oklch(21% 0.006 285.885);
+  --primary-hover: oklch(27.4% 0.006 286.033);
+  --on-primary: #ffffff;
+  --focus-ring: oklch(70.5% 0.015 286.067);
+  --field-ring: oklch(92% 0.004 286.32);
+  --danger: oklch(58.6% 0.253 17.585);
+  --danger-hover: oklch(51.4% 0.222 16.935);
+  --danger-text: var(--score-low);
+  --danger-ghost-hover: oklch(96.9% 0.015 12.422);
+  --on-danger: #ffffff;
+  --toggle-on: oklch(69.6% 0.17 162.48);
+  --toggle-off: oklch(87.1% 0.006 286.286);
+  --toggle-thumb: #ffffff;
+  --scrollbar: oklch(87.1% 0.006 286.286);
+  --success-bg: oklch(95% 0.052 163.051);
+  --success-ink: oklch(43.2% 0.095 166.913);
+  --success-border: oklch(90.5% 0.093 164.15);
+  --info-bg: oklch(95.1% 0.026 236.824);
+  --info-ink: oklch(44.3% 0.11 240.79);
+  --info-border: oklch(90.1% 0.058 230.902);
+  --warning-bg: oklch(96.2% 0.059 95.617);
+  --warning-ink: oklch(47.3% 0.137 46.201);
+  --warning-border: oklch(92.4% 0.12 95.746);
+  --danger-bg: oklch(94.1% 0.03 12.58);
+  --danger-ink: oklch(45.5% 0.188 13.697);
+  --danger-border: oklch(89.2% 0.058 10.001);
+  --success-soft: oklch(97.9% 0.021 166.113);
+  --success-soft-ink: oklch(43.2% 0.095 166.913);
+  --danger-soft: oklch(96.9% 0.015 12.422);
+  --danger-soft-ink: oklch(45.5% 0.188 13.697);
+  --score-high: oklch(59.6% 0.145 163.225);
+  --score-good: oklch(58.8% 0.158 241.966);
+  --link: var(--score-good);
+  --score-fair: oklch(66.6% 0.179 58.318);
+  --score-low: oklch(58.6% 0.253 17.585);
+  --ring-high: #10b981;
+  --ring-good: #0ea5e9;
+  --ring-fair: #f59e0b;
+  --ring-low: #f43f5e;
+  --ring-empty: #a1a1aa;
+  --ring-track: oklch(92% 0.004 286.32);
+  --chart-line: var(--ring-good);
 }
 
 .dark {
   color-scheme: dark;
+  --page: oklch(14.1% 0.005 285.823);
+  --surface: oklch(21% 0.006 285.885);
+  --surface-muted: oklch(27.4% 0.006 286.033);
+  --surface-hover: oklch(27.4% 0.006 286.033);
+  --surface-sunken: oklch(27.4% 0.006 286.033 / 0.5);
+  --surface-inset: oklch(14.1% 0.005 285.823 / 0.4);
+  --skeleton: oklch(27.4% 0.006 286.033);
+  --border: oklch(27.4% 0.006 286.033);
+  --border-control: oklch(37% 0.013 285.805);
+  --border-subtle: oklch(27.4% 0.006 286.033);
+  --border-strong: oklch(55.2% 0.016 285.938);
+  --ink: oklch(96.7% 0.001 286.375);
+  --ink-soft: oklch(96.7% 0.001 286.375);
+  --ink-strong: oklch(87.1% 0.006 286.286);
+  --ink-secondary: oklch(87.1% 0.006 286.286);
+  --ink-label: oklch(70.5% 0.015 286.067);
+  --ink-muted: oklch(70.5% 0.015 286.067);
+  --placeholder: oklch(55.2% 0.016 285.938);
+  --primary: oklch(96.7% 0.001 286.375);
+  --primary-hover: oklch(92% 0.004 286.32);
+  --on-primary: oklch(21% 0.006 285.885);
+  --field-ring: oklch(27.4% 0.006 286.033);
+  --danger-ghost-hover: oklch(64.5% 0.246 16.439 / 0.1);
+  --toggle-off: oklch(37% 0.013 285.805);
+  --scrollbar: oklch(37% 0.013 285.805);
+  --success-bg: oklch(69.6% 0.17 162.48 / 0.15);
+  --success-ink: oklch(84.5% 0.143 164.978);
+  --success-border: oklch(69.6% 0.17 162.48 / 0.3);
+  --info-bg: oklch(68.5% 0.169 237.323 / 0.15);
+  --info-ink: oklch(82.8% 0.111 230.318);
+  --info-border: oklch(68.5% 0.169 237.323 / 0.3);
+  --warning-bg: oklch(76.9% 0.188 70.08 / 0.15);
+  --warning-ink: oklch(87.9% 0.169 91.605);
+  --warning-border: oklch(76.9% 0.188 70.08 / 0.3);
+  --danger-bg: oklch(64.5% 0.246 16.439 / 0.15);
+  --danger-ink: oklch(81% 0.117 11.638);
+  --danger-border: oklch(64.5% 0.246 16.439 / 0.3);
+  --success-soft: oklch(69.6% 0.17 162.48 / 0.15);
+  --success-soft-ink: oklch(90.5% 0.093 164.15);
+  --danger-soft: oklch(64.5% 0.246 16.439 / 0.15);
+  --danger-soft-ink: oklch(89.2% 0.058 10.001);
+  --score-high: oklch(76.5% 0.177 163.223);
+  --score-good: oklch(74.6% 0.16 232.661);
+  --score-fair: oklch(82.8% 0.189 84.429);
+  --score-low: oklch(71.2% 0.194 13.428);
+  --ring-track: oklch(27.4% 0.006 286.033);
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-surface-hover: var(--surface-hover);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-surface-inset: var(--surface-inset);
+  --color-scrim: var(--scrim);
+  --color-skeleton: var(--skeleton);
+  --color-border: var(--border);
+  --color-border-control: var(--border-control);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-strong: var(--ink-strong);
+  --color-ink-secondary: var(--ink-secondary);
+  --color-ink-label: var(--ink-label);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
+  --color-placeholder: var(--placeholder);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-on-primary: var(--on-primary);
+  --color-focus-ring: var(--focus-ring);
+  --color-field-ring: var(--field-ring);
+  --color-danger: var(--danger);
+  --color-danger-hover: var(--danger-hover);
+  --color-danger-text: var(--danger-text);
+  --color-danger-ghost-hover: var(--danger-ghost-hover);
+  --color-on-danger: var(--on-danger);
+  --color-toggle-on: var(--toggle-on);
+  --color-toggle-off: var(--toggle-off);
+  --color-toggle-thumb: var(--toggle-thumb);
+  --color-scrollbar: var(--scrollbar);
+  --color-success-bg: var(--success-bg);
+  --color-success-ink: var(--success-ink);
+  --color-success-border: var(--success-border);
+  --color-info-bg: var(--info-bg);
+  --color-info-ink: var(--info-ink);
+  --color-info-border: var(--info-border);
+  --color-warning-bg: var(--warning-bg);
+  --color-warning-ink: var(--warning-ink);
+  --color-warning-border: var(--warning-border);
+  --color-danger-bg: var(--danger-bg);
+  --color-danger-ink: var(--danger-ink);
+  --color-danger-border: var(--danger-border);
+  --color-success-soft: var(--success-soft);
+  --color-success-soft-ink: var(--success-soft-ink);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-soft-ink: var(--danger-soft-ink);
+  --color-score-high: var(--score-high);
+  --color-score-good: var(--score-good);
+  --color-link: var(--link);
+  --color-score-fair: var(--score-fair);
+  --color-score-low: var(--score-low);
+  --color-ring-high: var(--ring-high);
+  --color-ring-good: var(--ring-good);
+  --color-ring-fair: var(--ring-fair);
+  --color-ring-low: var(--ring-low);
+  --color-ring-empty: var(--ring-empty);
+  --color-ring-track: var(--ring-track);
+  --color-chart-line: var(--chart-line);
+}
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 html,
@@ -21,7 +198,7 @@ body,
 }
 
 body {
-  @apply bg-zinc-50 text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100;
+  @apply bg-page text-ink antialiased;
 }
 
 ::-webkit-scrollbar {
@@ -30,11 +207,16 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply rounded-full bg-zinc-300 dark:bg-zinc-700;
+  @apply rounded-full bg-scrollbar;
 }
 
 ::-webkit-scrollbar-track {
   background: transparent;
+}
+
+/* Recharts sets stroke as an attribute; CSS overrides it with the token. */
+.chart-line .recharts-curve {
+  stroke: var(--chart-line);
 }
 
 @keyframes fade-in {

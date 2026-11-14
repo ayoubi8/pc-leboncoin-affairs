@@ -19,32 +19,32 @@ function confidenceBadge(level?: string) {
   if (!level) return null;
   const style =
     level === "high"
-      ? "border-emerald-200 bg-emerald-100 text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/15 dark:text-emerald-300"
+      ? "border-success-border bg-success-bg text-success-ink"
       : level === "medium"
-        ? "border-amber-200 bg-amber-100 text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/15 dark:text-amber-300"
-        : "border-zinc-200 bg-zinc-100 text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400";
+        ? "border-warning-border bg-warning-bg text-warning-ink"
+        : "border-border-control bg-surface-muted text-ink-label";
   return <Badge className={style}>{level}</Badge>;
 }
 
 function CostTable({ cost, title }: { cost: LandedCost; title: string }) {
   return (
     <Card>
-      <CardHeader title={title} subtitle={`Parallel rate ${cost.parallel_rate} DZD/€`} action={<Truck className="h-4 w-4 text-zinc-400" />} />
-      <div className="divide-y divide-zinc-100 text-sm dark:divide-zinc-800">
+      <CardHeader title={title} subtitle={`Parallel rate ${cost.parallel_rate} DZD/€`} action={<Truck className="h-4 w-4 text-ink-faint" />} />
+      <div className="divide-y divide-border-subtle text-sm">
         {cost.breakdown.map((row) => (
           <div key={row.key} className="flex items-center justify-between px-4 py-2">
-            <span className="text-zinc-600 dark:text-zinc-400">{row.label}</span>
+            <span className="text-ink-label">{row.label}</span>
             <span className="text-right">
               <span className="font-medium">{eur(row.eur, 2)}</span>
-              <span className="ml-2 text-xs text-zinc-400">{dzd(row.dzd)}</span>
+              <span className="ml-2 text-xs text-ink-faint">{dzd(row.dzd)}</span>
             </span>
           </div>
         ))}
-        <div className="flex items-center justify-between bg-zinc-50 px-4 py-3 dark:bg-zinc-800/40">
+        <div className="flex items-center justify-between bg-surface-sunken px-4 py-3">
           <span className="font-semibold">Landed total</span>
           <span className="text-right">
             <span className="text-base font-semibold">{eur(cost.total_eur, 2)}</span>
-            <span className="ml-2 text-xs text-zinc-500 dark:text-zinc-400">{dzd(cost.total_dzd)}</span>
+            <span className="ml-2 text-xs text-ink-muted">{dzd(cost.total_dzd)}</span>
           </span>
         </div>
       </div>
@@ -143,8 +143,8 @@ export default function ListingDetail() {
           </Link>
           <div>
             <h1 className="max-w-2xl text-lg font-semibold leading-snug">{listing.subject}</h1>
-            <p className="mt-1 flex flex-wrap items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
-              <span className="text-base font-semibold text-zinc-900 dark:text-zinc-100">{eur(listing.price_eur)}</span>
+            <p className="mt-1 flex flex-wrap items-center gap-2 text-xs text-ink-muted">
+              <span className="text-base font-semibold text-ink">{eur(listing.price_eur)}</span>
               <DealBadge label={listing.deal_label} score={listing.deal_score} />
               {listing.city ? <span>{listing.city}</span> : null}
               {specs.condition ? <span>{conditionLabel(specs.condition)}</span> : null}
@@ -162,11 +162,11 @@ export default function ListingDetail() {
       <div className="grid gap-4 lg:grid-cols-3">
         <div className="space-y-4 lg:col-span-2">
           <Card className="overflow-hidden">
-            <div className="aspect-video bg-zinc-100 dark:bg-zinc-800">
+            <div className="aspect-video bg-surface-muted">
               {images[activeImage] ? (
                 <img src={images[activeImage]} alt={listing.subject} referrerPolicy="no-referrer" className="h-full w-full object-contain" />
               ) : (
-                <div className="flex h-full items-center justify-center text-xs text-zinc-400">No image</div>
+                <div className="flex h-full items-center justify-center text-xs text-ink-faint">No image</div>
               )}
             </div>
             {images.length > 1 ? (
@@ -178,7 +178,7 @@ export default function ListingDetail() {
                     onClick={() => setActiveImage(index)}
                     className={cn(
                       "h-14 w-20 shrink-0 overflow-hidden rounded-md border",
-                      index === activeImage ? "border-zinc-900 dark:border-zinc-100" : "border-transparent",
+                      index === activeImage ? "border-primary" : "border-transparent",
                     )}
                   >
                     <img src={image} alt="" referrerPolicy="no-referrer" className="h-full w-full object-cover" />
@@ -190,7 +190,7 @@ export default function ListingDetail() {
 
           <Card>
             <CardHeader title="Extracted specs" subtitle={specsSummary(specs) || "No specs detected yet"} />
-            <div className="grid grid-cols-2 gap-px bg-zinc-100 text-sm dark:bg-zinc-800 sm:grid-cols-3">
+            <div className="grid grid-cols-2 gap-px bg-surface-muted text-sm sm:grid-cols-3">
               {[
                 ["CPU", specs.cpu, listing.spec_confidence.cpu],
                 ["CPU family", specs.cpu_family, listing.spec_confidence.cpu],
@@ -202,9 +202,9 @@ export default function ListingDetail() {
                 ["Condition", conditionLabel(specs.condition || listing.condition), listing.spec_confidence.condition],
                 ["Model key", listing.model_key, null],
               ].map(([label, value, confidence]) => (
-                <div key={String(label)} className="bg-white p-3 dark:bg-zinc-900">
+                <div key={String(label)} className="bg-surface p-3">
                   <div className="flex items-center justify-between gap-1">
-                    <p className="text-[11px] uppercase tracking-wide text-zinc-400">{label}</p>
+                    <p className="text-[11px] uppercase tracking-wide text-ink-faint">{label}</p>
                     {confidenceBadge(confidence as string)}
                   </div>
                   <p className="mt-1 truncate text-sm font-medium">{value ? String(value) : "—"}</p>
@@ -215,7 +215,7 @@ export default function ListingDetail() {
 
           <Card>
             <CardHeader title="Description" subtitle={listing.is_pro ? "Pro seller" : "Private seller"} />
-            <p className="whitespace-pre-wrap p-4 text-sm text-zinc-700 dark:text-zinc-300">{listing.description || "No description."}</p>
+            <p className="whitespace-pre-wrap p-4 text-sm text-ink-strong">{listing.description || "No description."}</p>
           </Card>
 
           {listing.price_history.length > 1 ? (
@@ -224,11 +224,11 @@ export default function ListingDetail() {
               <div className="h-48 p-3">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={listing.price_history.map((point) => ({ date: dateShort(point.observed_at), price: point.price_eur }))}>
-                    <CartesianGrid strokeDasharray="3 3" className="stroke-zinc-200 dark:stroke-zinc-800" />
+                    <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                     <XAxis dataKey="date" tick={{ fontSize: 10 }} />
                     <YAxis tick={{ fontSize: 10 }} width={45} />
                     <Tooltip formatter={(value: number) => eur(value)} />
-                    <Line type="monotone" dataKey="price" stroke="#0ea5e9" strokeWidth={2} dot={false} />
+                    <Line type="monotone" dataKey="price" className="chart-line" stroke="#0ea5e9" strokeWidth={2} dot={false} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -242,15 +242,15 @@ export default function ListingDetail() {
             <div className="p-4">
               <div className="grid grid-cols-3 gap-2 text-center">
                 <div>
-                  <p className="text-[11px] uppercase text-zinc-400">Low</p>
+                  <p className="text-[11px] uppercase text-ink-faint">Low</p>
                   <p className="text-sm font-semibold">{eur(listing.market_low_eur)}</p>
                 </div>
-                <div className="rounded-lg bg-zinc-50 py-1 dark:bg-zinc-800/50">
-                  <p className="text-[11px] uppercase text-zinc-400">Median</p>
+                <div className="rounded-lg bg-surface-sunken py-1">
+                  <p className="text-[11px] uppercase text-ink-faint">Median</p>
                   <p className="text-base font-semibold">{eur(listing.market_median_eur)}</p>
                 </div>
                 <div>
-                  <p className="text-[11px] uppercase text-zinc-400">High</p>
+                  <p className="text-[11px] uppercase text-ink-faint">High</p>
                   <p className="text-sm font-semibold">{eur(listing.market_high_eur)}</p>
                 </div>
               </div>
@@ -263,7 +263,7 @@ export default function ListingDetail() {
                   </span>
                 </div>
               </div>
-              <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400">{listing.market_explanation}</p>
+              <p className="mt-2 text-xs text-ink-muted">{listing.market_explanation}</p>
             </div>
           </Card>
 
@@ -271,19 +271,19 @@ export default function ListingDetail() {
             <CardHeader title="Negotiation plan" subtitle={listing.negotiation.rationale} />
             <div className="grid grid-cols-3 gap-2 p-4 text-center">
               <div>
-                <p className="text-[11px] uppercase text-zinc-400">Open</p>
+                <p className="text-[11px] uppercase text-ink-faint">Open</p>
                 <p className="text-sm font-semibold">{eur(listing.negotiation.offer_eur)}</p>
               </div>
               <div>
-                <p className="text-[11px] uppercase text-zinc-400">Target</p>
+                <p className="text-[11px] uppercase text-ink-faint">Target</p>
                 <p className="text-sm font-semibold">{eur(listing.negotiation.target_eur)}</p>
               </div>
               <div>
-                <p className="text-[11px] uppercase text-zinc-400">Max</p>
+                <p className="text-[11px] uppercase text-ink-faint">Max</p>
                 <p className="text-sm font-semibold">{eur(listing.negotiation.max_eur)}</p>
               </div>
             </div>
-            <div className="space-y-2 border-t border-zinc-100 p-4 dark:border-zinc-800">
+            <div className="space-y-2 border-t border-border-subtle p-4">
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <Label>Tone</Label>
@@ -307,9 +307,9 @@ export default function ListingDetail() {
                 {negotiationMutation.isPending ? "Writing…" : "Generate French message"}
               </Button>
               {message ? (
-                <div className="rounded-lg border border-zinc-200 p-3 text-sm dark:border-zinc-700">
+                <div className="rounded-lg border border-border-control p-3 text-sm">
                   <div className="mb-2 flex items-center justify-between">
-                    <span className="text-[11px] text-zinc-400">Generated message</span>
+                    <span className="text-[11px] text-ink-faint">Generated message</span>
                     <Button
                       size="sm"
                       variant="ghost"
@@ -330,14 +330,14 @@ export default function ListingDetail() {
           {cost ? <CostTable cost={cost} title={quote ? "Landed cost (your quote)" : "Landed cost"} /> : null}
 
           <Card>
-            <CardHeader title="Calculator" subtitle="Recalculate landed cost" action={<Calculator className="h-4 w-4 text-zinc-400" />} />
+            <CardHeader title="Calculator" subtitle="Recalculate landed cost" action={<Calculator className="h-4 w-4 text-ink-faint" />} />
             <div className="space-y-3 p-4">
               {quote ? (
-                <div className="flex items-center gap-3 rounded-lg bg-zinc-50 p-2 dark:bg-zinc-800/50">
+                <div className="flex items-center gap-3 rounded-lg bg-surface-sunken p-2">
                   <ScoreRing value={quote.deal_score} />
                   <div className="text-xs">
                     <p className="font-medium capitalize">{quote.deal_label || "not rated"}</p>
-                    <p className="text-zinc-500 dark:text-zinc-400">
+                    <p className="text-ink-muted">
                       offer {eur(quote.offer_price_eur, 2)} · total {eur(quote.landed_cost.total_eur, 2)}
                     </p>
                   </div>

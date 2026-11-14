@@ -20,11 +20,11 @@ function Stat({
   return (
     <Card className="p-4">
       <div className="flex items-center justify-between">
-        <p className="text-xs font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">{label}</p>
-        <Icon className="h-4 w-4 text-zinc-400" />
+        <p className="text-xs font-medium uppercase tracking-wide text-ink-muted">{label}</p>
+        <Icon className="h-4 w-4 text-ink-faint" />
       </div>
       <div className="mt-2 text-2xl font-semibold">{value}</div>
-      {hint ? <p className="mt-1 truncate text-xs text-zinc-500 dark:text-zinc-400">{hint}</p> : null}
+      {hint ? <p className="mt-1 truncate text-xs text-ink-muted">{hint}</p> : null}
     </Card>
   );
 }
@@ -66,7 +66,7 @@ export default function Dashboard() {
       <div className="flex flex-wrap items-end justify-between gap-2">
         <div>
           <h1 className="text-xl font-semibold">Dashboard</h1>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">
+          <p className="text-xs text-ink-muted">
             Live picture of your Leboncoin laptop hunt and landed costs.
           </p>
         </div>
@@ -91,8 +91,8 @@ export default function Dashboard() {
 
       {alerts.length ? (
         <Card>
-          <CardHeader title="Alerts" subtitle="Price drops and failed checks" action={<BellRing className="h-4 w-4 text-zinc-400" />} />
-          <ul className="divide-y divide-zinc-100 dark:divide-zinc-800">
+          <CardHeader title="Alerts" subtitle="Price drops and failed checks" action={<BellRing className="h-4 w-4 text-ink-faint" />} />
+          <ul className="divide-y divide-border-subtle">
             {alerts.map((alert, index) => (
               <li key={`${alert.type}-${index}`} className="flex items-start justify-between gap-3 px-4 py-2.5 text-sm">
                 <div className="min-w-0">
@@ -109,19 +109,19 @@ export default function Dashboard() {
                       "Check failed"
                     )}
                   </p>
-                  <p className="truncate text-xs text-zinc-500 dark:text-zinc-400">{alert.message}</p>
+                  <p className="truncate text-xs text-ink-muted">{alert.message}</p>
                 </div>
                 <div className="flex shrink-0 items-center gap-2">
                   {alert.type === "price_drop" ? (
-                    <Badge className="border-emerald-200 bg-emerald-100 text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/15 dark:text-emerald-300">
+                    <Badge className="border-success-border bg-success-bg text-success-ink">
                       −{eur((alert.old_eur || 0) - (alert.new_eur || 0))}
                     </Badge>
                   ) : (
-                    <Badge className="border-rose-200 bg-rose-100 text-rose-800 dark:border-rose-500/30 dark:bg-rose-500/15 dark:text-rose-300">
+                    <Badge className="border-danger-border bg-danger-bg text-danger-ink">
                       {alert.status || "failed"}
                     </Badge>
                   )}
-                  <span className="text-[11px] text-zinc-400">{timeAgo(alert.at)}</span>
+                  <span className="text-[11px] text-ink-faint">{timeAgo(alert.at)}</span>
                 </div>
               </li>
             ))}
@@ -134,7 +134,7 @@ export default function Dashboard() {
           title="Best deals"
           subtitle="Highest deal score across every search"
           action={
-            <Link to="/searches" className="flex items-center gap-1 text-xs text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100">
+            <Link to="/searches" className="flex items-center gap-1 text-xs text-ink-muted hover:text-ink">
               All searches <ArrowRight className="h-3 w-3" />
             </Link>
           }
@@ -158,8 +158,8 @@ export default function Dashboard() {
         {recent_runs.length ? (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="text-zinc-500 dark:text-zinc-400">
-                <tr className="border-b border-zinc-200 dark:border-zinc-800">
+              <thead className="text-ink-muted">
+                <tr className="border-b border-border">
                   <th className="px-4 py-2 font-medium">Search</th>
                   <th className="px-4 py-2 font-medium">Trigger</th>
                   <th className="px-4 py-2 font-medium">Status</th>
@@ -170,7 +170,7 @@ export default function Dashboard() {
               </thead>
               <tbody>
                 {recent_runs.map((run) => (
-                  <tr key={run.id} className="border-b border-zinc-100 last:border-0 dark:border-zinc-800/60">
+                  <tr key={run.id} className="border-b border-border-subtle last:border-0 dark:border-border-subtle/60">
                     <td className="max-w-52 truncate px-4 py-2">
                       {run.search_id ? (
                         <Link to={`/searches/${run.search_id}/results`} className="hover:underline">
@@ -180,16 +180,16 @@ export default function Dashboard() {
                         "—"
                       )}
                     </td>
-                    <td className="px-4 py-2 capitalize text-zinc-500 dark:text-zinc-400">{run.trigger}</td>
+                    <td className="px-4 py-2 capitalize text-ink-muted">{run.trigger}</td>
                     <td className="px-4 py-2">
                       <span
                         className={cn(
                           "inline-flex rounded-full px-2 py-0.5 text-[11px] font-medium capitalize",
                           run.status === "completed"
-                            ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300"
+                            ? "bg-success-bg text-success-ink"
                             : run.status === "running"
-                              ? "bg-sky-100 text-sky-800 dark:bg-sky-500/15 dark:text-sky-300"
-                              : "bg-rose-100 text-rose-800 dark:bg-rose-500/15 dark:text-rose-300",
+                              ? "bg-info-bg text-info-ink"
+                              : "bg-danger-bg text-danger-ink",
                         )}
                         title={run.error || undefined}
                       >
@@ -198,7 +198,7 @@ export default function Dashboard() {
                     </td>
                     <td className="px-4 py-2 text-right">{run.new_count}</td>
                     <td className="px-4 py-2 text-right">{run.results_total}</td>
-                    <td className="px-4 py-2 text-right text-zinc-500 dark:text-zinc-400">
+                    <td className="px-4 py-2 text-right text-ink-muted">
                       {run.started_at ? dateShort(run.started_at) : "—"}
                     </td>
                   </tr>
