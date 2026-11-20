@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from ..extraction import cpu_db, llm, specs as specs_mod
 from ..logistics import landed
 from ..models import Listing, Search, Settings
-from . import deal, dz_market, market, match
+from . import deal, dz_market, freshness, market, match, pricebook, screen as screen_mod
 
 
 def _attributes(raw: dict[str, Any]) -> dict[str, Any]:
@@ -27,10 +27,7 @@ def _attributes(raw: dict[str, Any]) -> dict[str, Any]:
 
 
 def _kind_for(listing: Listing) -> str:
-    specs = listing.specs or {}
-    if specs.get("gpu") and not specs.get("cpu") and not specs.get("ram_gb"):
-        return "gpu"
-    return "laptop"
+    return pricebook.kind_of(listing)
 
 
 def analyze_listing(
@@ -97,7 +94,25 @@ def analyze_listing(
     if search is not None:
         listing.match_score = match.compute_match(search, listing)["score"]
 
-    apply_dz_comparison(db, settings, listing)  # cached per config; never forced here
+    # Free checks first: sold/pending/broken/accessory ads never reach the paid Algerian lookup.
+    checked = screen_mod.screen(listing)
+    flags = list(checked["flags"])
+    if screen_mod.scam_price(listing.price_eur, listing.market_median_eur) and (listing.market_samples or 0) >= 5:
+        flags.append("suspiciously cheap (<35% of market)")
+    listing.ship_ok = checked["ship_ok"]
+    listing.screen_skip = "; ".join(checked["reasons"])[:200]
+    if any("marks it sold" in r or "marks it pending" in r or r.startswith("ad status") for r in checked["reasons"]):
+        listing.is_active = False
+        listing.gone_at = listing.gone_at or now
+    info = freshness.apply(listing, now)
+    listing.risk_flags = flags + [f for f in info["flags"] if f not in flags]
+
+    mismatch = match.hard_fail(search, listing) if search is not None else ""
+    if listing.screen_skip or mismatch:  # no paid lookup for junk or for ads that do not fit this search
+        listing.dz_price_low_dzd = listing.dz_price_median_dzd = listing.dz_price_high_dzd = None
+        listing.dz_saving_pct = listing.dz_confidence = None
+    else:
+        apply_dz_comparison(db, settings, listing)  # cached per config; never forced here
 
     listing.last_analyzed_at = now
 
@@ -116,7 +131,7 @@ def apply_dz_comparison(
     if not listing.price_eur:
         return
 
-    cost = landed.compute(settings, listing.price_eur, kind=_kind_for(listing))
+    cost = landed.compute(settings, listing.price_eur, kind=_kind_for(listing), specs=listing.specs)
     listing.acquisition_score = deal.acquisition_score(cost["total_eur"], listing.market_median_eur)
     listing.dz_landed_dzd = round(cost["total_eur"] * float(settings.eur_dzd_parallel or 0), 0)
 

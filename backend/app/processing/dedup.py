@@ -18,6 +18,15 @@ def fingerprint(ad: dict[str, Any]) -> str:
     return f"{subject}|{price}|{city}"
 
 
+def listing_fingerprint(ad: dict[str, Any]) -> str:
+    """Identity of an ad across re-posts: same title + same seller (or same city). Price is excluded on purpose."""
+    subject = " ".join(normalize_text(ad.get("subject") or "").split())
+    who = ad.get("seller_id") or normalize_text(ad.get("city") or "").strip()
+    if not subject or not who:
+        return ""
+    return f"{subject}|{who}"[:300]
+
+
 def dedupe_ads(ads: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Deduplicate within a single run: list_id, then URL, then fingerprint."""
     by_key: dict[str, dict[str, Any]] = {}

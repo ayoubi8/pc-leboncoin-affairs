@@ -27,6 +27,12 @@ class SettingsOut(ORMModel):
     telegram_token_set: bool = False
     notify_min_verdict: str = "good"
     notify_max_per_run: int = 5
+    max_ad_age_hours: int = 48
+    quiet_start_hour: Optional[int] = None
+    quiet_end_hour: Optional[int] = None
+    resale_haircut_pct: float = 10.0
+    avg_discount_pct: float = 6.0
+    alert_pickup_only: bool = False
     customs_mode: str = "personal"
     duty_rate: float = 0.05
     vat_rate: float = 0.19
@@ -67,6 +73,12 @@ class SettingsUpdate(BaseModel):
     telegram_chat_id: Optional[str] = None
     notify_min_verdict: Optional[str] = None
     notify_max_per_run: Optional[int] = None
+    max_ad_age_hours: Optional[int] = None
+    quiet_start_hour: Optional[int] = None
+    quiet_end_hour: Optional[int] = None
+    resale_haircut_pct: Optional[float] = None
+    avg_discount_pct: Optional[float] = None
+    alert_pickup_only: Optional[bool] = None
     customs_mode: Optional[str] = None
     duty_rate: Optional[float] = None
     vat_rate: Optional[float] = None
@@ -107,7 +119,8 @@ class SearchCreate(BaseModel):
     include_missing_specs: bool = True
     category: str = ""
     auto_check_enabled: bool = False
-    interval: Literal["1h", "6h", "12h", "daily"] = "daily"
+    interval: Literal["10m", "15m", "30m", "1h", "6h", "12h", "daily"] = "daily"
+    kind: Literal["laptop", "gpu"] = "laptop"
     notify_telegram: bool = True
 
 
@@ -132,6 +145,7 @@ class SearchUpdate(BaseModel):
     category: Optional[str] = None
     auto_check_enabled: Optional[bool] = None
     interval: Optional[str] = None
+    kind: Optional[str] = None
     notify_telegram: Optional[bool] = None
 
 
@@ -156,6 +170,7 @@ class SearchOut(ORMModel):
     category: str = ""
     auto_check_enabled: bool = False
     interval: str = "daily"
+    kind: str = "laptop"
     notify_telegram: bool = True
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
@@ -230,6 +245,18 @@ class ListingOut(ORMModel):
     ai_verdict: Optional[dict[str, Any]] = None
     ai_verdict_label: Optional[str] = None
     ai_profit_eur: Optional[float] = None
+    profit_ask_eur: Optional[float] = None
+    freshness_score: Optional[float] = None
+    is_active: bool = True
+    gone_at: Optional[datetime] = None
+    ship_ok: Optional[str] = None
+    risk_flags: list[str] = Field(default_factory=list)
+    screen_skip: str = ""
+    index_date: str = ""
+    repost_count: int = 0
+    pipeline_status: str = ""
+    bought_price_eur: Optional[float] = None
+    sold_price_dzd: Optional[float] = None
     first_seen_at: Optional[datetime] = None
     last_seen_at: Optional[datetime] = None
     last_analyzed_at: Optional[datetime] = None
@@ -257,6 +284,14 @@ class ListingCard(BaseModel):
     dz_saving_pct: Optional[float] = None
     ai_verdict_label: Optional[str] = None
     ai_profit_eur: Optional[float] = None
+    profit_ask_eur: Optional[float] = None
+    freshness_score: Optional[float] = None
+    age_hours: Optional[float] = None
+    is_active: bool = True
+    ship_ok: Optional[str] = None
+    risk_flags: list[str] = Field(default_factory=list)
+    screen_skip: str = ""
+    pipeline_status: str = ""
     is_new: bool = False
     found_at: Optional[datetime] = None
 

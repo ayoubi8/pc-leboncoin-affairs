@@ -1,20 +1,30 @@
-"""Telegram alerts for the best brand-new deals found by a search run."""
+"""Telegram deal desk: only fresh, verified, profitable ads reach the phone.
+
+Pipeline per run (cheap checks first, paid calls last):
+ 1. free gate: active, not rejected by the screen, young enough, fresh, has an Algerian price, shippable
+ 2. free maths gate: conservative profit (verdict.compute_numbers) must clear the threshold
+ 3. Haiku verdict for the survivors only
+ 4. rank by profit x freshness, verify the top ones are still online, send, stop at the per-run cap
+"""
 
 from __future__ import annotations
 
 import html
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Any, Optional
 
 from sqlalchemy.orm import Session
 
 from ..config import APP_URL
-from ..intelligence import verdict
+from ..intelligence import freshness, match, negotiation, verdict
 from ..models import Listing, Search, Settings
+from ..scraping import leboncoin
 from . import telegram
 
 ORDER = ["skip", "fair", "good", "great"]
 EMOJI = {"great": "🔥", "good": "✅", "fair": "🟡", "skip": "⛔"}
+MIN_FRESHNESS = 40.0
+PRICE_DROP_REALERT = 0.95  # re-alert when the price falls below 95 % of the last alerted price
 
 
 def _esc(value: Any) -> str:
@@ -25,8 +35,24 @@ def _eur(value: Optional[float]) -> str:
     return "—" if value is None else f"{value:,.0f} €".replace(",", " ")
 
 
+def _signed(value: Optional[float]) -> str:
+    return "—" if value is None else f"{value:+,.0f} €".replace(",", " ")
+
+
 def _dzd(value: Optional[float]) -> str:
     return "—" if value is None else f"{value:,.0f} DA".replace(",", " ")
+
+
+def _now() -> datetime:
+    return datetime.now(timezone.utc).replace(tzinfo=None)
+
+
+def in_quiet_hours(settings: Settings, now: Optional[datetime] = None) -> bool:
+    start, end = settings.quiet_start_hour, settings.quiet_end_hour
+    if start is None or end is None or start == end:
+        return False
+    hour = ((now or _now()) + timedelta(hours=1)).hour  # Algeria is UTC+1 all year
+    return start <= hour < end if start < end else (hour >= start or hour < end)
 
 
 def _spec_line(listing: Listing) -> str:
@@ -44,73 +70,180 @@ def _spec_line(listing: Listing) -> str:
     return " · ".join(_esc(p) for p in parts if p)
 
 
-def format_message(listing: Listing, result: dict[str, Any]) -> str:
+def _ship_line(listing: Listing) -> str:
+    return {"yes": "📦 ships (Leboncoin delivery)", "no": "🚫 pickup only"}.get(listing.ship_ok or "", "📦 shipping not stated")
+
+
+def format_message(
+    listing: Listing,
+    result: dict[str, Any],
+    verified: Optional[str] = None,
+    previous_price: Optional[float] = None,
+) -> str:
     n = result["numbers"]
     label = result["verdict"]
-    published = (listing.first_publication_date or "")[:10]
+    info = freshness.compute(listing)
+    online = {"active": "✅ still online (checked)", "unknown": "⚠️ availability not verified"}.get(verified or "", "")
+    title = "PRICE DROP" if previous_price else f"{label.upper()} DEAL"
     lines = [
-        f"{EMOJI.get(label, '')} <b>{_esc(label.upper())} DEAL</b> · {_esc(listing.subject)[:140]}",
-        _spec_line(listing) + (f" · published {_esc(published)}" if published else ""),
+        f"{'📉' if previous_price else EMOJI.get(label, '')} <b>{_esc(title)}</b> · {_esc(listing.subject)[:140]}",
+        _spec_line(listing),
+        f"🕒 {_esc(freshness.age_label(info['age_hours']))} · freshness {info['score']:.0f}/100" + (f" · {online}" if online else ""),
+        _ship_line(listing),
         "",
         f"💶 <b>Leboncoin:</b> {_eur(n['ask_price_eur'])}"
-        + (f" → negotiate to ~{_eur(n['buy_price_eur'])}" if n["negotiation_saving_eur"] > 0 else ""),
-        f"🚚 <b>Landed in Algeria:</b> {_eur(n['total_cost_eur'])} ({_dzd(n['total_cost_dzd'])})",
-        f"🇩🇿 <b>Algeria market:</b> {_dzd(n['dz_median_dzd'])} ≈ {_eur(n['dz_median_eur'])}"
-        f" ({_esc(n['dz_confidence'] or '?')} confidence)",
-        f"📈 <b>Estimated profit:</b> {_eur(n['profit_eur'])} ({n['margin_pct']}%)"
-        f" · max to pay {_eur(result.get('max_buy_price_eur'))}",
+        + (f" (was {_eur(previous_price)})" if previous_price else "")
+        + f" → expected buy ~{_eur(n['buy_price_eur'])}",
+        f"🚚 <b>Landed:</b> {_eur(n['total_cost_eur'])} ({_dzd(n['total_cost_dzd'])}) = shipping {_eur(n['shipping_eur'])} + customs {_eur(n['customs_eur'])}",
+        f"🇩🇿 <b>Algeria:</b> {_dzd(n['dz_median_dzd'])} ≈ {_eur(n['dz_median_eur'])} asking"
+        f" → {_eur(n['dz_net_eur'])} after {n['resale_haircut_pct']:.0f}% haircut ({_esc(n['dz_confidence'] or '?')} confidence)",
+        f"📈 <b>Profit:</b> {_signed(n['profit_eur'])} ({n['margin_pct']}%) expected · {_signed(n['profit_ask_eur'])} at asking price",
+        f"🎯 <b>Max to pay:</b> {_eur(result.get('max_buy_price_eur'))}",
     ]
+    flags = [f for f in (listing.risk_flags or []) if "positive" not in f][:4]
+    if flags:
+        lines.append("⚠️ " + _esc(" · ".join(flags)))
     if result.get("headline"):
         lines += ["", f"💬 {_esc(result['headline'])}"]
-    return "\n".join(lines)
+    return "\n".join(lines)[:1020]
 
 
-def notify_run(db: Session, settings: Settings, search: Search, new_listings: list[Listing]) -> dict[str, int]:
-    """Send the best new deals of a run. Each listing is alerted at most once (notified_at)."""
-    stats = {"candidates": 0, "verdicts": 0, "sent": 0}
+def negotiation_text(db: Session, settings: Settings, listing: Listing, numbers: dict[str, Any]) -> str:
+    """French opening message, copy-paste ready; the offer sits below the price we expect to settle at."""
+    ask = float(listing.price_eur or 0)
+    target = numbers["buy_price_eur"]
+    offer = max(round(target * 0.97 / 5) * 5, round(ask * 0.8 / 5) * 5)
+    offer = min(offer, ask)
+    try:
+        built = negotiation.build(db, settings, listing, tone="friendly", offer_override=offer)
+        return built["message_fr"]
+    except Exception:
+        return f"Bonjour, votre annonce « {listing.subject[:80]} » est-elle toujours disponible ? Je peux vous proposer {offer:.0f} €, paiement rapide. Merci."
+
+
+def _check_online(listing: Listing) -> str:
+    """'active' | 'gone' | 'unknown' from the live ad page (one request, never raises)."""
+    try:
+        return leboncoin.check_ad_status(leboncoin.make_session(), listing.url or "")
+    except Exception:
+        return "unknown"
+
+
+def _gate(settings: Settings, listing: Listing, realert: bool, search: Optional[Search] = None) -> bool:
+    """Free checks. True when the ad may be considered for an alert."""
+    if search is not None and match.hard_fail(search, listing):
+        return False
+    if listing.screen_skip or listing.gone_at is not None or listing.is_active is False:
+        return False
+    if not listing.price_eur or not listing.dz_price_median_dzd:
+        return False
+    if any("suspiciously" in f for f in (listing.risk_flags or [])):
+        return False
+    if listing.ship_ok == "no" and not settings.alert_pickup_only:
+        return False
+    info = freshness.compute(listing)
+    max_age = float(settings.max_ad_age_hours or 48)
+    if info["age_hours"] is not None and info["age_hours"] > max_age:
+        return False
+    if info["score"] < MIN_FRESHNESS:
+        return False
+    if realert:
+        return bool(listing.price_alerted_eur) and listing.price_eur <= listing.price_alerted_eur * PRICE_DROP_REALERT
+    return listing.notified_at is None
+
+
+def notify_run(
+    db: Session,
+    settings: Settings,
+    search: Search,
+    new_listings: list[Listing],
+    changed_listings: Optional[list[Listing]] = None,
+) -> dict[str, int]:
+    """Send the best fresh deals of a run. A listing is alerted once, plus once more if its price drops."""
+    stats = {"candidates": 0, "verdicts": 0, "sent": 0, "gone": 0, "quiet": 0}
     min_label = settings.notify_min_verdict if settings.notify_min_verdict in ORDER else "good"
     limit = max(1, int(settings.notify_max_per_run or 5))
 
-    # 1) cheap prefilter - no paid calls: needs an Algerian price that beats the landed cost
-    candidates = [
-        l for l in new_listings
-        if l.notified_at is None and l.price_eur and l.dz_price_median_dzd and (l.dz_saving_pct or 0) > 0
+    pool = [(listing, False) for listing in new_listings] + [
+        (listing, True) for listing in (changed_listings or []) if listing.notified_at is not None
     ]
+    candidates = [(l, r) for l, r in pool if _gate(settings, l, r, search)]
     stats["candidates"] = len(candidates)
 
-    # 2) honest verdict (Haiku) only for those
-    good: list[tuple[Listing, dict[str, Any]]] = []
-    for listing in candidates:
+    # free maths gate -> paid verdict only for ads that already look profitable on conservative numbers
+    scored: list[tuple[Listing, bool, dict[str, Any]]] = []
+    for listing, realert in candidates:
+        numbers = verdict.compute_numbers(settings, listing)
+        if numbers is None or numbers["profit_ask_eur"] <= 0:
+            continue
+        if ORDER.index(verdict.label_for(numbers["margin_pct"], numbers["dz_confidence"])) < ORDER.index(min_label):
+            continue
         try:
             result = verdict.apply(db, settings, listing)
         except Exception:
             continue
         stats["verdicts"] += 1
         if ORDER.index(result["verdict"]) >= ORDER.index(min_label):
-            good.append((listing, result))
+            scored.append((listing, realert, result))
 
-    good.sort(key=lambda item: item[1]["numbers"]["profit_eur"], reverse=True)
+    def rank(item: tuple[Listing, bool, dict[str, Any]]) -> float:
+        listing, _, result = item
+        return result["numbers"]["profit_eur"] * (0.5 + (listing.freshness_score or 50) / 200)
 
-    # 3) send the top N, one message each
-    for listing, result in good[:limit]:
+    scored.sort(key=rank, reverse=True)
+
+    if in_quiet_hours(settings):
+        stats["quiet"] = len(scored)  # keep them un-notified; they go out after quiet hours if still fresh
+        return stats
+
+    sent = 0
+    checks = 0
+    for listing, realert, result in scored:
+        if sent >= limit or checks >= limit * 2:
+            break
+        checks += 1
+        state = _check_online(listing)
+        listing.last_checked_at = _now()
+        if state == "gone":
+            listing.is_active = False
+            listing.gone_at = _now()
+            listing.freshness_score = 0.0
+            stats["gone"] += 1
+            continue
+
         images = listing.images or []
         photo = images[0] if images and isinstance(images[0], str) else None
-        sent = telegram.send_message(
+        previous = listing.price_alerted_eur if realert else None
+        first = telegram.send_message(
             settings,
-            format_message(listing, result),
+            format_message(listing, result, state, previous),
             photo_url=photo,
-            buttons=[("Open ad", listing.url or ""), ("Open in app", f"{APP_URL}/listings/{listing.id}")],
+            buttons=[
+                ("Open ad", listing.url or ""),
+                ("Open in app", f"{APP_URL}/listings/{listing.id}"),
+                ("📨 Contacted", f"cb:p:c:{listing.id}"),
+                ("✅ Bought", f"cb:p:b:{listing.id}"),
+                ("⏭ Skip", f"cb:p:s:{listing.id}"),
+            ],
         )
-        if sent["ok"]:
-            listing.notified_at = datetime.now(timezone.utc).replace(tzinfo=None)
-            stats["sent"] += 1
-        else:
-            print(f"[notify] telegram send failed: {sent['error']}")
+        if not first["ok"]:
+            print(f"[notify] telegram send failed: {first['error']}")
             break  # bad token/chat: stop spamming errors, retry next run
+        telegram.send_message(
+            settings,
+            "✍️ <b>Message to send</b> (tap to copy):\n<code>"
+            + _esc(negotiation_text(db, settings, listing, result["numbers"]))
+            + "</code>",
+            reply_to=telegram.message_id(first),
+        )
+        listing.notified_at = _now()
+        listing.price_alerted_eur = listing.price_eur
+        sent += 1
+    stats["sent"] = sent
     db.commit()
 
-    extra = len(good) - limit
-    if extra > 0 and stats["sent"]:
+    extra = len(scored) - sent - stats["gone"]
+    if extra > 0 and sent:
         telegram.send_message(
             settings,
             f"➕ {extra} more good deal(s) from “{_esc(search.name)}”.",

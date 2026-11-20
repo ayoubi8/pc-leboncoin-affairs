@@ -96,6 +96,37 @@ export default function ListingDetail() {
     onError: (err: Error) => toast(err.message, "error"),
   });
 
+  const [myPrice, setMyPrice] = useState("");
+  const refreshListing = () => queryClient.invalidateQueries({ queryKey: ["listing", listingId] });
+  const recheckMutation = useMutation({
+    mutationFn: () => api.ops.recheck(listingId),
+    onSuccess: (result) => {
+      if (result.state === "gone") toast("This ad is gone (sold or removed)", "error");
+      else if (result.state === "active") toast("Still online", "success");
+      else toast("Could not verify (Leboncoin may be blocking the check)", "error");
+      refreshListing();
+    },
+    onError: (err: Error) => toast(err.message, "error"),
+  });
+  const myPriceMutation = useMutation({
+    mutationFn: () => api.ops.setMyPrice(listingId, Number(myPrice)),
+    onSuccess: () => {
+      toast("Saved. This price now applies to every similar ad.", "success");
+      setMyPrice("");
+      refreshListing();
+      queryClient.invalidateQueries({ queryKey: ["price-book"] });
+    },
+    onError: (err: Error) => toast(err.message, "error"),
+  });
+  const pipelineMutation = useMutation({
+    mutationFn: (status: string) => api.ops.setPipeline(listingId, { status }),
+    onSuccess: () => {
+      refreshListing();
+      queryClient.invalidateQueries({ queryKey: ["pipeline"] });
+    },
+    onError: (err: Error) => toast(err.message, "error"),
+  });
+
   // Ask Gemini automatically the first time an ad without an Algerian price is opened.
   const autoAsked = useRef<number | null>(null);
   useEffect(() => {
@@ -277,6 +308,49 @@ export default function ListingDetail() {
         <div className="space-y-4">
           <Card>
             <CardHeader
+              title="Is it still for sale?"
+              subtitle={
+                listing.gone_at
+                  ? "Marked gone / sold"
+                  : listing.freshness_score !== null
+                    ? `Freshness ${Math.round(listing.freshness_score)}/100`
+                    : "Not scored yet"
+              }
+              action={
+                <Button size="sm" onClick={() => recheckMutation.mutate()} disabled={recheckMutation.isPending}>
+                  {recheckMutation.isPending ? "Checking…" : "Check now"}
+                </Button>
+              }
+            />
+            <div className="space-y-2 p-4 text-xs">
+              <p>
+                Shipping:{" "}
+                <strong>
+                  {listing.ship_ok === "yes" ? "ships" : listing.ship_ok === "no" ? "pickup only" : "not stated"}
+                </strong>
+                {listing.repost_count ? ` · reposted ${listing.repost_count}x` : ""}
+              </p>
+              {listing.screen_skip ? <p className="text-danger-ink">Rejected: {listing.screen_skip}</p> : null}
+              {listing.risk_flags?.length ? <p className="text-warning-ink">⚠ {listing.risk_flags.join(" · ")}</p> : null}
+              <div className="flex flex-wrap items-center gap-1 pt-1">
+                <span className="mr-1 text-ink-muted">Pipeline:</span>
+                {["contacted", "bought", "shipped", "sold", "skipped"].map((status) => (
+                  <Button
+                    key={status}
+                    size="sm"
+                    variant={listing.pipeline_status === status ? "primary" : "secondary"}
+                    disabled={pipelineMutation.isPending}
+                    onClick={() => pipelineMutation.mutate(listing.pipeline_status === status ? "" : status)}
+                  >
+                    {status}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          </Card>
+
+          <Card>
+            <CardHeader
               title="Market value"
               subtitle={listing.dz_query || "Price in Algeria vs landed cost"}
               action={
@@ -334,6 +408,20 @@ export default function ListingDetail() {
                   {listing.dz_error || "No Algerian price yet. Add your OpenRouter key in Settings, then search."}
                 </p>
               )}
+              <div className="mt-3 flex items-end gap-2 border-t border-border-subtle pt-3">
+                <label className="flex-1 text-xs text-ink-muted">
+                  I know this price (median, DA) - applies to every similar ad
+                  <Input
+                    type="number"
+                    value={myPrice}
+                    onChange={(event) => setMyPrice(event.target.value)}
+                    placeholder={listing.dz_price_median_dzd ? String(Math.round(listing.dz_price_median_dzd)) : "e.g. 90000"}
+                  />
+                </label>
+                <Button size="sm" variant="secondary" disabled={!myPrice || myPriceMutation.isPending} onClick={() => myPriceMutation.mutate()}>
+                  Save
+                </Button>
+              </div>
               <div className="mt-3 flex items-center justify-end gap-3 border-t border-border-subtle pt-2 text-xs">
                 <span className={cn("font-medium", scoreColor(listing.match_score))}>match {listing.match_score ?? "—"}</span>
                 <span className={cn("font-medium", scoreColor(listing.acquisition_score))}>
@@ -368,7 +456,10 @@ export default function ListingDetail() {
                       ["Shipping", eur(listing.ai_verdict.numbers.shipping_eur, 2)],
                       ["Customs + fees", eur(listing.ai_verdict.numbers.customs_eur + listing.ai_verdict.numbers.transfer_fee_eur, 2)],
                       ["Total cost", `${eur(listing.ai_verdict.numbers.total_cost_eur, 2)} · ${dzd(listing.ai_verdict.numbers.total_cost_dzd)}`],
-                      [`Sells in Algeria (÷${listing.ai_verdict.numbers.rate})`, `${eur(listing.ai_verdict.numbers.dz_median_eur, 2)} · ${dzd(listing.ai_verdict.numbers.dz_median_dzd)}`],
+                      [`Algerian asking price (÷${listing.ai_verdict.numbers.rate})`, `${eur(listing.ai_verdict.numbers.dz_median_eur, 2)} · ${dzd(listing.ai_verdict.numbers.dz_median_dzd)}`],
+                      ...(listing.ai_verdict.numbers.dz_net_eur !== undefined
+                        ? [[`Realistic sale (−${listing.ai_verdict.numbers.resale_haircut_pct}% haircut)`, eur(listing.ai_verdict.numbers.dz_net_eur, 2)]]
+                        : []),
                     ].map(([label, value]) => (
                       <div key={label} className="flex items-center justify-between px-3 py-1.5">
                         <span className="text-ink-muted">{label}</span>
@@ -381,6 +472,14 @@ export default function ListingDetail() {
                         {eur(listing.ai_verdict.numbers.profit_eur, 2)} · {dzd(listing.ai_verdict.numbers.profit_dzd)} ({listing.ai_verdict.numbers.margin_pct}%)
                       </span>
                     </div>
+                    {listing.ai_verdict.numbers.profit_ask_eur !== undefined ? (
+                      <div className="flex items-center justify-between px-3 py-1.5">
+                        <span className="text-ink-muted">Worst case (seller refuses to negotiate)</span>
+                        <span className={cn("font-medium", listing.ai_verdict.numbers.profit_ask_eur < 0 && "text-danger-ink")}>
+                          {eur(listing.ai_verdict.numbers.profit_ask_eur, 2)} ({listing.ai_verdict.numbers.margin_ask_pct}%)
+                        </span>
+                      </div>
+                    ) : null}
                   </div>
                   <p className="mt-3 text-ink-strong">{listing.ai_verdict.opinion}</p>
                   {listing.ai_verdict.risks?.length ? (

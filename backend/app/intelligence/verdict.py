@@ -16,7 +16,7 @@ import httpx
 
 from ..config import OPENROUTER_BASE_URL
 from ..models import Listing, Settings
-from . import dz_market, negotiation
+from . import dz_market, negotiation, pricebook
 from ..logistics import landed
 
 DEFAULT_MODEL = "anthropic/claude-haiku-5.5"
@@ -31,10 +31,10 @@ SYSTEM = f"""You are a blunt, honest advisor for a reseller who buys used laptop
 You receive pre-computed numbers. NEVER recompute or invent figures; quote only the numbers given.
 
 How the money works:
-- Buy price = what the buyer expects to actually pay after negotiating (not always the asking price).
+- Buy price = asking price minus the discount sellers typically accept (assumed_discount_pct); profit_ask_eur is the worst case if the seller refuses to negotiate.
 - Total cost = buy price + shipping France->Algeria + customs/taxes + transfer fees. Costs depend on the weight/box size.
-- Algerian resale price = what Gemini found online for the same config in DZD; converted to EUR at the given parallel rate (1 EUR = rate DZD).
-- Profit = Algerian resale price (EUR) - total cost (EUR). Margin = profit / total cost.
+- Algerian resale price = the median ASKING price found online for the same config in DZD, converted to EUR at the parallel rate (1 EUR = rate DZD), then reduced by resale_haircut_pct to a realistic selling price (dz_net_eur).
+- Profit = dz_net_eur - total cost (EUR). Margin = profit / total cost. If profit_ask_eur is negative, say the deal only works if the seller negotiates.
 
 Definition of a good deal (margin on total cost):
 - great: margin >= {GREAT_PCT:.0f}% and confidence is not low
@@ -59,6 +59,7 @@ def apply(db, settings: Settings, listing: Listing, buy_price_eur: Optional[floa
     listing.ai_verdict = result
     listing.ai_verdict_label = result["verdict"]
     listing.ai_profit_eur = result["numbers"]["profit_eur"]
+    listing.profit_ask_eur = result["numbers"]["profit_ask_eur"]
     db.commit()
     return result
 
@@ -68,10 +69,7 @@ def _utcnow() -> datetime:
 
 
 def _kind(listing: Listing) -> str:
-    specs = listing.specs or {}
-    if specs.get("gpu") and not specs.get("cpu") and not specs.get("ram_gb"):
-        return "gpu"
-    return "laptop"
+    return pricebook.kind_of(listing)
 
 
 def label_for(margin_pct: float, confidence: Optional[str]) -> str:
@@ -84,26 +82,45 @@ def label_for(margin_pct: float, confidence: Optional[str]) -> str:
     return "skip"
 
 
+def _setting(settings: Settings, name: str, default: float) -> float:
+    value = getattr(settings, name, None)
+    return float(default if value is None else value)
+
+
 def compute_numbers(
     settings: Settings, listing: Listing, buy_price_eur: Optional[float] = None
 ) -> Optional[dict[str, Any]]:
-    """Deterministic profit maths. None when there is no price or no Algerian price."""
+    """Deterministic, conservative profit maths. None when there is no price or no Algerian price.
+
+    - Resale: the Algerian median is an ASKING price, so a haircut (``resale_haircut_pct``) gives the
+      price you can realistically get.
+    - Buy price: the asking price minus the discount sellers really accept (``avg_discount_pct``), unless
+      given explicitly. The profit at the full asking price is reported too (``profit_ask_eur``).
+    """
     ask = listing.price_eur
     if not ask or not listing.dz_price_median_dzd:
         return None
 
-    recs = negotiation.recommendations(ask, listing.market_median_eur, listing.deal_label)
-    buy = float(buy_price_eur) if buy_price_eur else float(recs["target_eur"] or ask)
-    cost = landed.compute(settings, buy, kind=_kind(listing))
+    discount = max(0.0, min(40.0, _setting(settings, "avg_discount_pct", 6.0)))
+    haircut = max(0.0, min(60.0, _setting(settings, "resale_haircut_pct", 10.0)))
+    buy = float(buy_price_eur) if buy_price_eur else round(ask * (1 - discount / 100), 2)
+    buy = min(buy, ask)
+    kind = _kind(listing)
+    cost = landed.compute(settings, buy, kind=kind, specs=listing.specs)
+    cost_ask = cost if abs(buy - ask) < 0.005 else landed.compute(settings, ask, kind=kind, specs=listing.specs)
     rate = float(settings.eur_dzd_parallel or 280)
 
-    resale_eur = listing.dz_price_median_dzd / rate
+    resale_gross_eur = listing.dz_price_median_dzd / rate
+    resale_eur = resale_gross_eur * (1 - haircut / 100)
     profit_eur = resale_eur - cost["total_eur"]
+    profit_ask = resale_eur - cost_ask["total_eur"]
     margin_pct = profit_eur / cost["total_eur"] * 100 if cost["total_eur"] else 0.0
+    margin_ask = profit_ask / cost_ask["total_eur"] * 100 if cost_ask["total_eur"] else 0.0
     return {
         "ask_price_eur": round(ask, 2),
         "buy_price_eur": round(buy, 2),
         "negotiation_saving_eur": round(ask - buy, 2),
+        "assumed_discount_pct": round(discount, 1),
         "shipping_eur": cost["shipping"]["total_eur"],
         "customs_eur": cost["customs"]["total_eur"],
         "transfer_fee_eur": cost["transfer_fee_eur"],
@@ -113,14 +130,17 @@ def compute_numbers(
         "dz_low_dzd": listing.dz_price_low_dzd,
         "dz_median_dzd": listing.dz_price_median_dzd,
         "dz_high_dzd": listing.dz_price_high_dzd,
-        "dz_median_eur": round(resale_eur, 2),
+        "dz_median_eur": round(resale_gross_eur, 2),
+        "resale_haircut_pct": round(haircut, 1),
+        "dz_net_eur": round(resale_eur, 2),
         "dz_confidence": listing.dz_confidence,
         "profit_eur": round(profit_eur, 2),
         "profit_dzd": round(profit_eur * rate),
         "margin_pct": round(margin_pct, 1),
-        "max_buy_for_good_eur": round(
-            max(0.0, _max_buy(settings, listing, resale_eur, rate)), 2
-        ),
+        "total_cost_ask_eur": cost_ask["total_eur"],
+        "profit_ask_eur": round(profit_ask, 2),
+        "margin_ask_pct": round(margin_ask, 1),
+        "max_buy_for_good_eur": round(max(0.0, _max_buy(settings, listing, resale_eur, rate)), 2),
     }
 
 
@@ -129,7 +149,7 @@ def _max_buy(settings: Settings, listing: Listing, resale_eur: float, rate: floa
     lo, hi = 0.0, float(listing.price_eur or 0) * 2 + 500
     for _ in range(30):
         mid = (lo + hi) / 2
-        total = landed.compute(settings, mid, kind=_kind(listing))["total_eur"]
+        total = landed.compute(settings, mid, kind=_kind(listing), specs=listing.specs)["total_eur"]
         if resale_eur - total >= total * GOOD_PCT / 100:
             lo = mid
         else:
@@ -144,7 +164,7 @@ def _fallback(numbers: dict[str, Any]) -> dict[str, Any]:
         "headline": f"{numbers['margin_pct']:.0f}% margin after all costs",
         "opinion": (
             f"Buying at {numbers['buy_price_eur']} EUR costs {numbers['total_cost_eur']} EUR landed; "
-            f"it resells for about {numbers['dz_median_eur']} EUR in Algeria, a profit of "
+            f"it resells for about {numbers['dz_net_eur']} EUR in Algeria (after a {numbers['resale_haircut_pct']:.0f}% haircut), a profit of "
             f"{numbers['profit_eur']} EUR. (Rule-based verdict: AI opinion unavailable.)"
         ),
         "risks": [],

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { ArrowRight, BellRing, ListChecks, Plus, Radar, Search, TrendingDown } from "lucide-react";
+import { AlertTriangle, ArrowRight, BellRing, CheckCircle2, ListChecks, Plus, Radar, Search, TrendingDown } from "lucide-react";
 import { api } from "../lib/api";
 import { cn, dateShort, eur, timeAgo } from "../lib/utils";
 import { Badge, Button, Card, CardHeader, DealBadge, EmptyState, Skeleton } from "../components/ui";
@@ -26,6 +26,34 @@ function Stat({
       <div className="mt-2 text-2xl font-semibold">{value}</div>
       {hint ? <p className="mt-1 truncate text-xs text-ink-muted">{hint}</p> : null}
     </Card>
+  );
+}
+
+function HealthBanner() {
+  const { data } = useQuery({ queryKey: ["health"], queryFn: api.ops.health, refetchInterval: 60_000 });
+  if (!data) return null;
+  if (data.ok && !data.problems.length) {
+    const mins = data.scan.minutes_since_success;
+    return (
+      <div className="flex items-center gap-2 rounded-lg border border-success-border bg-success-bg px-3 py-2 text-xs text-success-soft-ink">
+        <CheckCircle2 className="h-4 w-4" />
+        System healthy{mins !== null ? ` · last good scan ${mins < 90 ? `${mins} min` : `${Math.round(mins / 60)} h`} ago` : ""} · Algerian prices {data.dz_lookups_24h.ok}/{data.dz_lookups_24h.total} OK (24 h)
+      </div>
+    );
+  }
+  return (
+    <div className="space-y-1 rounded-lg border border-danger-border bg-danger-bg px-3 py-2 text-xs text-danger-ink">
+      {data.problems.map((problem) => (
+        <p key={problem.kind} className="flex items-start gap-2">
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" /> {problem.message}
+        </p>
+      ))}
+      {data.problems.some((p) => p.kind.startsWith("key_")) ? (
+        <p className="pl-6">
+          <Link to="/settings" className="underline">Fix it in Settings</Link>
+        </p>
+      ) : null}
+    </div>
   );
 }
 
@@ -76,6 +104,8 @@ export default function Dashboard() {
           </Button>
         </Link>
       </div>
+
+      <HealthBanner />
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Stat label="Active searches" value={kpis.active_searches} icon={Search} hint="with a run or auto-check" />

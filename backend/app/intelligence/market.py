@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from ..models import Listing
 
+MIN_SAMPLES = 5  # comparables needed before a European reference price is trusted
 MIN_PRICE = 40.0
 MAX_PRICE = 12000.0
 
@@ -58,13 +59,11 @@ def compute_market(db: Session, listing: Listing) -> dict[str, Any]:
     samples: list[float] = []
     used_scope = "none"
     for scope, condition in tiers:
-        samples = _prices_for(db, listing, condition)
-        if len(samples) >= 3:
-            used_scope = scope
+        found = _prices_for(db, listing, condition)
+        if len(found) >= MIN_SAMPLES:
+            samples, used_scope = found, scope
             break
-    if not samples:
-        samples = _prices_for(db, listing, None)
-        used_scope = "all listings" if samples else "none"
+    # No "all listings" fallback: mixing laptops, GPUs and accessories gave meaningless medians.
 
     if not samples:
         return {
@@ -74,7 +73,7 @@ def compute_market(db: Session, listing: Listing) -> dict[str, Any]:
             "confidence": "none",
             "samples": 0,
             "scope": "none",
-            "explanation": "No comparable listings yet — run more searches to build the market sample.",
+            "explanation": f"Fewer than {MIN_SAMPLES} comparable listings of the same model so far, so no European reference price.",
         }
 
     ordered = sorted(samples)

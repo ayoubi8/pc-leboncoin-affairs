@@ -51,3 +51,8 @@ USER_AGENT = (
     "(KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
 )
 REQUEST_TIMEOUT = 120
+
+# Fetch strategies tried in order: "reader" (r.jina.ai) and/or "direct" (browser-like request).
+SCRAPE_STRATEGIES = [x.strip() for x in os.getenv("SCRAPE_STRATEGIES", "reader,direct").split(",") if x.strip() in ("reader", "direct")] or ["reader"]
+# Optional residential/rotating proxy for the scraper, e.g. http://user:pass@host:port
+PROXY_URL = os.getenv("PROXY_URL", "").strip()

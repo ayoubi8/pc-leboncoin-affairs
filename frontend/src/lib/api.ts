@@ -7,6 +7,7 @@ export type SortKey =
   | "acquisition_desc"
   | "newest"
   | "profit_desc"
+  | "opportunity"
   | "landed_asc";
 
 export interface Search {
@@ -30,6 +31,7 @@ export interface Search {
   category: string;
   auto_check_enabled: boolean;
   interval: string;
+  kind: "laptop" | "gpu";
   notify_telegram: boolean;
   created_at: string | null;
   updated_at: string | null;
@@ -87,6 +89,14 @@ export interface ListingCard {
   dz_saving_pct: number | null;
   ai_verdict_label: string | null;
   ai_profit_eur: number | null;
+  profit_ask_eur: number | null;
+  freshness_score: number | null;
+  age_hours: number | null;
+  is_active: boolean;
+  ship_ok: string | null;
+  risk_flags: string[];
+  screen_skip: string;
+  pipeline_status: string;
   is_new: boolean;
   found_at: string | null;
 }
@@ -167,6 +177,18 @@ export interface ListingDetail {
   ai_verdict: Verdict | null;
   ai_verdict_label: string | null;
   ai_profit_eur: number | null;
+  profit_ask_eur: number | null;
+  freshness_score: number | null;
+  is_active: boolean;
+  gone_at: string | null;
+  ship_ok: string | null;
+  risk_flags: string[];
+  screen_skip: string;
+  index_date: string;
+  repost_count: number;
+  pipeline_status: string;
+  bought_price_eur: number | null;
+  sold_price_dzd: number | null;
   first_seen_at: string | null;
   last_seen_at: string | null;
   last_analyzed_at: string | null;
@@ -219,6 +241,12 @@ export interface Settings {
   telegram_token_set: boolean;
   notify_min_verdict: string;
   notify_max_per_run: number;
+  max_ad_age_hours: number;
+  quiet_start_hour: number | null;
+  quiet_end_hour: number | null;
+  resale_haircut_pct: number;
+  avg_discount_pct: number;
+  alert_pickup_only: boolean;
   customs_mode: string;
   duty_rate: number;
   vat_rate: number;
@@ -262,6 +290,50 @@ export interface Dashboard {
     at: string;
     message: string;
   }[];
+}
+
+export interface SystemHealth {
+  ok: boolean;
+  problems: { kind: string; severity: "error" | "warning"; message: string }[];
+  openrouter_key: "ok" | "missing" | "rejected" | "unknown";
+  scan: {
+    last_success_at: string | null;
+    minutes_since_success: number | null;
+    blocked_streak: number;
+    auto_searches: number;
+    expected_interval_minutes: number | null;
+  };
+  dz_lookups_24h: { ok: number; total: number };
+}
+
+export interface PriceBookRow {
+  id: number;
+  key: string;
+  query: string;
+  kind: string;
+  manual: boolean;
+  ok: boolean;
+  low_dzd: number | null;
+  median_dzd: number | null;
+  high_dzd: number | null;
+  confidence: string;
+  note: string;
+  sources: { title: string; url: string }[];
+  fetched_at: string | null;
+}
+
+export interface PipelineRow extends ListingCard {
+  bought_price_eur: number | null;
+  sold_price_dzd: number | null;
+  realised: { cost_eur: number; revenue_eur: number; profit_eur: number; margin_pct: number } | null;
+}
+
+export interface PipelineBoard {
+  count: number;
+  sold: number;
+  realised_profit_eur: number;
+  learned: { avg_discount_pct: number; resale_haircut_pct: number };
+  rows: PipelineRow[];
 }
 
 export class ApiError extends Error {
@@ -384,6 +456,23 @@ export const api = {
       }),
   },
 
+  ops: {
+    health: () => request<SystemHealth>("/api/health/system"),
+    pipeline: () => request<PipelineBoard>("/api/pipeline"),
+    setPipeline: (id: number, payload: { status: string; bought_price_eur?: number | null; sold_price_dzd?: number | null }) =>
+      request<{ status: string }>(`/api/listings/${id}/pipeline`, { method: "PATCH", body: JSON.stringify(payload) }),
+    recheck: (id: number) => request<{ state: string; freshness_score: number | null }>(`/api/listings/${id}/recheck`, { method: "POST" }),
+    priceBook: () => request<PriceBookRow[]>("/api/price-book"),
+    editPrice: (id: number, median_dzd: number) =>
+      request<PriceBookRow>(`/api/price-book/${id}`, { method: "PUT", body: JSON.stringify({ median_dzd }) }),
+    deletePrice: (id: number) => request<{ deleted: number }>(`/api/price-book/${id}`, { method: "DELETE" }),
+    setMyPrice: (listingId: number, median_dzd: number) =>
+      request<{ ok: boolean; dz_price_median_dzd: number }>(`/api/listings/${listingId}/dz-price`, {
+        method: "PUT",
+        body: JSON.stringify({ median_dzd }),
+      }),
+  },
+
   settings: {
     get: () => request<Settings>("/api/settings"),
     update: (payload: Partial<Settings>) =>
@@ -414,6 +503,12 @@ export interface Verdict {
     rate: number;
     dz_median_dzd: number;
     dz_median_eur: number;
+    dz_net_eur?: number;
+    resale_haircut_pct?: number;
+    assumed_discount_pct?: number;
+    profit_ask_eur?: number;
+    margin_ask_pct?: number;
+    total_cost_ask_eur?: number;
     dz_confidence: string | null;
     profit_eur: number;
     profit_dzd: number;

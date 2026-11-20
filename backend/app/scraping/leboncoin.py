@@ -15,7 +15,7 @@ from typing import Any, Optional
 
 from curl_cffi import requests
 
-from ..config import JINA_HEADERS, JINA_READER, LEBONCOIN_BASE_URL, REQUEST_TIMEOUT
+from ..config import JINA_HEADERS, JINA_READER, LEBONCOIN_BASE_URL, PROXY_URL, REQUEST_TIMEOUT, SCRAPE_STRATEGIES, USER_AGENT
 
 NEXT_DATA_RE = re.compile(
     r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>', re.S
@@ -41,6 +41,7 @@ class ScrapePage:
     total: Optional[int] = None
     blocked: bool = False
     error: Optional[str] = None
+    strategy: str = ""
 
 
 CATEGORY_IDS = {
@@ -126,7 +127,7 @@ def parse_ads(html: str) -> tuple[list[dict[str, Any]], Optional[int]]:
     return list(ads), search_data.get("total")
 
 
-def fetch_page(
+def _fetch_reader(
     session: requests.Session,
     text: str,
     page: int = 1,
@@ -205,6 +206,99 @@ def fetch_page(
         return ScrapePage(ads=ads, total=total)
 
     return ScrapePage(error=last_error or "unknown error")
+
+
+def _fetch_direct(
+    session: requests.Session,
+    text: str,
+    page: int = 1,
+    category: str = "",
+    price_min=None,
+    price_max=None,
+    **_: Any,
+) -> ScrapePage:
+    """Fetch Leboncoin directly with a browser-like TLS fingerprint (works from some home IPs)."""
+    url = build_url(text, page, category, price_min, price_max)
+    try:
+        response = session.get(url, headers={"User-Agent": USER_AGENT, "Accept-Language": "fr-FR,fr;q=0.9"}, timeout=REQUEST_TIMEOUT)
+    except Exception as exc:
+        return ScrapePage(error=f"connection error: {exc}")
+    html = response.content.decode("utf-8", "replace")
+    if response.status_code in (403, 429, 503):
+        return ScrapePage(blocked=True, error=f"HTTP {response.status_code}: direct fetch blocked (DataDome)")
+    if response.status_code != 200:
+        return ScrapePage(error=f"HTTP {response.status_code}")
+    try:
+        ads, total = parse_ads(html)
+    except ScrapeError as exc:
+        return ScrapePage(error=str(exc))
+    if ads or NEXT_DATA_RE.search(html):
+        return ScrapePage(ads=ads, total=total)
+    if detect_block(200, html):
+        return ScrapePage(blocked=True, error="HTTP 200: direct fetch shows a challenge page")
+    return ScrapePage(error="no ad payload in direct response")
+
+
+def fetch_page(session: requests.Session, text: str, page: int = 1, **kwargs: Any) -> ScrapePage:
+    """Try each configured strategy (default: reader, then direct) until one returns ads."""
+    last = ScrapePage(error="no scrape strategy configured")
+    for name in SCRAPE_STRATEGIES:
+        func = _fetch_direct if name == "direct" else _fetch_reader
+        result = func(session, text, page=page, **kwargs)
+        result.strategy = name
+        if not (result.blocked or result.error):
+            return result
+        last = result
+    return last
+
+
+AD_GONE_MARKERS = (
+    "n'est plus disponible",
+    "n’est plus disponible",
+    "cette annonce n'existe plus",
+    "cette annonce n’existe plus",
+    "annonce supprimée",
+    "annonce expirée",
+    "page introuvable",
+)
+
+
+def classify_ad_page(status: Optional[int], html: str) -> str:
+    """'active' | 'gone' | 'unknown' for a fetched ad page."""
+    if status in (404, 410):
+        return "gone"
+    lowered = html.lower()
+    if any(marker in lowered for marker in AD_GONE_MARKERS):
+        return "gone"
+    match = NEXT_DATA_RE.search(html)
+    if match:
+        try:
+            ad = (json.loads(match.group(1)).get("props", {}).get("pageProps", {}) or {}).get("ad") or {}
+        except json.JSONDecodeError:
+            ad = {}
+        if ad:
+            return "gone" if str(ad.get("status", "active")).lower() in ("deleted", "expired", "sold", "inactive") else "active"
+    if status == 200 and not detect_block(status, html) and len(html) > 2000:
+        return "active"
+    return "unknown"
+
+
+def check_ad_status(session: requests.Session, ad_url: str) -> str:
+    """Is the ad still online? Never raises; blocked/failed checks return 'unknown'."""
+    if not ad_url:
+        return "unknown"
+    urls = [reader_url(ad_url)] if "reader" in SCRAPE_STRATEGIES else []
+    if "direct" in SCRAPE_STRATEGIES:
+        urls.append(ad_url)
+    for url in urls:
+        try:
+            response = session.get(url, headers=JINA_HEADERS if url.startswith(JINA_READER) else {"User-Agent": USER_AGENT}, timeout=REQUEST_TIMEOUT)
+        except Exception:
+            continue
+        state = classify_ad_page(response.status_code, response.content.decode("utf-8", "replace"))
+        if state != "unknown":
+            return state
+    return "unknown"
 
 
 def _first_price(raw: dict[str, Any]) -> tuple[Optional[int], Optional[float]]:
@@ -292,6 +386,8 @@ def normalize_ad(raw: dict[str, Any]) -> dict[str, Any]:
         "description": raw.get("body") or "",
         "images": _images(raw),
         "first_publication_date": raw.get("first_publication_date") or "",
+        "index_date": raw.get("index_date") or "",
+        "seller_id": str(owner.get("user_id") or owner.get("store_id") or "") if owner else "",
         "is_boosted": bool(raw.get("is_boosted")),
         "is_pro": (owner.get("type") == "pro") if owner else False,
         "raw": raw,
@@ -299,4 +395,6 @@ def normalize_ad(raw: dict[str, Any]) -> dict[str, Any]:
 
 
 def make_session() -> requests.Session:
+    if PROXY_URL:
+        return requests.Session(impersonate="chrome", proxies={"http": PROXY_URL, "https": PROXY_URL})
     return requests.Session(impersonate="chrome")

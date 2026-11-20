@@ -7,7 +7,7 @@ from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from . import auth
-from .api import cron, dashboard, imports, listings, searches
+from .api import cron, dashboard, imports, listings, ops, searches
 from .api import settings as settings_api
 from .config import FRONTEND_ORIGINS, SERVERLESS, STATIC_DIR
 from .db import init_db
@@ -41,6 +41,7 @@ app.include_router(cron.router)
 app.include_router(dashboard.router)
 app.include_router(searches.router)
 app.include_router(listings.router)
+app.include_router(ops.router)
 app.include_router(settings_api.router)
 app.include_router(imports.router)
 

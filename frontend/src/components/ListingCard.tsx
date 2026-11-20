@@ -1,8 +1,22 @@
 import { Link } from "react-router-dom";
-import { ExternalLink, MapPin, Sparkles } from "lucide-react";
+import { AlertTriangle, ExternalLink, MapPin, Sparkles } from "lucide-react";
 import type { ListingCard as ListingCardType } from "../lib/api";
 import { cn, conditionLabel, dateShort, dzd, eur, imageUrl, scoreColor, specsSummary } from "../lib/utils";
 import { Badge, DealBadge, ScoreRing } from "./ui";
+
+export function ageLabel(hours: number | null | undefined): string {
+  if (hours === null || hours === undefined) return "";
+  if (hours < 1) return `${Math.max(1, Math.round(hours * 60))} min ago`;
+  if (hours < 48) return `${Math.round(hours)} h ago`;
+  return `${Math.round(hours / 24)} d ago`;
+}
+
+function freshnessTone(score: number | null | undefined): string {
+  if (score === null || score === undefined) return "";
+  if (score >= 75) return "border-success-border bg-success-bg text-success-soft-ink";
+  if (score >= 45) return "border-warning-border bg-warning-bg text-warning-ink";
+  return "border-danger-border bg-danger-bg text-danger-ink";
+}
 
 export default function ListingCard({
   card,
@@ -59,6 +73,13 @@ export default function ListingCard({
             ) : null}
             {card.condition ? <Badge>{conditionLabel(card.condition)}</Badge> : null}
           </div>
+          <div className="absolute right-2 top-2 flex flex-col items-end gap-1">
+            {!card.is_active ? <Badge className="border-danger-border bg-danger-bg text-danger-ink">Gone / sold</Badge> : null}
+            {card.age_hours !== null && card.is_active ? (
+              <Badge className={freshnessTone(card.freshness_score)} >{ageLabel(card.age_hours)}</Badge>
+            ) : null}
+            {card.ship_ok === "no" ? <Badge className="border-warning-border bg-warning-bg text-warning-ink">Pickup only</Badge> : null}
+          </div>
         </div>
       </Link>
 
@@ -93,7 +114,22 @@ export default function ListingCard({
           <p className="text-xs font-medium">
             AI: {card.ai_verdict_label}
             {card.ai_profit_eur !== null && card.ai_profit_eur !== undefined ? ` · profit ${eur(card.ai_profit_eur)}` : ""}
+            {card.profit_ask_eur !== null && card.profit_ask_eur !== undefined ? ` (${eur(card.profit_ask_eur)} at asking)` : ""}
           </p>
+        ) : null}
+
+        {card.screen_skip ? (
+          <p className="flex items-center gap-1 text-[11px] text-danger-ink">
+            <AlertTriangle className="h-3 w-3" /> {card.screen_skip}
+          </p>
+        ) : card.risk_flags?.length ? (
+          <p className="flex items-start gap-1 text-[11px] text-warning-ink">
+            <AlertTriangle className="mt-0.5 h-3 w-3 shrink-0" /> {card.risk_flags.slice(0, 2).join(" · ")}
+          </p>
+        ) : null}
+
+        {card.pipeline_status ? (
+          <p className="text-[11px] font-medium capitalize text-info-ink">Pipeline: {card.pipeline_status}</p>
         ) : null}
 
         <div className="mt-auto flex items-center justify-between pt-1 text-[11px] text-ink-muted">

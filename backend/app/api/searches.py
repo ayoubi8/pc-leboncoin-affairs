@@ -12,6 +12,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from ..db import get_db
+from ..intelligence import freshness, match
 from ..logistics import landed
 from ..models import Listing, Run, Search, SearchListing
 from ..schemas import (
@@ -131,6 +132,9 @@ def search_results(
     new_only: bool = False,
     new_within: str = "24h",
     good_only: bool = False,
+    relevant_only: bool = False,
+    hide_gone: bool = True,
+    max_age_hours: Optional[int] = None,
     db: Session = Depends(get_db),
 ) -> ResultsResponse:
     search = _get_search(db, search_id)
@@ -176,6 +180,14 @@ def search_results(
             continue
         if hide_missing_specs and not specs.get("cpu"):
             continue
+        if hide_gone and (listing.gone_at is not None or listing.is_active is False):
+            continue
+        if max_age_hours is not None:
+            age = freshness.age_hours(listing, now)
+            if age is not None and age > max_age_hours:
+                continue
+        if relevant_only and match.hard_fail(search, listing):
+            continue
         found = link.found_at
         if new_only and not (found and found >= filter_cutoff):
             continue
@@ -196,7 +208,7 @@ def search_results(
                 continue
             specs = listing.specs or {}
             kind = "gpu" if specs.get("gpu") and not specs.get("cpu") and not specs.get("ram_gb") else "laptop"
-            landed_totals[card.id] = landed.compute(settings, listing.price_eur, kind=kind)["total_eur"]
+            landed_totals[card.id] = landed.compute(settings, listing.price_eur, kind=kind, specs=listing.specs)["total_eur"]
 
     def sort_key(card: ListingCard):
         if sort == "price_asc":
@@ -209,6 +221,10 @@ def search_results(
             return (card.match_score is None, -(card.match_score or 0))
         if sort == "acquisition_desc":
             return (card.acquisition_score is None, -(card.acquisition_score or 0))
+        if sort == "opportunity":  # conservative profit weighted by how fresh the ad is
+            if card.ai_profit_eur is None:
+                return (True, 0)
+            return (False, -(card.ai_profit_eur * (0.5 + (card.freshness_score or 50) / 200)))
         if sort == "profit_desc":
             return (card.ai_profit_eur is None, -(card.ai_profit_eur or 0))
         if sort == "newest":

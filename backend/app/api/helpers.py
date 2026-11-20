@@ -6,6 +6,7 @@ from typing import Optional
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from ..intelligence import freshness
 from ..models import Listing, Run, Search, SearchListing, Settings
 from ..schemas import ListingCard, SearchOut
 
@@ -77,6 +78,14 @@ def listing_card(listing: Listing, found_at: Optional[datetime] = None, is_new: 
         dz_saving_pct=listing.dz_saving_pct,
         ai_verdict_label=listing.ai_verdict_label,
         ai_profit_eur=listing.ai_profit_eur,
+        profit_ask_eur=listing.profit_ask_eur,
+        freshness_score=listing.freshness_score,
+        age_hours=freshness.age_hours(listing),
+        is_active=listing.is_active is not False and listing.gone_at is None,
+        ship_ok=listing.ship_ok,
+        risk_flags=list(listing.risk_flags or []),
+        screen_skip=listing.screen_skip or "",
+        pipeline_status=listing.pipeline_status or "",
         is_new=is_new,
         found_at=found_at,
     )

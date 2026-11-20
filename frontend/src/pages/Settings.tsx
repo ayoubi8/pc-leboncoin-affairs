@@ -299,6 +299,43 @@ export default function Settings() {
               onChange={(event) => set("notify_max_per_run", Number(event.target.value) || 5)}
             />
           </div>
+          <NumberField
+            label="Alert only ads younger than"
+            suffix="hours"
+            value={form.max_ad_age_hours}
+            onChange={(value) => set("max_ad_age_hours", Math.max(1, Math.round(value)))}
+          />
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <Label>Quiet from (Algeria hour)</Label>
+              <Input
+                type="number"
+                min={0}
+                max={23}
+                placeholder="off"
+                value={form.quiet_start_hour ?? ""}
+                onChange={(event) => set("quiet_start_hour", event.target.value === "" ? null : Number(event.target.value))}
+              />
+            </div>
+            <div>
+              <Label>Quiet until</Label>
+              <Input
+                type="number"
+                min={0}
+                max={24}
+                placeholder="off"
+                value={form.quiet_end_hour ?? ""}
+                onChange={(event) => set("quiet_end_hour", event.target.value === "" ? null : Number(event.target.value))}
+              />
+            </div>
+          </div>
+          <div className="sm:col-span-2">
+            <Switch
+              checked={form.alert_pickup_only}
+              onChange={(value) => set("alert_pickup_only", value)}
+              label="Also alert on ads that cannot be shipped (pickup only)"
+            />
+          </div>
           <div className="flex flex-wrap gap-2 sm:col-span-2">
             <Button
               type="button"
@@ -331,6 +368,29 @@ export default function Settings() {
             </Button>
             <span className="self-center text-[11px] text-ink-faint">Save settings before Detect / Test.</span>
           </div>
+        </div>
+      </Card>
+
+      <Card>
+        <CardHeader
+          title="Resale model"
+          subtitle="Keeps profit estimates honest. Both values are re-learned automatically from the deals you mark Bought / Sold."
+        />
+        <div className="grid gap-4 p-4 sm:grid-cols-2">
+          <NumberField
+            label="Resale haircut"
+            suffix="% below the Algerian asking price"
+            step={0.5}
+            value={form.resale_haircut_pct}
+            onChange={(value) => set("resale_haircut_pct", value)}
+          />
+          <NumberField
+            label="Discount sellers accept"
+            suffix="% off the Leboncoin price"
+            step={0.5}
+            value={form.avg_discount_pct}
+            onChange={(value) => set("avg_discount_pct", value)}
+          />
         </div>
       </Card>
 

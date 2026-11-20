@@ -56,7 +56,7 @@ def read_listing(listing_id: int, db: Session = Depends(get_db)) -> ListingDetai
     ).scalars().all()
 
     market_info = market.compute_market(db, listing)
-    cost = landed.compute(settings, listing.price_eur or 0, kind=_kind(listing))
+    cost = landed.compute(settings, listing.price_eur or 0, kind=_kind(listing), specs=listing.specs)
     recs = negotiation.recommendations(
         listing.price_eur, listing.market_median_eur, listing.deal_label
     )
@@ -110,14 +110,16 @@ def generate_verdict(
 
 @router.get("/deals/best", response_model=list[ListingCard])
 def best_deals(limit: int = 30, db: Session = Depends(get_db)) -> list[ListingCard]:
-    """Listings with an AI verdict, best resale profit first (skips excluded)."""
+    """Listings with an AI verdict that are still online, ranked by profit weighted by freshness."""
     rows = db.execute(
         select(Listing)
         .where(Listing.ai_verdict_label.in_(["great", "good", "fair"]))
+        .where(Listing.gone_at.is_(None), Listing.is_active.isnot(False), Listing.screen_skip == "")
         .order_by(Listing.ai_profit_eur.desc())
-        .limit(min(max(limit, 1), 100))
+        .limit(300)
     ).scalars().all()
-    return [listing_card(row) for row in rows]
+    rows.sort(key=lambda r: -((r.ai_profit_eur or 0) * (0.5 + (r.freshness_score if r.freshness_score is not None else 50) / 200)))
+    return [listing_card(row) for row in rows[: min(max(limit, 1), 100)]]
 
 
 @router.post("/listings/{listing_id}/quote", response_model=QuoteResponse)
@@ -136,6 +138,7 @@ def quote(listing_id: int, payload: QuoteRequest, db: Session = Depends(get_db))
         kind=kind,
         weight_kg=payload.weight_kg,
         dims_cm=payload.package_cm,
+        specs=listing.specs,
     )
     recs = negotiation.recommendations(offer, listing.market_median_eur, label)
     market_info = market.compute_market(db, listing)

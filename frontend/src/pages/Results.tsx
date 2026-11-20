@@ -16,6 +16,7 @@ const SORTS: { value: SortKey; label: string }[] = [
   { value: "match_desc", label: "Best hardware match" },
   { value: "acquisition_desc", label: "Best acquisition" },
   { value: "newest", label: "Newest" },
+  { value: "opportunity", label: "Best opportunity (profit × freshness)" },
   { value: "profit_desc", label: "Highest resale profit" },
   { value: "landed_asc", label: "Lowest landed cost" },
 ];
@@ -41,6 +42,9 @@ export default function Results() {
     new_only: false,
     new_within: "24h",
     good_only: false,
+    relevant_only: true,
+    show_gone: false,
+    max_age_hours: "",
   });
 
   const params = useMemo(
@@ -57,6 +61,9 @@ export default function Results() {
       new_only: filters.new_only || undefined,
       new_within: filters.new_only ? filters.new_within : undefined,
       good_only: filters.good_only || undefined,
+      relevant_only: filters.relevant_only || undefined,
+      hide_gone: filters.show_gone ? "false" : undefined,
+      max_age_hours: filters.max_age_hours || undefined,
     }),
     [sort, filters],
   );
@@ -230,6 +237,38 @@ export default function Results() {
               />
               Good deals only
             </label>
+            <label className="flex items-end gap-2 pb-2 text-xs text-ink-label">
+              <input
+                type="checkbox"
+                className="h-4 w-4 accent-primary"
+                checked={filters.relevant_only}
+                onChange={(event) => setFilters((current) => ({ ...current, relevant_only: event.target.checked }))}
+              />
+              Only ads matching my search (CPU/GPU/RAM/storage)
+            </label>
+            <label className="flex items-end gap-2 pb-2 text-xs text-ink-label">
+              <input
+                type="checkbox"
+                className="h-4 w-4 accent-primary"
+                checked={filters.show_gone}
+                onChange={(event) => setFilters((current) => ({ ...current, show_gone: event.target.checked }))}
+              />
+              Show sold / gone ads
+            </label>
+            <div className="flex items-end gap-2">
+              <span className="pb-2 text-xs text-ink-label">Max age</span>
+              <Select
+                value={filters.max_age_hours}
+                onChange={(event) => setFilters((current) => ({ ...current, max_age_hours: event.target.value }))}
+                className="h-8 w-28 py-1 text-xs"
+              >
+                <option value="">Any</option>
+                <option value="6">6 h</option>
+                <option value="24">24 h</option>
+                <option value="48">48 h</option>
+                <option value="168">7 days</option>
+              </Select>
+            </div>
             <div className="flex items-end gap-2">
               <label className="flex items-end gap-2 pb-2 text-xs text-ink-label">
                 <input

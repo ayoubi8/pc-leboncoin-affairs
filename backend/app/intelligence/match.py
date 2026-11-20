@@ -101,3 +101,19 @@ def compute_match(search: Search, listing: Listing, include_missing: bool | None
         score = sum(WEIGHTS[name] * check["value"] for name, check in checks.items()) / total_weight * 100
 
     return {"score": round(score, 1), "checks": checks}
+
+
+HARD_CHECKS = ("cpu", "cpu_family", "gpu", "ram_min", "storage_min")
+
+
+def hard_fail(search: Search, listing: Listing) -> str:
+    """Why the ad does not fit the search's hard criteria (CPU/GPU/RAM/storage), or "" if it fits.
+
+    A criterion the ad does not state only counts as a failure when the search excludes missing specs.
+    """
+    checks = compute_match(search, listing)["checks"]
+    for name in HARD_CHECKS:
+        check = checks.get(name)
+        if check and (check["status"] == "fail" or (check["status"] == "unknown" and not search.include_missing_specs)):
+            return check["reason"]
+    return ""

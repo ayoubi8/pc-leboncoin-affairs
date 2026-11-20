@@ -72,11 +72,33 @@ def _params(search: Search) -> dict[str, Any]:
     return params
 
 
+GPU_CATEGORY_ID = "83"  # Leboncoin "Accessoires informatique" (graphics cards are listed there)
+
+
+def _gpu_queries(search: Search) -> list[GeneratedQuery]:
+    """Bare graphics-card searches: model name first, then the generic French phrase."""
+    model = _clean(search.gpu) or _clean(search.brand)
+    params: dict[str, Any] = {"category": GPU_CATEGORY_ID}
+    if search.price_min is not None or search.price_max is not None:
+        params["price_min"], params["price_max"] = search.price_min, search.price_max
+    texts = [model] if model else []
+    texts.append(f"carte graphique {model}".strip())
+    seen: set[str] = set()
+    out = []
+    for text in texts:
+        if text.lower() not in seen:
+            seen.add(text.lower())
+            out.append(GeneratedQuery(text=text, params=dict(params)))
+    return out
+
+
 def generate_queries(search: Search, limit: int = 3) -> list[GeneratedQuery]:
     """Full query first, then a lighter one without GPU/screen/condition.
 
     With no inputs at all the text falls back to "pc portable" so the search is not empty.
     """
+    if getattr(search, "kind", "laptop") == "gpu":
+        return _gpu_queries(search)[:limit]
     params = _params(search)
     queries: list[GeneratedQuery] = []
     seen: set[str] = set()

@@ -8,6 +8,11 @@ services:
       APP_PASSWORD: ${APP_PASSWORD:-}
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
       APP_URL: ${APP_URL:-http://localhost:8000}
+      TZ: ${TZ:-Africa/Algiers}
+      # "reader" = r.jina.ai, "direct" = straight from this machine; tried in this order
+      SCRAPE_STRATEGIES: ${SCRAPE_STRATEGIES:-reader,direct}
+      # Optional residential proxy if Leboncoin blocks your IP, e.g. http://user:pass@host:port
+      PROXY_URL: ${PROXY_URL:-}
       # DATABASE_URL: postgresql://user:pass@host:5432/db   # default is SQLite in the volume below
     volumes:
       - app-data:/app/data      # SQLite database lives here

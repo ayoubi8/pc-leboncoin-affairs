@@ -4,6 +4,8 @@ import Layout from "./components/Layout";
 import BestDeals from "./pages/BestDeals";
 import Dashboard from "./pages/Dashboard";
 import ListingDetail from "./pages/ListingDetail";
+import Pipeline from "./pages/Pipeline";
+import PriceBook from "./pages/PriceBook";
 import Results from "./pages/Results";
 import SearchForm from "./pages/SearchForm";
 import Searches from "./pages/Searches";
@@ -16,6 +18,8 @@ export default function App() {
       <Route element={<Layout />}>
         <Route index element={<Dashboard />} />
         <Route path="deals" element={<BestDeals />} />
+        <Route path="pipeline" element={<Pipeline />} />
+        <Route path="price-book" element={<PriceBook />} />
         <Route path="searches" element={<Searches />} />
         <Route path="searches/new" element={<SearchForm />} />
         <Route path="searches/:id/edit" element={<SearchForm />} />

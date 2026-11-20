@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
-import { Laptop, LayoutDashboard, Trophy, Moon, Monitor, Plus, Search, Settings as SettingsIcon, Sun } from "lucide-react";
+import { BookOpen, Kanban, Laptop, LayoutDashboard, Trophy, Moon, Monitor, Plus, Search, Settings as SettingsIcon, Sun } from "lucide-react";
 import { cn } from "../lib/utils";
 import { applyTheme, getThemePreference, watchSystemTheme, type ThemePreference } from "../lib/theme";
 import { Toaster } from "./ui";
@@ -8,6 +8,8 @@ import { Toaster } from "./ui";
 const NAV = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard, end: true },
   { to: "/deals", label: "Best deals", icon: Trophy, end: true },
+  { to: "/pipeline", label: "Pipeline", icon: Kanban, end: true },
+  { to: "/price-book", label: "Price book", icon: BookOpen, end: true },
   { to: "/searches", label: "Searches", icon: Search, end: false },
   { to: "/searches/new", label: "New search", icon: Plus, end: true },
   { to: "/settings", label: "Settings", icon: SettingsIcon, end: true },

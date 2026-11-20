@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import random
 import time
 from datetime import datetime, timezone
 from typing import Any, Optional
@@ -9,7 +10,7 @@ from sqlalchemy.orm import Session
 
 from ..intelligence.analyze import analyze_listing
 from ..models import Listing, PriceSnapshot, Run, Search, SearchListing, Settings
-from ..processing.dedup import dedupe_ads, price_changed
+from ..processing.dedup import dedupe_ads, listing_fingerprint, price_changed
 from ..scraping import leboncoin
 from .query_generator import GeneratedQuery, generate_queries
 
@@ -38,6 +39,27 @@ def _find_listing(db: Session, ad: dict[str, Any]) -> Optional[Listing]:
             select(Listing).where(Listing.url.in_(candidates))
         ).scalars().first()
     return None
+
+
+KNOWN_STOP_RATIO = 0.7  # stop paging when this share of a page is already in the database
+
+
+def _known_ratio(db: Session, ads: list[dict[str, Any]]) -> float:
+    ids = [ad["list_id"] for ad in ads if ad.get("list_id")]
+    if not ids:
+        return 0.0
+    known = set(db.execute(select(Listing.list_id).where(Listing.list_id.in_(ids))).scalars())
+    return len(known) / len(ids)
+
+
+def _find_repost(db: Session, fingerprint: str) -> Optional[Listing]:
+    if not fingerprint:
+        return None
+    return db.execute(
+        select(Listing)
+        .where(Listing.fingerprint == fingerprint, Listing.repost_of_id.is_(None))
+        .order_by(Listing.id)
+    ).scalars().first()
 
 
 def upsert_ads(
@@ -71,12 +93,23 @@ def upsert_ads(
                 description=ad.get("description") or "",
                 images=ad.get("images") or [],
                 first_publication_date=ad.get("first_publication_date") or "",
+                index_date=ad.get("index_date") or "",
+                seller_id=ad.get("seller_id") or "",
                 is_boosted=bool(ad.get("is_boosted")),
                 is_pro=bool(ad.get("is_pro")),
                 raw=ad.get("raw") or {},
                 first_seen_at=now,
                 last_seen_at=now,
             )
+            listing.fingerprint = listing_fingerprint(ad)
+            original = _find_repost(db, listing.fingerprint)
+            if original is not None:
+                # Same seller re-posted the same ad: link it and never alert twice for it.
+                listing.repost_of_id = original.id
+                listing.notified_at = original.notified_at
+                listing.pipeline_status = original.pipeline_status or ""
+                original.repost_count = (original.repost_count or 0) + 1
+                listing.repost_count = original.repost_count
             db.add(listing)
             db.flush()
             new_listings.append(listing)
@@ -87,6 +120,10 @@ def upsert_ads(
                 listing.price_eur = ad.get("price_eur")
                 listing.price_cents = ad.get("price_cents") or listing.price_cents
             listing.last_seen_at = now
+            if ad.get("index_date"):
+                listing.index_date = ad["index_date"]
+            if not listing.fingerprint:
+                listing.fingerprint = listing_fingerprint(ad)
             if not listing.subject:
                 listing.subject = ad.get("subject") or ""
             if not listing.description:
@@ -129,6 +166,7 @@ def upsert_ads(
         "skipped": max(0, len(ads) - len(new_listings) - len(changed_listings)),
         "touched": len(touched),
         "new_listings": new_listings,
+        "changed_listings": changed_listings,
     }
 
 
@@ -178,13 +216,16 @@ def run_search(
                     break
                 if not result.ads:
                     break
-                ads.extend(leboncoin.normalize_ad(raw) for raw in result.ads)
+                page_ads = [leboncoin.normalize_ad(raw) for raw in result.ads]
+                ads.extend(page_ads)
                 if page < pages:
-                    time.sleep(delay)
+                    if _known_ratio(db, page_ads) >= KNOWN_STOP_RATIO:
+                        break  # sorted newest-first: the remaining pages are old news
+                    time.sleep(delay * random.uniform(0.7, 1.4))
             if blocked:
                 break
             if index < len(queries) - 1:
-                time.sleep(delay)
+                time.sleep(delay * random.uniform(0.7, 1.4))
 
         # local price filters
         if search.price_min is not None:
@@ -200,11 +241,11 @@ def run_search(
         run.updated_count = counts["updated"]
         run.skipped_count = counts["skipped"]
 
-        if settings.telegram_enabled and search.notify_telegram and counts["new_listings"]:
+        if settings.telegram_enabled and search.notify_telegram and (counts["new_listings"] or counts["changed_listings"]):
             try:
                 from ..notify import deals
 
-                deals.notify_run(db, settings, search, counts["new_listings"])
+                deals.notify_run(db, settings, search, counts["new_listings"], counts["changed_listings"])
             except Exception as exc:  # alerts must never break a run
                 print(f"[notify] search {search.id}: {type(exc).__name__}: {exc}")
 

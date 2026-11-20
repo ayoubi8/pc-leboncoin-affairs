@@ -25,7 +25,8 @@ const EMPTY: SearchInput = {
   include_missing_specs: true,
   category: "informatique/ordinateurs",
   auto_check_enabled: false,
-  interval: "daily",
+  interval: "15m",
+  kind: "laptop",
   notify_telegram: true,
 };
 
@@ -59,7 +60,7 @@ export default function SearchForm() {
       void last_run_at;
       void last_run_status;
       void result_count;
-      const interval = ["1h", "6h", "12h", "daily"].includes(rest.interval) ? rest.interval : "daily";
+      const interval = ["10m", "15m", "30m", "1h", "6h", "12h", "daily"].includes(rest.interval) ? rest.interval : "daily";
       setForm({ ...rest, interval, category: "informatique/ordinateurs", keyword: "pc portable", location: "" });
     }
   }, [existing.data]);
@@ -162,6 +163,16 @@ export default function SearchForm() {
             <Label htmlFor="name">Name *</Label>
             <Input id="name" value={form.name} onChange={(event) => set("name", event.target.value)} placeholder="i5 16GB under 500 €" />
           </div>
+          <div>
+            <Label htmlFor="kind">What are you hunting?</Label>
+            <Select id="kind" value={form.kind} onChange={(event) => set("kind", event.target.value as "laptop" | "gpu")}>
+              <option value="laptop">Laptops / PCs</option>
+              <option value="gpu">Graphics cards (GPU)</option>
+            </Select>
+            {form.kind === "gpu" ? (
+              <p className="mt-1 text-[11px] text-ink-muted">Only the GPU model (e.g. RTX 3060), brand and price are used for card searches.</p>
+            ) : null}
+          </div>
         </div>
       </Card>
 
@@ -249,6 +260,9 @@ export default function SearchForm() {
           <div className="w-40">
             <Label htmlFor="interval">Interval</Label>
             <Select id="interval" value={form.interval} onChange={(event) => set("interval", event.target.value)}>
+              <option value="10m">Every 10 minutes</option>
+              <option value="15m">Every 15 minutes</option>
+              <option value="30m">Every 30 minutes</option>
               <option value="1h">Every hour</option>
               <option value="6h">Every 6 hours</option>
               <option value="12h">Every 12 hours</option>

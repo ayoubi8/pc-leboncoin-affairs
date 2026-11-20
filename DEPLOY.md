@@ -49,3 +49,10 @@ docker compose up -d --build      # then open http://localhost:8000
 - Optional env (shell or `.env` next to `docker-compose.yml`): `APP_PASSWORD` (set it if the port is reachable from the internet), `OPENROUTER_API_KEY`, `APP_URL`.
 - To use Postgres instead of SQLite, uncomment `DATABASE_URL` in the compose file.
 - Logs: `docker compose logs -f`. Stop: `docker compose down` (add `-v` to also delete the data).
+
+## Running as a deal machine (recommended: Docker on an always-on PC/VPS)
+- Searches can run every 10 / 15 / 30 minutes. After the first run only the newest page is fetched; paging stops as soon as a page is mostly ads already seen.
+- Telegram alerts only for ads that are young (default 48 h), shippable, still online (checked against the live ad page just before sending) and profitable even at the full asking price. Each alert carries a ready-to-paste French message.
+- Telegram buttons: Contacted / Bought / Skip. Commands: `/paid ID PRICE`, `/sold ID DZD`, `/status`.
+- Health: the Dashboard banner and `/status` show scanner blocks and a rejected OpenRouter key; you also get a Telegram alert for each.
+- If Leboncoin blocks your IP, set `PROXY_URL` (and keep `SCRAPE_STRATEGIES=reader,direct`).

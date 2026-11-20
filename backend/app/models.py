@@ -21,17 +21,22 @@ def utcnow() -> datetime:
     return datetime.now(timezone.utc).replace(tzinfo=None)
 
 
+# Porsay "Colissimo" prices (https://porsay.com/fr/pricing/). A parcel pays the first tier it fits in.
 DEFAULT_PORSAY_TARIFF = [
-    {"max_kg": 1, "price_eur": 40.0},
-    {"max_kg": 2, "price_eur": 52.0},
-    {"max_kg": 5, "price_eur": 70.0},
-    {"max_kg": 10, "price_eur": 115.0},
-    {"max_kg": 15, "price_eur": 150.0},
-    {"max_kg": 20, "price_eur": 180.0},
-    {"max_kg": 25, "price_eur": 210.0},
-    {"max_kg": 30, "price_eur": 240.0},
+    {"max_kg": 1, "price_eur": 23.80},   # 0.5 kg and 1 kg
+    {"max_kg": 2, "price_eur": 27.25},
+    {"max_kg": 5, "price_eur": 41.87},
+    {"max_kg": 10, "price_eur": 72.87},
+    {"max_kg": 20, "price_eur": 129.87},
+    {"max_kg": 30, "price_eur": 186.87},
 ]
-DEFAULT_PORSAY_PER_KG_OVER = 8.0
+DEFAULT_PORSAY_PER_KG_OVER = 5.7  # slope of the 20 -> 30 kg step
+# What earlier versions stored as defaults; upgraded in place by init_db.
+LEGACY_PORSAY_TARIFF = [
+    {"max_kg": 1, "price_eur": 40.0}, {"max_kg": 2, "price_eur": 52.0}, {"max_kg": 5, "price_eur": 70.0},
+    {"max_kg": 10, "price_eur": 115.0}, {"max_kg": 15, "price_eur": 150.0}, {"max_kg": 20, "price_eur": 180.0},
+    {"max_kg": 25, "price_eur": 210.0}, {"max_kg": 30, "price_eur": 240.0},
+]
 
 
 class Settings(Base):
@@ -59,6 +64,16 @@ class Settings(Base):
     telegram_chat_id = Column(String(60), default="")
     notify_min_verdict = Column(String(20), default="good")  # good | great
     notify_max_per_run = Column(Integer, default=5)
+    max_ad_age_hours = Column(Integer, default=48)  # alert only on ads younger than this
+    quiet_start_hour = Column(Integer, nullable=True)  # Algeria time (UTC+1); no alerts in this window
+    quiet_end_hour = Column(Integer, nullable=True)
+    telegram_update_offset = Column(Integer, default=0)  # getUpdates cursor for button presses
+    system_alert_state = Column(JSON, default=dict)  # {kind: last_alert_iso} for health alerts
+
+    # Resale model (see intelligence/verdict.py)
+    resale_haircut_pct = Column(Float, default=10.0)  # asking price -> realistic selling price
+    avg_discount_pct = Column(Float, default=6.0)  # discount sellers really accept (learned from outcomes)
+    alert_pickup_only = Column(Boolean, default=False)  # also alert on ads that cannot be shipped
 
     customs_mode = Column(String(30), default="personal")
     duty_rate = Column(Float, default=0.05)
@@ -108,6 +123,7 @@ class Search(Base):
     shipping_available = Column(Boolean, default=False)
     include_missing_specs = Column(Boolean, default=True)
     category = Column(String(20), default="")
+    kind = Column(String(10), default="laptop")  # laptop | gpu
 
     # behaviour
     auto_check_enabled = Column(Boolean, default=False)
@@ -194,6 +210,28 @@ class Listing(Base):
     ai_verdict_label = Column(String(20), nullable=True)
     ai_profit_eur = Column(Float, nullable=True)
     notified_at = Column(DateTime, nullable=True)  # Telegram alert sent
+    price_alerted_eur = Column(Float, nullable=True)  # price when the last alert went out (price-drop re-alert)
+
+    # freshness / availability (see intelligence/freshness.py)
+    index_date = Column(String(40), default="")  # last bump on Leboncoin
+    seller_id = Column(String(60), default="")
+    fingerprint = Column(String(300), index=True, default="")
+    repost_of_id = Column(Integer, nullable=True)
+    repost_count = Column(Integer, default=0)
+    is_active = Column(Boolean, default=True)
+    last_checked_at = Column(DateTime, nullable=True)
+    gone_at = Column(DateTime, nullable=True)
+    freshness_score = Column(Float, nullable=True)
+    ship_ok = Column(String(10), nullable=True)  # yes | no | unknown
+    screen_skip = Column(String(200), default="")  # why the free pre-checks rejected it (empty = fine)
+    risk_flags = Column(JSON, default=list)
+    profit_ask_eur = Column(Float, nullable=True)  # conservative profit (buying at the asking price)
+
+    # deal pipeline (Telegram buttons)
+    pipeline_status = Column(String(20), default="")  # contacted | bought | shipped | sold | skipped
+    bought_price_eur = Column(Float, nullable=True)
+    sold_price_dzd = Column(Float, nullable=True)
+    pipeline_updated_at = Column(DateTime, nullable=True)
 
     raw = Column(JSON, default=dict)
     first_seen_at = Column(DateTime, default=utcnow)
@@ -288,4 +326,6 @@ class DzPrice(Base):
     sources = Column(JSON, default=list)
     note = Column(Text, default="")
     ok = Column(Boolean, default=False)
+    manual = Column(Boolean, default=False)  # user-entered price: never overwritten by Gemini
+    kind = Column(String(10), default="laptop")
     fetched_at = Column(DateTime, default=utcnow)

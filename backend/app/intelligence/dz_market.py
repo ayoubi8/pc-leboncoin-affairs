@@ -20,6 +20,7 @@ from sqlalchemy.orm import Session
 
 from ..config import OPENROUTER_API_KEY, OPENROUTER_BASE_URL
 from ..models import DzPrice, Listing, Settings
+from . import pricebook
 
 DEFAULT_MODEL = "google/gemini-2.5-flash-lite"
 TIMEOUT = 60.0
@@ -45,42 +46,8 @@ def _utcnow() -> datetime:
 
 def describe(listing: Listing) -> tuple[str, str]:
     """Return (cache_key, human description) for a listing, or ("", "") if too vague."""
-    specs = listing.specs or {}
-    brand = (specs.get("brand") or listing.brand or "").strip()
-    cpu = (specs.get("cpu") or "").strip()
-    ram = specs.get("ram_gb")
-    storage = specs.get("storage_gb")
-    gpu = (specs.get("gpu") or "").strip()
-    screen = specs.get("screen_inches")
-
-    if not (cpu or ram or (brand and screen)):
-        # Sparse specs: search with whatever the ad gives (brand, GPU, model name in the title).
-        title = " ".join((listing.subject or "").split())[:120]
-        if not (title and (brand or gpu or len(title) >= 8)):
-            return "", ""
-        gpu_only = bool(gpu) and not cpu
-        noun = "graphics card" if gpu_only else "laptop/PC"
-        details = ", ".join(str(x) for x in (brand, gpu, f"{storage} GB storage" if storage else "") if x)
-        description = f"{noun}: {title}" + (f" ({details})" if details else "")
-        key = "title|" + title.lower()
-        return key[:200], description[:300]
-
-    parts = []
-    if brand:
-        parts.append(brand)
-    if cpu:
-        parts.append(cpu)
-    if ram:
-        parts.append(f"{ram} GB RAM")
-    if storage:
-        parts.append(f"{storage} GB SSD")
-    if gpu:
-        parts.append(gpu)
-    if screen:
-        parts.append(f'{screen}"')
-    description = "laptop " + ", ".join(parts)
-    key = "|".join(str(x).lower() for x in (brand, cpu, ram or "", storage or "", gpu, screen or ""))
-    return key[:200], description[:300]
+    key, description, _kind = pricebook.canonical(listing)
+    return key, description
 
 
 def ad_context(listing: Listing) -> str:
@@ -241,13 +208,39 @@ def lookup(db: Session, settings: Settings, listing: Listing, force: bool = Fals
         return None
 
     row = db.query(DzPrice).filter(DzPrice.cache_key == key).first()
+    if row is not None and row.manual and row.ok:
+        return row  # the user's own price always wins
     if row is not None and not force:
         age = _utcnow() - (row.fetched_at or _utcnow())
         if age < (SUCCESS_TTL if row.ok else FAILURE_TTL):
             return row if row.ok else None
 
-    row = _store(db, key, query, _call_gemini(settings, query, ad_context(listing)))
+    # Coarse keys are shared by many ads, so only title-keyed (vague) lookups get this ad's own text.
+    context = ad_context(listing) if key.startswith("title|") else ""
+    row = _store(db, key, query, _call_gemini(settings, query, context))
+    row.kind = pricebook.canonical(listing)[2]
+    db.commit()
     return row if row.ok else None
+
+
+def set_manual(db: Session, listing: Listing, median_dzd: float, low_dzd: Optional[float] = None, high_dzd: Optional[float] = None) -> DzPrice:
+    """Store the user's own Algerian price for this listing's product key (overrides Gemini)."""
+    key, query, kind = pricebook.canonical(listing)
+    if not key:
+        raise ValueError("This ad has too little information to build a price-book key.")
+    row = db.query(DzPrice).filter(DzPrice.cache_key == key).first()
+    if row is None:
+        row = DzPrice(cache_key=key)
+        db.add(row)
+    row.query, row.kind = query, kind
+    row.median_dzd = round(float(median_dzd))
+    row.low_dzd = round(float(low_dzd)) if low_dzd else round(row.median_dzd * 0.9)
+    row.high_dzd = round(float(high_dzd)) if high_dzd else round(row.median_dzd * 1.1)
+    row.confidence, row.ok, row.manual, row.sources = "high", True, True, []
+    row.note = "Entered manually"
+    row.fetched_at = _utcnow()
+    db.commit()
+    return row
 
 
 def last_error(db: Session, listing: Listing) -> str:

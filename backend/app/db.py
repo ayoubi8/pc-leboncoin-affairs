@@ -32,11 +32,17 @@ def get_db():
 
 def init_db() -> None:
     from . import models  # noqa: F401  (register models)
-    from .models import Settings, DEFAULT_PORSAY_TARIFF
+    from .models import Settings, DEFAULT_PORSAY_TARIFF, DEFAULT_PORSAY_PER_KG_OVER, LEGACY_PORSAY_TARIFF
 
     Base.metadata.create_all(bind=engine)
     _add_missing_columns()
     with SessionLocal() as db:
+        existing = db.get(Settings, 1)
+        if existing is not None and list(existing.porsay_tariff or []) == LEGACY_PORSAY_TARIFF:
+            # still on the old made-up defaults: move to the real Porsay Colissimo prices
+            existing.porsay_tariff = list(DEFAULT_PORSAY_TARIFF)
+            existing.porsay_per_kg_over = DEFAULT_PORSAY_PER_KG_OVER
+            db.commit()
         if db.get(Settings, 1) is None:
             db.add(
                 Settings(
@@ -51,8 +57,8 @@ def _add_missing_columns() -> None:
     """Tiny SQLite-friendly migration: add columns new models declare but the table lacks."""
     from sqlalchemy import inspect, text
 
-    inspector = inspect(engine)
     with engine.begin() as conn:
+        inspector = inspect(conn)  # same connection: a second one would deadlock on SQLite's write lock
         for table in Base.metadata.sorted_tables:
             if not inspector.has_table(table.name):
                 continue
@@ -73,5 +79,22 @@ def _add_missing_columns() -> None:
             conn.execute(text("UPDATE settings SET telegram_chat_id = '' WHERE telegram_chat_id IS NULL"))
             conn.execute(text("UPDATE settings SET notify_min_verdict = 'good' WHERE notify_min_verdict IS NULL OR notify_min_verdict = ''"))
             conn.execute(text("UPDATE settings SET notify_max_per_run = 5 WHERE notify_max_per_run IS NULL"))
+            conn.execute(text("UPDATE settings SET max_ad_age_hours = 48 WHERE max_ad_age_hours IS NULL"))
+            conn.execute(text("UPDATE settings SET telegram_update_offset = 0 WHERE telegram_update_offset IS NULL"))
+            conn.execute(text("UPDATE settings SET resale_haircut_pct = 10 WHERE resale_haircut_pct IS NULL"))
+            conn.execute(text("UPDATE settings SET avg_discount_pct = 6 WHERE avg_discount_pct IS NULL"))
+            conn.execute(text("UPDATE settings SET alert_pickup_only = false WHERE alert_pickup_only IS NULL"))
         if inspector.has_table("searches"):
+            conn.execute(text("UPDATE searches SET kind = 'laptop' WHERE kind IS NULL OR kind = ''"))
             conn.execute(text("UPDATE searches SET notify_telegram = false WHERE notify_telegram IS NULL"))
+        if inspector.has_table("listings"):
+            conn.execute(text("UPDATE listings SET is_active = true WHERE is_active IS NULL"))
+            conn.execute(text("UPDATE listings SET repost_count = 0 WHERE repost_count IS NULL"))
+            conn.execute(text("UPDATE listings SET index_date = '' WHERE index_date IS NULL"))
+            conn.execute(text("UPDATE listings SET seller_id = '' WHERE seller_id IS NULL"))
+            conn.execute(text("UPDATE listings SET fingerprint = '' WHERE fingerprint IS NULL"))
+            conn.execute(text("UPDATE listings SET pipeline_status = '' WHERE pipeline_status IS NULL"))
+            conn.execute(text("UPDATE listings SET screen_skip = '' WHERE screen_skip IS NULL"))
+        if inspector.has_table("dz_prices"):
+            conn.execute(text("UPDATE dz_prices SET manual = false WHERE manual IS NULL"))
+            conn.execute(text("UPDATE dz_prices SET kind = 'laptop' WHERE kind IS NULL OR kind = ''"))
