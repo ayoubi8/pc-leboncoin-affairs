@@ -1,5 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
+import AuthGate from "./components/AuthGate";
 import Layout from "./components/Layout";
+import BestDeals from "./pages/BestDeals";
 import Dashboard from "./pages/Dashboard";
 import ListingDetail from "./pages/ListingDetail";
 import Results from "./pages/Results";
@@ -9,9 +11,11 @@ import Settings from "./pages/Settings";
 
 export default function App() {
   return (
+    <AuthGate>
     <Routes>
       <Route element={<Layout />}>
         <Route index element={<Dashboard />} />
+        <Route path="deals" element={<BestDeals />} />
         <Route path="searches" element={<Searches />} />
         <Route path="searches/new" element={<SearchForm />} />
         <Route path="searches/:id/edit" element={<SearchForm />} />
@@ -21,5 +25,6 @@ export default function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>
+    </AuthGate>
   );
 }

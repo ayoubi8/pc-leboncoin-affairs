@@ -3,7 +3,7 @@ from __future__ import annotations
 import csv
 import io
 import re
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -128,10 +128,23 @@ def search_results(
     screen_min: Optional[float] = None,
     screen_max: Optional[float] = None,
     hide_missing_specs: bool = False,
+    new_only: bool = False,
+    new_within: str = "24h",
+    good_only: bool = False,
     db: Session = Depends(get_db),
 ) -> ResultsResponse:
     search = _get_search(db, search_id)
-    latest_run = _latest_run_id(db, search.id)
+
+    # "New" = first linked to this search recently (SearchListing.found_at is set once).
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
+    badge_cutoff = now - timedelta(hours=24)
+    if new_within == "last_run":
+        run_started = db.execute(
+            select(Run.started_at).where(Run.search_id == search.id).order_by(Run.id.desc()).limit(1)
+        ).scalar_one_or_none()
+        filter_cutoff = run_started or now
+    else:
+        filter_cutoff = now - timedelta(days=7 if new_within == "7d" else 1)
 
     rows = db.execute(
         select(SearchListing, Listing)
@@ -163,7 +176,14 @@ def search_results(
             continue
         if hide_missing_specs and not specs.get("cpu"):
             continue
-        is_new = bool(latest_run and link.run_id == latest_run)
+        found = link.found_at
+        if new_only and not (found and found >= filter_cutoff):
+            continue
+        if good_only:
+            label = listing.ai_verdict_label or listing.deal_label
+            if label not in ("great", "good", "excellent"):
+                continue
+        is_new = bool(found and found >= badge_cutoff)
         cards.append(listing_card(listing, found_at=link.found_at, is_new=is_new))
         listing_by_id[listing.id] = listing
 
@@ -189,6 +209,8 @@ def search_results(
             return (card.match_score is None, -(card.match_score or 0))
         if sort == "acquisition_desc":
             return (card.acquisition_score is None, -(card.acquisition_score or 0))
+        if sort == "profit_desc":
+            return (card.ai_profit_eur is None, -(card.ai_profit_eur or 0))
         if sort == "newest":
             return (card.found_at is None, -(card.found_at.timestamp() if card.found_at else 0))
         if sort == "landed_asc":

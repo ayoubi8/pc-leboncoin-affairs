@@ -6,6 +6,7 @@ export type SortKey =
   | "match_desc"
   | "acquisition_desc"
   | "newest"
+  | "profit_desc"
   | "landed_asc";
 
 export interface Search {
@@ -29,6 +30,7 @@ export interface Search {
   category: string;
   auto_check_enabled: boolean;
   interval: string;
+  notify_telegram: boolean;
   created_at: string | null;
   updated_at: string | null;
   last_run_at: string | null;
@@ -80,6 +82,11 @@ export interface ListingCard {
   match_score: number | null;
   acquisition_score: number | null;
   market_median_eur: number | null;
+  dz_price_median_dzd: number | null;
+  dz_landed_dzd: number | null;
+  dz_saving_pct: number | null;
+  ai_verdict_label: string | null;
+  ai_profit_eur: number | null;
   is_new: boolean;
   found_at: string | null;
 }
@@ -149,6 +156,17 @@ export interface ListingDetail {
   deal_label: string | null;
   match_score: number | null;
   acquisition_score: number | null;
+  dz_price_low_dzd: number | null;
+  dz_price_median_dzd: number | null;
+  dz_price_high_dzd: number | null;
+  dz_landed_dzd: number | null;
+  dz_saving_pct: number | null;
+  dz_confidence: string | null;
+  dz_query: string | null;
+  dz_sources: { title: string; url: string }[];
+  ai_verdict: Verdict | null;
+  ai_verdict_label: string | null;
+  ai_profit_eur: number | null;
   first_seen_at: string | null;
   last_seen_at: string | null;
   last_analyzed_at: string | null;
@@ -156,6 +174,7 @@ export interface ListingDetail {
   market_explanation: string;
   negotiation: NegotiationRecs;
   landed_cost: LandedCost;
+  dz_error: string;
 }
 
 export interface QuoteResponse {
@@ -191,6 +210,15 @@ export interface Settings {
   llm_provider: string;
   llm_api_key: string;
   llm_model: string;
+  dz_price_enabled: boolean;
+  gemini_model: string;
+  verdict_model: string;
+  telegram_enabled: boolean;
+  telegram_bot_token: string;
+  telegram_chat_id: string;
+  telegram_token_set: boolean;
+  notify_min_verdict: string;
+  notify_max_per_run: number;
   customs_mode: string;
   duty_rate: number;
   vat_rate: number;
@@ -261,6 +289,9 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     } catch {
       /* ignore non-JSON errors */
     }
+    if (response.status === 401 && !path.startsWith("/api/auth/")) {
+      window.dispatchEvent(new Event("auth-required"));
+    }
     throw new ApiError(detail, response.status);
   }
   if (response.status === 204) return undefined as T;
@@ -278,6 +309,13 @@ function qs(params: Record<string, unknown>): string {
 }
 
 export const api = {
+  auth: {
+    me: () => request<{ auth_required: boolean; authenticated: boolean }>("/api/auth/me"),
+    login: (password: string) =>
+      request<{ ok: boolean }>("/api/auth/login", { method: "POST", body: JSON.stringify({ password }) }),
+    logout: () => request<{ ok: boolean }>("/api/auth/logout", { method: "POST" }),
+  },
+
   dashboard: () => request<Dashboard>("/api/dashboard"),
 
   searches: {
@@ -313,6 +351,14 @@ export const api = {
 
   listings: {
     get: (id: number) => request<ListingDetail>(`/api/listings/${id}`),
+    verdict: (id: number, buy_price_eur?: number | null) =>
+      request<ListingDetail>(`/api/listings/${id}/verdict`, {
+        method: "POST",
+        body: JSON.stringify({ buy_price_eur: buy_price_eur ?? null }),
+      }),
+    bestDeals: () => request<ListingCard[]>("/api/deals/best"),
+    refreshDz: (id: number) =>
+      request<ListingDetail>(`/api/listings/${id}/dz-price`, { method: "POST" }),
     quote: (
       id: number,
       payload: {
@@ -342,5 +388,36 @@ export const api = {
     get: () => request<Settings>("/api/settings"),
     update: (payload: Partial<Settings>) =>
       request<Settings>("/api/settings", { method: "PUT", body: JSON.stringify(payload) }),
+    telegramDetect: () => request<{ chat_id: string; title: string }>("/api/settings/telegram/detect", { method: "POST" }),
+    telegramTest: () => request<{ ok: boolean }>("/api/settings/telegram/test", { method: "POST" }),
   },
 };
+
+export interface Verdict {
+  verdict: "great" | "good" | "fair" | "skip";
+  headline: string;
+  opinion: string;
+  risks: string[];
+  max_buy_price_eur: number | null;
+  source: "ai" | "rules";
+  model: string;
+  generated_at: string;
+  numbers: {
+    ask_price_eur: number;
+    buy_price_eur: number;
+    negotiation_saving_eur: number;
+    shipping_eur: number;
+    customs_eur: number;
+    transfer_fee_eur: number;
+    total_cost_eur: number;
+    total_cost_dzd: number;
+    rate: number;
+    dz_median_dzd: number;
+    dz_median_eur: number;
+    dz_confidence: string | null;
+    profit_eur: number;
+    profit_dzd: number;
+    margin_pct: number;
+    max_buy_for_good_eur: number;
+  };
+}

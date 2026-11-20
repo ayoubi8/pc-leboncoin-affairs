@@ -1,60 +1,267 @@
 {
   "families": {
-    "i3": {"label": "Intel Core i3", "base_score": 40},
-    "i5": {"label": "Intel Core i5", "base_score": 58},
-    "i7": {"label": "Intel Core i7", "base_score": 76},
-    "i9": {"label": "Intel Core i9", "base_score": 92},
-    "ryzen3": {"label": "AMD Ryzen 3", "base_score": 38},
-    "ryzen5": {"label": "AMD Ryzen 5", "base_score": 62},
-    "ryzen7": {"label": "AMD Ryzen 7", "base_score": 80},
-    "ryzen9": {"label": "AMD Ryzen 9", "base_score": 94},
-    "apple_m": {"label": "Apple Silicon", "base_score": 85},
-    "celeron": {"label": "Intel Celeron", "base_score": 18},
-    "pentium": {"label": "Intel Pentium", "base_score": 22},
-    "athlon": {"label": "AMD Athlon", "base_score": 20},
-    "unknown": {"label": "Unknown", "base_score": 30}
+    "i3": {
+      "label": "Intel Core i3",
+      "base_score": 40
+    },
+    "i5": {
+      "label": "Intel Core i5",
+      "base_score": 58
+    },
+    "i7": {
+      "label": "Intel Core i7",
+      "base_score": 76
+    },
+    "i9": {
+      "label": "Intel Core i9",
+      "base_score": 92
+    },
+    "ryzen3": {
+      "label": "AMD Ryzen 3",
+      "base_score": 38
+    },
+    "ryzen5": {
+      "label": "AMD Ryzen 5",
+      "base_score": 62
+    },
+    "ryzen7": {
+      "label": "AMD Ryzen 7",
+      "base_score": 80
+    },
+    "ryzen9": {
+      "label": "AMD Ryzen 9",
+      "base_score": 94
+    },
+    "apple_m": {
+      "label": "Apple Silicon",
+      "base_score": 85
+    },
+    "celeron": {
+      "label": "Intel Celeron",
+      "base_score": 18
+    },
+    "pentium": {
+      "label": "Intel Pentium",
+      "base_score": 22
+    },
+    "athlon": {
+      "label": "AMD Athlon",
+      "base_score": 20
+    },
+    "unknown": {
+      "label": "Unknown",
+      "base_score": 30
+    },
+    "snapdragon": {
+      "label": "Snapdragon (ARM)",
+      "base_score": 70
+    }
   },
   "models": [
-    {"pattern": "i3-8130u", "family": "i3", "score": 34},
-    {"pattern": "i5-8250u", "family": "i5", "score": 42},
-    {"pattern": "i5-10210u", "family": "i5", "score": 46},
-    {"pattern": "i5-1135g7", "family": "i5", "score": 55},
-    {"pattern": "i5-1235u", "family": "i5", "score": 62},
-    {"pattern": "i5-12450h", "family": "i5", "score": 68},
-    {"pattern": "i5-12500h", "family": "i5", "score": 72},
-    {"pattern": "i5-13420h", "family": "i5", "score": 74},
-    {"pattern": "i5-13500h", "family": "i5", "score": 78},
-    {"pattern": "i7-8550u", "family": "i7", "score": 44},
-    {"pattern": "i7-9750h", "family": "i7", "score": 58},
-    {"pattern": "i7-10750h", "family": "i7", "score": 62},
-    {"pattern": "i7-1165g7", "family": "i7", "score": 64},
-    {"pattern": "i7-11800h", "family": "i7", "score": 72},
-    {"pattern": "i7-1260p", "family": "i7", "score": 70},
-    {"pattern": "i7-12700h", "family": "i7", "score": 80},
-    {"pattern": "i7-13620h", "family": "i7", "score": 82},
-    {"pattern": "i7-13700h", "family": "i7", "score": 85},
-    {"pattern": "i9-13900h", "family": "i9", "score": 92},
-    {"pattern": "i9-14900hx", "family": "i9", "score": 98},
-    {"pattern": "n100", "family": "pentium", "score": 26},
-    {"pattern": "n95", "family": "pentium", "score": 22},
-    {"pattern": "n4020", "family": "celeron", "score": 16},
-    {"pattern": "n5030", "family": "pentium", "score": 20},
-    {"pattern": "ryzen 3 3200u", "family": "ryzen3", "score": 34},
-    {"pattern": "ryzen 5 3500u", "family": "ryzen5", "score": 42},
-    {"pattern": "ryzen 5 4500u", "family": "ryzen5", "score": 52},
-    {"pattern": "ryzen 5 5500u", "family": "ryzen5", "score": 56},
-    {"pattern": "ryzen 5 5600h", "family": "ryzen5", "score": 66},
-    {"pattern": "ryzen 5 7530u", "family": "ryzen5", "score": 64},
-    {"pattern": "ryzen 7 4800h", "family": "ryzen7", "score": 70},
-    {"pattern": "ryzen 7 5800h", "family": "ryzen7", "score": 78},
-    {"pattern": "ryzen 7 6800h", "family": "ryzen7", "score": 82},
-    {"pattern": "ryzen 7 7735hs", "family": "ryzen7", "score": 84},
-    {"pattern": "ryzen 7 7840hs", "family": "ryzen7", "score": 88},
-    {"pattern": "ryzen 9 5900hx", "family": "ryzen9", "score": 88},
-    {"pattern": "ryzen 9 7940hs", "family": "ryzen9", "score": 94},
-    {"pattern": "m1", "family": "apple_m", "score": 78},
-    {"pattern": "m2", "family": "apple_m", "score": 84},
-    {"pattern": "m3", "family": "apple_m", "score": 90},
-    {"pattern": "m4", "family": "apple_m", "score": 95}
+    {
+      "pattern": "i3-8130u",
+      "family": "i3",
+      "score": 34
+    },
+    {
+      "pattern": "i5-8250u",
+      "family": "i5",
+      "score": 42
+    },
+    {
+      "pattern": "i5-10210u",
+      "family": "i5",
+      "score": 46
+    },
+    {
+      "pattern": "i5-1135g7",
+      "family": "i5",
+      "score": 55
+    },
+    {
+      "pattern": "i5-1235u",
+      "family": "i5",
+      "score": 62
+    },
+    {
+      "pattern": "i5-12450h",
+      "family": "i5",
+      "score": 68
+    },
+    {
+      "pattern": "i5-12500h",
+      "family": "i5",
+      "score": 72
+    },
+    {
+      "pattern": "i5-13420h",
+      "family": "i5",
+      "score": 74
+    },
+    {
+      "pattern": "i5-13500h",
+      "family": "i5",
+      "score": 78
+    },
+    {
+      "pattern": "i7-8550u",
+      "family": "i7",
+      "score": 44
+    },
+    {
+      "pattern": "i7-9750h",
+      "family": "i7",
+      "score": 58
+    },
+    {
+      "pattern": "i7-10750h",
+      "family": "i7",
+      "score": 62
+    },
+    {
+      "pattern": "i7-1165g7",
+      "family": "i7",
+      "score": 64
+    },
+    {
+      "pattern": "i7-11800h",
+      "family": "i7",
+      "score": 72
+    },
+    {
+      "pattern": "i7-1260p",
+      "family": "i7",
+      "score": 70
+    },
+    {
+      "pattern": "i7-12700h",
+      "family": "i7",
+      "score": 80
+    },
+    {
+      "pattern": "i7-13620h",
+      "family": "i7",
+      "score": 82
+    },
+    {
+      "pattern": "i7-13700h",
+      "family": "i7",
+      "score": 85
+    },
+    {
+      "pattern": "i9-13900h",
+      "family": "i9",
+      "score": 92
+    },
+    {
+      "pattern": "i9-14900hx",
+      "family": "i9",
+      "score": 98
+    },
+    {
+      "pattern": "n100",
+      "family": "pentium",
+      "score": 26
+    },
+    {
+      "pattern": "n95",
+      "family": "pentium",
+      "score": 22
+    },
+    {
+      "pattern": "n4020",
+      "family": "celeron",
+      "score": 16
+    },
+    {
+      "pattern": "n5030",
+      "family": "pentium",
+      "score": 20
+    },
+    {
+      "pattern": "ryzen 3 3200u",
+      "family": "ryzen3",
+      "score": 34
+    },
+    {
+      "pattern": "ryzen 5 3500u",
+      "family": "ryzen5",
+      "score": 42
+    },
+    {
+      "pattern": "ryzen 5 4500u",
+      "family": "ryzen5",
+      "score": 52
+    },
+    {
+      "pattern": "ryzen 5 5500u",
+      "family": "ryzen5",
+      "score": 56
+    },
+    {
+      "pattern": "ryzen 5 5600h",
+      "family": "ryzen5",
+      "score": 66
+    },
+    {
+      "pattern": "ryzen 5 7530u",
+      "family": "ryzen5",
+      "score": 64
+    },
+    {
+      "pattern": "ryzen 7 4800h",
+      "family": "ryzen7",
+      "score": 70
+    },
+    {
+      "pattern": "ryzen 7 5800h",
+      "family": "ryzen7",
+      "score": 78
+    },
+    {
+      "pattern": "ryzen 7 6800h",
+      "family": "ryzen7",
+      "score": 82
+    },
+    {
+      "pattern": "ryzen 7 7735hs",
+      "family": "ryzen7",
+      "score": 84
+    },
+    {
+      "pattern": "ryzen 7 7840hs",
+      "family": "ryzen7",
+      "score": 88
+    },
+    {
+      "pattern": "ryzen 9 5900hx",
+      "family": "ryzen9",
+      "score": 88
+    },
+    {
+      "pattern": "ryzen 9 7940hs",
+      "family": "ryzen9",
+      "score": 94
+    },
+    {
+      "pattern": "m1",
+      "family": "apple_m",
+      "score": 78
+    },
+    {
+      "pattern": "m2",
+      "family": "apple_m",
+      "score": 84
+    },
+    {
+      "pattern": "m3",
+      "family": "apple_m",
+      "score": 90
+    },
+    {
+      "pattern": "m4",
+      "family": "apple_m",
+      "score": 95
+    }
   ]
 }

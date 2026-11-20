@@ -128,6 +128,7 @@ def upsert_ads(
         "updated": len(changed_listings),
         "skipped": max(0, len(ads) - len(new_listings) - len(changed_listings)),
         "touched": len(touched),
+        "new_listings": new_listings,
     }
 
 
@@ -185,18 +186,11 @@ def run_search(
             if index < len(queries) - 1:
                 time.sleep(delay)
 
-        # local filters (price + loose location match)
+        # local price filters
         if search.price_min is not None:
             ads = [ad for ad in ads if ad.get("price_eur") is None or ad["price_eur"] >= search.price_min]
         if search.price_max is not None:
             ads = [ad for ad in ads if ad.get("price_eur") is None or ad["price_eur"] <= search.price_max]
-        if search.location:
-            needle = search.location.strip().lower()
-            ads = [
-                ad for ad in ads
-                if not ad.get("city") or needle in (ad.get("city") or "").lower()
-                or needle in (ad.get("department") or "").lower()
-            ]
 
         unique = dedupe_ads(ads)
         run.results_total = len(unique)
@@ -205,6 +199,14 @@ def run_search(
         run.new_count = counts["new"]
         run.updated_count = counts["updated"]
         run.skipped_count = counts["skipped"]
+
+        if settings.telegram_enabled and search.notify_telegram and counts["new_listings"]:
+            try:
+                from ..notify import deals
+
+                deals.notify_run(db, settings, search, counts["new_listings"])
+            except Exception as exc:  # alerts must never break a run
+                print(f"[notify] search {search.id}: {type(exc).__name__}: {exc}")
 
         if blocked and not unique:
             run.status = "blocked"

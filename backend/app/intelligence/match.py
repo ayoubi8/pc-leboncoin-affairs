@@ -54,8 +54,13 @@ def compute_match(search: Search, listing: Listing, include_missing: bool | None
                f"CPU {cpu or 'unknown'} vs {search.cpu}")
     if _norm(search.cpu_family):
         family = (specs.get("cpu_family") or cpu_db.family_of(cpu)) if cpu else ""
-        known = bool(family)
-        record("cpu_family", True, known, _norm(family) == _norm(search.cpu_family),
+        known = bool(family) and family != "unknown"
+        wanted = cpu_db.vendor_of(search.cpu_family)
+        if wanted:  # vendor group: intel / ryzen / apple / snapdragon
+            passed = cpu_db.vendor_of(family) == wanted
+        else:  # legacy exact family value such as "i7"
+            passed = _norm(family) == _norm(search.cpu_family)
+        record("cpu_family", True, known, passed,
                f"family {family or 'unknown'} vs {search.cpu_family}")
     if search.ram_min:
         ram = specs.get("ram_gb")

@@ -40,13 +40,25 @@ class Settings(Base):
     id = Column(Integer, primary_key=True, default=1)
 
     porsay_address = Column(String(500), default="")
-    eur_dzd_parallel = Column(Float, default=276.0)
+    eur_dzd_parallel = Column(Float, default=280.0)
     eur_dzd_official = Column(Float, default=151.2)
 
     llm_enabled = Column(Boolean, default=True)
     llm_provider = Column(String(50), default="openrouter")
     llm_api_key = Column(String(500), default="")
     llm_model = Column(String(200), default="google/gemini-2.0-flash-lite-001")
+
+    # Algerian price lookup (Gemini via OpenRouter web search)
+    dz_price_enabled = Column(Boolean, default=True)
+    gemini_model = Column(String(100), default="google/gemini-2.5-flash-lite")
+    verdict_model = Column(String(100), default="anthropic/claude-haiku-5.5")
+
+    # Telegram deal alerts
+    telegram_enabled = Column(Boolean, default=False)
+    telegram_bot_token = Column(String(200), default="")
+    telegram_chat_id = Column(String(60), default="")
+    notify_min_verdict = Column(String(20), default="good")  # good | great
+    notify_max_per_run = Column(Integer, default=5)
 
     customs_mode = Column(String(30), default="personal")
     duty_rate = Column(Float, default=0.05)
@@ -99,7 +111,8 @@ class Search(Base):
 
     # behaviour
     auto_check_enabled = Column(Boolean, default=False)
-    interval = Column(String(20), default="daily")  # daily | 6h | weekly
+    interval = Column(String(20), default="daily")  # 1h | 6h | 12h | daily
+    notify_telegram = Column(Boolean, default=True)
     created_at = Column(DateTime, default=utcnow)
     updated_at = Column(DateTime, default=utcnow, onupdate=utcnow)
     last_run_at = Column(DateTime, nullable=True)
@@ -166,6 +179,21 @@ class Listing(Base):
     deal_label = Column(String(20), nullable=True)
     match_score = Column(Float, nullable=True)
     acquisition_score = Column(Float, nullable=True)
+
+    # Algerian market comparison (cached from DzPrice)
+    dz_price_low_dzd = Column(Float, nullable=True)
+    dz_price_median_dzd = Column(Float, nullable=True)
+    dz_price_high_dzd = Column(Float, nullable=True)
+    dz_landed_dzd = Column(Float, nullable=True)
+    dz_saving_pct = Column(Float, nullable=True)
+    dz_confidence = Column(String(20), nullable=True)
+    dz_query = Column(String(300), default="")
+    dz_sources = Column(JSON, default=list)
+    # Honest AI verdict (resale margin in Algeria); see intelligence/verdict.py
+    ai_verdict = Column(JSON, nullable=True)
+    ai_verdict_label = Column(String(20), nullable=True)
+    ai_profit_eur = Column(Float, nullable=True)
+    notified_at = Column(DateTime, nullable=True)  # Telegram alert sent
 
     raw = Column(JSON, default=dict)
     first_seen_at = Column(DateTime, default=utcnow)
@@ -243,3 +271,21 @@ class LlmCache(Base):
     kind = Column(String(40), default="")
     response = Column(Text, default="")
     created_at = Column(DateTime, default=utcnow)
+
+
+class DzPrice(Base):
+    """Cached Algerian market price per laptop configuration (one Gemini lookup each)."""
+
+    __tablename__ = "dz_prices"
+
+    id = Column(Integer, primary_key=True)
+    cache_key = Column(String(200), unique=True, index=True, nullable=False)
+    query = Column(String(300), default="")
+    low_dzd = Column(Float, nullable=True)
+    median_dzd = Column(Float, nullable=True)
+    high_dzd = Column(Float, nullable=True)
+    confidence = Column(String(20), default="low")
+    sources = Column(JSON, default=list)
+    note = Column(Text, default="")
+    ok = Column(Boolean, default=False)
+    fetched_at = Column(DateTime, default=utcnow)

@@ -240,6 +240,101 @@ export default function Settings() {
       </Card>
 
       <Card>
+        <CardHeader title="Algerian price lookup" subtitle="Gemini (via OpenRouter) searches the web for the local price, compared with the landed cost" />
+        <div className="grid gap-4 p-4 sm:grid-cols-2">
+          <div className="sm:col-span-2">
+            <Switch checked={form.dz_price_enabled} onChange={(value) => set("dz_price_enabled", value)} label="Compare with Algerian prices (Gemini)" />
+          </div>
+          <div>
+            <Label>Model</Label>
+            <Input value={form.gemini_model} onChange={(event) => set("gemini_model", event.target.value)} placeholder="google/gemini-2.5-flash-lite" />
+          </div>
+          <div>
+            <Label>Verdict model (Claude Haiku)</Label>
+            <Input value={form.verdict_model} onChange={(event) => set("verdict_model", event.target.value)} placeholder="anthropic/claude-haiku-5.5" />
+          </div>
+          <p className="text-[11px] text-ink-faint sm:self-end">
+            Uses the OpenRouter API key above (or OPENROUTER_API_KEY in backend/.env) with web search enabled.
+          </p>
+        </div>
+      </Card>
+
+      <Card>
+        <CardHeader title="Telegram alerts" subtitle="Get the best new deals (with Algerian price estimate) on your phone" />
+        <div className="grid gap-4 p-4 sm:grid-cols-2">
+          <div className="sm:col-span-2">
+            <Switch checked={form.telegram_enabled} onChange={(value) => set("telegram_enabled", value)} label="Enable Telegram alerts" />
+            <p className="mt-1 text-[11px] text-ink-faint">
+              1) In Telegram open @BotFather → /newbot → copy the token. 2) Paste it below and Save. 3) Open your bot, press Start, send “hi”.
+              4) Click Detect chat, then Send test. Finally turn on “Send best new deals to Telegram” inside a search.
+            </p>
+          </div>
+          <div>
+            <Label>Bot token</Label>
+            <Input
+              type="password"
+              value={form.telegram_bot_token}
+              onChange={(event) => set("telegram_bot_token", event.target.value)}
+              placeholder="123456:ABC-DEF…"
+            />
+          </div>
+          <div>
+            <Label>Chat id</Label>
+            <Input value={form.telegram_chat_id} onChange={(event) => set("telegram_chat_id", event.target.value)} placeholder="auto-detected" />
+          </div>
+          <div>
+            <Label>Alert threshold</Label>
+            <Select value={form.notify_min_verdict} onChange={(event) => set("notify_min_verdict", event.target.value)}>
+              <option value="good">Good or better (margin ≥ 15%)</option>
+              <option value="great">Great only (margin ≥ 30%)</option>
+            </Select>
+          </div>
+          <div>
+            <Label>Max alerts per run</Label>
+            <Input
+              type="number"
+              min={1}
+              max={20}
+              value={form.notify_max_per_run}
+              onChange={(event) => set("notify_max_per_run", Number(event.target.value) || 5)}
+            />
+          </div>
+          <div className="flex flex-wrap gap-2 sm:col-span-2">
+            <Button
+              type="button"
+              size="sm"
+              variant="secondary"
+              onClick={() =>
+                api.settings
+                  .telegramDetect()
+                  .then((r) => {
+                    set("telegram_chat_id", r.chat_id);
+                    toast(`Chat detected${r.title ? `: ${r.title}` : ""}`, "success");
+                  })
+                  .catch((err: Error) => toast(err.message, "error"))
+              }
+            >
+              Detect chat
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="secondary"
+              onClick={() =>
+                api.settings
+                  .telegramTest()
+                  .then(() => toast("Test message sent", "success"))
+                  .catch((err: Error) => toast(err.message, "error"))
+              }
+            >
+              Send test
+            </Button>
+            <span className="self-center text-[11px] text-ink-faint">Save settings before Detect / Test.</span>
+          </div>
+        </div>
+      </Card>
+
+      <Card>
         <CardHeader title="Automation" />
         <div className="p-4">
           <Switch checked={form.auto_check_enabled} onChange={(value) => set("auto_check_enabled", value)} label="Allow scheduled auto-checks" />

@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Copy, Download, Filter, MessageSquareText, X } from "lucide-react";
+import { ArrowLeft, Copy, Download, Filter, MessageSquareText, Sparkles, X } from "lucide-react";
 import { api, type NegotiationOut, type SortKey } from "../lib/api";
 import { eur } from "../lib/utils";
 import { toast } from "../lib/toast";
@@ -16,6 +16,7 @@ const SORTS: { value: SortKey; label: string }[] = [
   { value: "match_desc", label: "Best hardware match" },
   { value: "acquisition_desc", label: "Best acquisition" },
   { value: "newest", label: "Newest" },
+  { value: "profit_desc", label: "Highest resale profit" },
   { value: "landed_asc", label: "Lowest landed cost" },
 ];
 
@@ -37,6 +38,9 @@ export default function Results() {
     condition: "",
     city: "",
     hide_missing_specs: false,
+    new_only: false,
+    new_within: "24h",
+    good_only: false,
   });
 
   const params = useMemo(
@@ -50,6 +54,9 @@ export default function Results() {
       condition: filters.condition || undefined,
       city: filters.city || undefined,
       hide_missing_specs: filters.hide_missing_specs || undefined,
+      new_only: filters.new_only || undefined,
+      new_within: filters.new_only ? filters.new_within : undefined,
+      good_only: filters.good_only || undefined,
     }),
     [sort, filters],
   );
@@ -93,6 +100,17 @@ export default function Results() {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <Button
+            size="sm"
+            variant={filters.new_only && filters.good_only ? "primary" : "secondary"}
+            onClick={() => {
+              const on = !(filters.new_only && filters.good_only);
+              setFilters((current) => ({ ...current, new_only: on, good_only: on }));
+              setSort("best_deal");
+            }}
+          >
+            <Sparkles className="h-4 w-4" /> Best new deals
+          </Button>
           <Button size="sm" variant="secondary" onClick={() => setShowFilters((value) => !value)}>
             <Filter className="h-4 w-4" /> Filters
           </Button>
@@ -203,6 +221,36 @@ export default function Results() {
               />
               Hide listings without CPU
             </label>
+            <label className="flex items-end gap-2 pb-2 text-xs text-ink-label">
+              <input
+                type="checkbox"
+                className="h-4 w-4 accent-primary"
+                checked={filters.good_only}
+                onChange={(event) => setFilters((current) => ({ ...current, good_only: event.target.checked }))}
+              />
+              Good deals only
+            </label>
+            <div className="flex items-end gap-2">
+              <label className="flex items-end gap-2 pb-2 text-xs text-ink-label">
+                <input
+                  type="checkbox"
+                  className="h-4 w-4 accent-primary"
+                  checked={filters.new_only}
+                  onChange={(event) => setFilters((current) => ({ ...current, new_only: event.target.checked }))}
+                />
+                New only
+              </label>
+              <Select
+                value={filters.new_within}
+                disabled={!filters.new_only}
+                onChange={(event) => setFilters((current) => ({ ...current, new_within: event.target.value }))}
+                className="h-8 w-32 py-1 text-xs"
+              >
+                <option value="last_run">Last check</option>
+                <option value="24h">Last 24 h</option>
+                <option value="7d">Last 7 days</option>
+              </Select>
+            </div>
           </div>
         </Card>
       ) : null}

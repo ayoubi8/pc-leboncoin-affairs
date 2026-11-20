@@ -12,12 +12,21 @@ class ORMModel(BaseModel):
 class SettingsOut(ORMModel):
     id: int
     porsay_address: str = ""
-    eur_dzd_parallel: float = 276.0
+    eur_dzd_parallel: float = 280.0
     eur_dzd_official: float = 151.2
     llm_enabled: bool = True
     llm_provider: str = "openrouter"
     llm_api_key: str = ""
     llm_model: str = ""
+    dz_price_enabled: bool = True
+    gemini_model: str = "google/gemini-2.5-flash-lite"
+    verdict_model: str = "anthropic/claude-haiku-5.5"
+    telegram_enabled: bool = False
+    telegram_bot_token: str = ""
+    telegram_chat_id: str = ""
+    telegram_token_set: bool = False
+    notify_min_verdict: str = "good"
+    notify_max_per_run: int = 5
     customs_mode: str = "personal"
     duty_rate: float = 0.05
     vat_rate: float = 0.19
@@ -50,6 +59,14 @@ class SettingsUpdate(BaseModel):
     llm_provider: Optional[str] = None
     llm_api_key: Optional[str] = None
     llm_model: Optional[str] = None
+    dz_price_enabled: Optional[bool] = None
+    gemini_model: Optional[str] = None
+    verdict_model: Optional[str] = None
+    telegram_enabled: Optional[bool] = None
+    telegram_bot_token: Optional[str] = None
+    telegram_chat_id: Optional[str] = None
+    notify_min_verdict: Optional[str] = None
+    notify_max_per_run: Optional[int] = None
     customs_mode: Optional[str] = None
     duty_rate: Optional[float] = None
     vat_rate: Optional[float] = None
@@ -90,7 +107,8 @@ class SearchCreate(BaseModel):
     include_missing_specs: bool = True
     category: str = ""
     auto_check_enabled: bool = False
-    interval: Literal["daily", "6h", "weekly"] = "daily"
+    interval: Literal["1h", "6h", "12h", "daily"] = "daily"
+    notify_telegram: bool = True
 
 
 class SearchUpdate(BaseModel):
@@ -114,6 +132,7 @@ class SearchUpdate(BaseModel):
     category: Optional[str] = None
     auto_check_enabled: Optional[bool] = None
     interval: Optional[str] = None
+    notify_telegram: Optional[bool] = None
 
 
 class SearchOut(ORMModel):
@@ -137,6 +156,7 @@ class SearchOut(ORMModel):
     category: str = ""
     auto_check_enabled: bool = False
     interval: str = "daily"
+    notify_telegram: bool = True
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
     last_run_at: Optional[datetime] = None
@@ -199,6 +219,17 @@ class ListingOut(ORMModel):
     deal_label: Optional[str] = None
     match_score: Optional[float] = None
     acquisition_score: Optional[float] = None
+    dz_price_low_dzd: Optional[float] = None
+    dz_price_median_dzd: Optional[float] = None
+    dz_price_high_dzd: Optional[float] = None
+    dz_landed_dzd: Optional[float] = None
+    dz_saving_pct: Optional[float] = None
+    dz_confidence: Optional[str] = None
+    dz_query: Optional[str] = ""
+    dz_sources: list[Any] = Field(default_factory=list)
+    ai_verdict: Optional[dict[str, Any]] = None
+    ai_verdict_label: Optional[str] = None
+    ai_profit_eur: Optional[float] = None
     first_seen_at: Optional[datetime] = None
     last_seen_at: Optional[datetime] = None
     last_analyzed_at: Optional[datetime] = None
@@ -221,6 +252,11 @@ class ListingCard(BaseModel):
     match_score: Optional[float] = None
     acquisition_score: Optional[float] = None
     market_median_eur: Optional[float] = None
+    dz_price_median_dzd: Optional[float] = None
+    dz_landed_dzd: Optional[float] = None
+    dz_saving_pct: Optional[float] = None
+    ai_verdict_label: Optional[str] = None
+    ai_profit_eur: Optional[float] = None
     is_new: bool = False
     found_at: Optional[datetime] = None
 
@@ -244,6 +280,7 @@ class ListingDetail(ListingOut):
     market_explanation: str = ""
     negotiation: dict[str, Any] = Field(default_factory=dict)
     landed_cost: dict[str, Any] = Field(default_factory=dict)
+    dz_error: str = ""
 
 
 class QuoteRequest(BaseModel):

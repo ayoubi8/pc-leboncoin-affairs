@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { ExternalLink, MapPin, Sparkles } from "lucide-react";
 import type { ListingCard as ListingCardType } from "../lib/api";
-import { cn, conditionLabel, eur, imageUrl, scoreColor, specsSummary, timeAgo } from "../lib/utils";
+import { cn, conditionLabel, dateShort, dzd, eur, imageUrl, scoreColor, specsSummary } from "../lib/utils";
 import { Badge, DealBadge, ScoreRing } from "./ui";
 
 export default function ListingCard({
@@ -80,12 +80,28 @@ export default function ListingCard({
 
         {summary ? <p className="text-xs text-ink-label">{summary}</p> : null}
 
+        {card.dz_price_median_dzd ? (
+          <p className="text-xs text-ink-muted">
+            DZ {dzd(card.dz_price_median_dzd)} · landed {dzd(card.dz_landed_dzd)}
+            {card.dz_saving_pct !== null && card.dz_saving_pct !== undefined
+              ? ` (${card.dz_saving_pct >= 0 ? "−" : "+"}${Math.abs(Math.round(card.dz_saving_pct))}%)`
+              : ""}
+          </p>
+        ) : null}
+
+        {card.ai_verdict_label ? (
+          <p className="text-xs font-medium">
+            AI: {card.ai_verdict_label}
+            {card.ai_profit_eur !== null && card.ai_profit_eur !== undefined ? ` · profit ${eur(card.ai_profit_eur)}` : ""}
+          </p>
+        ) : null}
+
         <div className="mt-auto flex items-center justify-between pt-1 text-[11px] text-ink-muted">
           <span className="flex items-center gap-1">
             <MapPin className="h-3 w-3" />
             {card.city || "—"}
           </span>
-          <span>{timeAgo(card.found_at || card.first_publication_date)}</span>
+          <span title="Date published on Leboncoin">{dateShort(card.first_publication_date || card.found_at)}</span>
         </div>
 
         <div className="flex items-center justify-between border-t border-border-subtle pt-2 text-[11px]">

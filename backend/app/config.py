@@ -6,13 +6,37 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent.parent  # backend/
 PROJECT_ROOT = BASE_DIR.parent
 DATA_DIR = PROJECT_ROOT / "data"
-DATA_DIR.mkdir(parents=True, exist_ok=True)
+try:
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+except OSError:  # read-only filesystem (serverless)
+    pass
 
 load_dotenv(BASE_DIR / ".env")
 
-DATABASE_URL = os.getenv("DATABASE_URL") or f"sqlite:///{(DATA_DIR / 'app.db').as_posix()}"
+# True when running as a serverless function (Vercel): no background threads, no local disk.
+SERVERLESS = bool(os.getenv("VERCEL") or os.getenv("SERVERLESS"))
+
+
+def _normalize_db_url(url: str) -> str:
+    """Accept the postgres:// URLs Supabase hands out and use the psycopg 3 driver."""
+    url = url.strip()
+    for prefix in ("postgres://", "postgresql://"):
+        if url.startswith(prefix):
+            return "postgresql+psycopg://" + url[len(prefix):]
+    return url
+
+
+DATABASE_URL = _normalize_db_url(os.getenv("DATABASE_URL") or f"sqlite:///{(DATA_DIR / 'app.db').as_posix()}")
+# Built frontend served by the backend itself (Docker / single-process deployments).
+STATIC_DIR = Path(os.getenv("STATIC_DIR") or PROJECT_ROOT / "frontend" / "dist")
+# Shared password protecting the UI/API once it is public. Empty = no login (local use).
+APP_PASSWORD = os.getenv("APP_PASSWORD", "").strip()
+# Secret for the /api/cron/tick endpoint (sent as "Authorization: Bearer <secret>").
+CRON_SECRET = os.getenv("CRON_SECRET", "").strip()
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "").strip()
 OPENROUTER_BASE_URL = os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1").strip()
+# Base URL of the web UI, used for "Open in app" links in Telegram alerts.
+APP_URL = os.getenv("APP_URL", "http://localhost:5173").strip().rstrip("/")
 FRONTEND_ORIGIN = os.getenv("FRONTEND_ORIGIN", "http://localhost:5173").strip()
 FRONTEND_ORIGINS = [o.strip() for o in os.getenv(
     "FRONTEND_ORIGINS",

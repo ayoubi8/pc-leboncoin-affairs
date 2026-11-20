@@ -72,6 +72,11 @@ def listing_card(listing: Listing, found_at: Optional[datetime] = None, is_new: 
         match_score=listing.match_score,
         acquisition_score=listing.acquisition_score,
         market_median_eur=listing.market_median_eur,
+        dz_price_median_dzd=listing.dz_price_median_dzd,
+        dz_landed_dzd=listing.dz_landed_dzd,
+        dz_saving_pct=listing.dz_saving_pct,
+        ai_verdict_label=listing.ai_verdict_label,
+        ai_profit_eur=listing.ai_profit_eur,
         is_new=is_new,
         found_at=found_at,
     )

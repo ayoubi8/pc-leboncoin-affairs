@@ -1,0 +1,17 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      # Set these (or put them in a .env file next to this one). All optional.
+      APP_PASSWORD: ${APP_PASSWORD:-}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      APP_URL: ${APP_URL:-http://localhost:8000}
+      # DATABASE_URL: postgresql://user:pass@host:5432/db   # default is SQLite in the volume below
+    volumes:
+      - app-data:/app/data      # SQLite database lives here
+    restart: unless-stopped
+
+volumes:
+  app-data:

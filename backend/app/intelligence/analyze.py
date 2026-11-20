@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from ..extraction import cpu_db, llm, specs as specs_mod
 from ..logistics import landed
 from ..models import Listing, Search, Settings
-from . import deal, market, match
+from . import deal, dz_market, market, match
 
 
 def _attributes(raw: dict[str, Any]) -> dict[str, Any]:
@@ -97,10 +97,47 @@ def analyze_listing(
     if search is not None:
         listing.match_score = match.compute_match(search, listing)["score"]
 
-    if listing.price_eur:
-        cost = landed.compute(settings, listing.price_eur, kind=_kind_for(listing))
-        listing.acquisition_score = deal.acquisition_score(
-            cost["total_eur"], listing.market_median_eur
-        )
+    apply_dz_comparison(db, settings, listing)  # cached per config; never forced here
 
     listing.last_analyzed_at = now
+
+
+def apply_dz_comparison(
+    db: Session,
+    settings: Settings,
+    listing: Listing,
+    force: bool = False,
+) -> None:
+    """Landed cost (price + shipping + customs) in DZD vs. the Algerian market price.
+
+    When a Gemini lookup succeeds, the deal score/label are driven by that comparison;
+    otherwise they stay on the European-median score computed earlier.
+    """
+    if not listing.price_eur:
+        return
+
+    cost = landed.compute(settings, listing.price_eur, kind=_kind_for(listing))
+    listing.acquisition_score = deal.acquisition_score(cost["total_eur"], listing.market_median_eur)
+    listing.dz_landed_dzd = round(cost["total_eur"] * float(settings.eur_dzd_parallel or 0), 0)
+
+    row = dz_market.lookup(db, settings, listing, force=force)
+    if row is None:
+        listing.dz_price_low_dzd = listing.dz_price_median_dzd = listing.dz_price_high_dzd = None
+        listing.dz_saving_pct = None
+        listing.dz_confidence = None
+        listing.dz_query = dz_market.describe(listing)[1]
+        listing.dz_sources = []
+        return
+
+    listing.dz_price_low_dzd = row.low_dzd
+    listing.dz_price_median_dzd = row.median_dzd
+    listing.dz_price_high_dzd = row.high_dzd
+    listing.dz_confidence = row.confidence
+    listing.dz_query = row.query
+    listing.dz_sources = row.sources or []
+    listing.dz_saving_pct = deal.savings_pct(listing.dz_landed_dzd, row.median_dzd)
+
+    score = deal.score_from_ratio(listing.dz_landed_dzd, row.median_dzd)
+    if score is not None:
+        listing.deal_score = score
+        listing.deal_label = deal.classify(score)

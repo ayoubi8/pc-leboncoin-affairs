@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
 import {
   ArrowLeft,
   Calculator,
+  Sparkles,
   Copy,
   ExternalLink,
   MessageSquareText,
@@ -11,9 +12,16 @@ import {
 } from "lucide-react";
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { api, type LandedCost, type QuoteResponse } from "../lib/api";
-import { cn, conditionLabel, dateShort, dzd, eur, imageUrl, scoreColor, specsSummary, timeAgo } from "../lib/utils";
+import { cn, conditionLabel, dateShort, dzd, eur, imageUrl, scoreColor, specsSummary } from "../lib/utils";
 import { toast } from "../lib/toast";
 import { Badge, Button, Card, CardHeader, DealBadge, Input, Label, ScoreRing, Select, Skeleton, Textarea } from "../components/ui";
+
+const VERDICT_STYLE: Record<string, string> = {
+  great: "border-success-border bg-success-bg text-success-ink",
+  good: "border-success-border bg-success-bg text-success-ink",
+  fair: "border-warning-border bg-warning-bg text-warning-ink",
+  skip: "border-border-control bg-surface-muted text-ink-label",
+};
 
 function confidenceBadge(level?: string) {
   if (!level) return null;
@@ -55,6 +63,7 @@ function CostTable({ cost, title }: { cost: LandedCost; title: string }) {
 export default function ListingDetail() {
   const { id } = useParams();
   const listingId = Number(id);
+  const queryClient = useQueryClient();
   const { data: listing, isLoading, isError, error } = useQuery({
     queryKey: ["listing", listingId],
     queryFn: () => api.listings.get(listingId),
@@ -76,6 +85,35 @@ export default function ListingDetail() {
       setKind(listing.specs?.gpu && !listing.specs?.cpu ? "gpu" : "laptop");
     }
   }, [listing]);
+
+  const dzMutation = useMutation({
+    mutationFn: () => api.listings.refreshDz(listingId),
+    onSuccess: (data) => {
+      queryClient.setQueryData(["listing", listingId], data);
+      if (data.dz_price_median_dzd) toast("Algerian price updated", "success");
+      else toast(data.dz_error || "No Algerian price found", "error");
+    },
+    onError: (err: Error) => toast(err.message, "error"),
+  });
+
+  // Ask Gemini automatically the first time an ad without an Algerian price is opened.
+  const autoAsked = useRef<number | null>(null);
+  useEffect(() => {
+    if (listing && !listing.dz_price_median_dzd && !listing.dz_error && autoAsked.current !== listing.id) {
+      autoAsked.current = listing.id;
+      dzMutation.mutate();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listing]);
+
+  const verdictMutation = useMutation({
+    mutationFn: () => api.listings.verdict(listingId, offerPrice ? Number(offerPrice) : null),
+    onSuccess: (data) => {
+      queryClient.setQueryData(["listing", listingId], data);
+      queryClient.invalidateQueries({ queryKey: ["best-deals"] });
+    },
+    onError: (err: Error) => toast(err.message, "error"),
+  });
 
   const quoteMutation = useMutation({
     mutationFn: () => {
@@ -148,7 +186,7 @@ export default function ListingDetail() {
               <DealBadge label={listing.deal_label} score={listing.deal_score} />
               {listing.city ? <span>{listing.city}</span> : null}
               {specs.condition ? <span>{conditionLabel(specs.condition)}</span> : null}
-              <span>{timeAgo(listing.first_seen_at)}</span>
+              <span>{dateShort(listing.first_publication_date || listing.first_seen_at)}</span>
             </p>
           </div>
         </div>
@@ -238,32 +276,132 @@ export default function ListingDetail() {
 
         <div className="space-y-4">
           <Card>
-            <CardHeader title="Market value" subtitle={`${listing.market_samples} comparable(s)`} />
+            <CardHeader
+              title="Market value"
+              subtitle={listing.dz_query || "Price in Algeria vs landed cost"}
+              action={
+                <Button size="sm" onClick={() => dzMutation.mutate()} disabled={dzMutation.isPending}>
+                  {dzMutation.isPending ? "Searching…" : listing.dz_price_median_dzd ? "Refresh" : "Search price"}
+                </Button>
+              }
+            />
             <div className="p-4">
-              <div className="grid grid-cols-3 gap-2 text-center">
-                <div>
-                  <p className="text-[11px] uppercase text-ink-faint">Low</p>
-                  <p className="text-sm font-semibold">{eur(listing.market_low_eur)}</p>
-                </div>
-                <div className="rounded-lg bg-surface-sunken py-1">
-                  <p className="text-[11px] uppercase text-ink-faint">Median</p>
-                  <p className="text-base font-semibold">{eur(listing.market_median_eur)}</p>
-                </div>
-                <div>
-                  <p className="text-[11px] uppercase text-ink-faint">High</p>
-                  <p className="text-sm font-semibold">{eur(listing.market_high_eur)}</p>
-                </div>
+              {listing.dz_price_median_dzd ? (
+                <>
+                  <div className="grid grid-cols-3 gap-2 text-center">
+                    <div>
+                      <p className="text-[11px] uppercase text-ink-faint">Low</p>
+                      <p className="text-sm font-semibold">{dzd(listing.dz_price_low_dzd)}</p>
+                    </div>
+                    <div className="rounded-lg bg-surface-sunken py-1">
+                      <p className="text-[11px] uppercase text-ink-faint">Median</p>
+                      <p className="text-base font-semibold">{dzd(listing.dz_price_median_dzd)}</p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] uppercase text-ink-faint">High</p>
+                      <p className="text-sm font-semibold">{dzd(listing.dz_price_high_dzd)}</p>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex items-center justify-between text-sm">
+                    <span className="text-ink-muted">Landed in Algeria</span>
+                    <span className="font-semibold">{dzd(listing.dz_landed_dzd)}</span>
+                  </div>
+                  <div className="mt-1 flex items-center justify-between text-sm">
+                    <span className="text-ink-muted">
+                      {(listing.dz_saving_pct ?? 0) >= 0 ? "Cheaper than local" : "Dearer than local"}
+                    </span>
+                    <span className="font-semibold">
+                      {listing.dz_saving_pct === null ? "—" : `${Math.abs(listing.dz_saving_pct).toFixed(1)}%`}
+                    </span>
+                  </div>
+                  <div className="mt-3 flex items-center justify-between">
+                    {confidenceBadge(listing.dz_confidence || "none")}
+                  </div>
+                  {listing.dz_sources?.length ? (
+                    <ul className="mt-2 space-y-0.5 text-xs">
+                      {listing.dz_sources.slice(0, 4).map((source) => (
+                        <li key={source.url} className="truncate">
+                          <a href={source.url} target="_blank" rel="noreferrer" className="text-ink-muted hover:text-ink hover:underline">
+                            {source.title || source.url}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </>
+              ) : (
+                <p className="text-xs text-ink-muted">
+                  {listing.dz_error || "No Algerian price yet. Add your OpenRouter key in Settings, then search."}
+                </p>
+              )}
+              <div className="mt-3 flex items-center justify-end gap-3 border-t border-border-subtle pt-2 text-xs">
+                <span className={cn("font-medium", scoreColor(listing.match_score))}>match {listing.match_score ?? "—"}</span>
+                <span className={cn("font-medium", scoreColor(listing.acquisition_score))}>
+                  landed {listing.acquisition_score ?? "—"}
+                </span>
               </div>
-              <div className="mt-3 flex items-center justify-between">
-                {confidenceBadge(listing.market_confidence || "none")}
-                <div className="flex items-center gap-3 text-xs">
-                  <span className={cn("font-medium", scoreColor(listing.match_score))}>match {listing.match_score ?? "—"}</span>
-                  <span className={cn("font-medium", scoreColor(listing.acquisition_score))}>
-                    landed {listing.acquisition_score ?? "—"}
-                  </span>
-                </div>
-              </div>
-              <p className="mt-2 text-xs text-ink-muted">{listing.market_explanation}</p>
+            </div>
+          </Card>
+
+          <Card>
+            <CardHeader
+              title="Honest verdict"
+              subtitle="Resale margin in Algeria after negotiation, shipping and customs"
+              action={
+                <Button size="sm" variant="primary" onClick={() => verdictMutation.mutate()} disabled={verdictMutation.isPending}>
+                  <Sparkles className="h-4 w-4" />
+                  {verdictMutation.isPending ? "Thinking…" : listing.ai_verdict ? "Regenerate" : "Generate verdict"}
+                </Button>
+              }
+            />
+            <div className="p-4 text-sm">
+              {listing.ai_verdict ? (
+                <>
+                  <div className="flex items-center gap-2">
+                    <Badge className={VERDICT_STYLE[listing.ai_verdict.verdict]}>{listing.ai_verdict.verdict}</Badge>
+                    <span className="font-medium">{listing.ai_verdict.headline}</span>
+                  </div>
+                  <div className="mt-3 divide-y divide-border-subtle rounded-lg border border-border-subtle text-xs">
+                    {[
+                      ["Asking price", eur(listing.ai_verdict.numbers.ask_price_eur)],
+                      ["Buy price (after negotiation)", `${eur(listing.ai_verdict.numbers.buy_price_eur)} (−${eur(listing.ai_verdict.numbers.negotiation_saving_eur)})`],
+                      ["Shipping", eur(listing.ai_verdict.numbers.shipping_eur, 2)],
+                      ["Customs + fees", eur(listing.ai_verdict.numbers.customs_eur + listing.ai_verdict.numbers.transfer_fee_eur, 2)],
+                      ["Total cost", `${eur(listing.ai_verdict.numbers.total_cost_eur, 2)} · ${dzd(listing.ai_verdict.numbers.total_cost_dzd)}`],
+                      [`Sells in Algeria (÷${listing.ai_verdict.numbers.rate})`, `${eur(listing.ai_verdict.numbers.dz_median_eur, 2)} · ${dzd(listing.ai_verdict.numbers.dz_median_dzd)}`],
+                    ].map(([label, value]) => (
+                      <div key={label} className="flex items-center justify-between px-3 py-1.5">
+                        <span className="text-ink-muted">{label}</span>
+                        <span className="font-medium">{value}</span>
+                      </div>
+                    ))}
+                    <div className="flex items-center justify-between bg-surface-sunken px-3 py-2">
+                      <span className="font-semibold">Your profit</span>
+                      <span className="text-sm font-semibold">
+                        {eur(listing.ai_verdict.numbers.profit_eur, 2)} · {dzd(listing.ai_verdict.numbers.profit_dzd)} ({listing.ai_verdict.numbers.margin_pct}%)
+                      </span>
+                    </div>
+                  </div>
+                  <p className="mt-3 text-ink-strong">{listing.ai_verdict.opinion}</p>
+                  {listing.ai_verdict.risks?.length ? (
+                    <ul className="mt-2 list-disc space-y-0.5 pl-5 text-xs text-ink-muted">
+                      {listing.ai_verdict.risks.map((risk) => (
+                        <li key={risk}>{risk}</li>
+                      ))}
+                    </ul>
+                  ) : null}
+                  <p className="mt-3 text-xs text-ink-muted">
+                    Max to pay for a good deal: <span className="font-semibold">{eur(listing.ai_verdict.max_buy_price_eur)}</span>
+                  </p>
+                  <p className="mt-1 text-[11px] text-ink-faint">
+                    {listing.ai_verdict.source === "ai" ? listing.ai_verdict.model : "rule-based (AI unavailable)"} · uses the offer price in the quote box if set
+                  </p>
+                </>
+              ) : (
+                <p className="text-xs text-ink-muted">
+                  Click Generate to get an honest opinion: buy price after negotiation, shipping, customs, and what it sells for in Algeria.
+                </p>
+              )}
             </div>
           </Card>
 

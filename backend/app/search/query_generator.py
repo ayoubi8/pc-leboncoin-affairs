@@ -7,7 +7,14 @@ from typing import Any
 
 from ..models import Search
 
-DEFAULT_BASE = "pc portable"
+DEFAULT_BASE = "pc portable"  # only used when the form has no inputs
+CATEGORY_ID = "15"  # Leboncoin "Ordinateurs"; fixed for every search
+VENDOR_TERMS = {
+    "intel": "intel",
+    "ryzen": "ryzen",
+    "apple": "macbook",
+    "snapdragon": "snapdragon",
+}
 CONDITION_LABELS = {
     "new": "neuf",
     "like_new": "comme neuf",
@@ -34,20 +41,16 @@ def _storage_label(gb: int) -> str:
     return f"{gb}go"
 
 
-def _base_terms(search: Search) -> list[str]:
-    base = _clean(search.keyword) or DEFAULT_BASE
-    terms = [base]
-    if search.brand and search.brand.lower() not in base.lower():
-        terms.append(f"{base} {search.brand}")
-    return terms
-
-
 def _spec_terms(search: Search, full: bool = True) -> list[str]:
+    """Search words built only from what was entered in the form."""
     terms: list[str] = []
+    if _clean(search.brand):
+        terms.append(_clean(search.brand))
     if _clean(search.cpu):
         terms.append(_clean(search.cpu))
     elif _clean(search.cpu_family):
-        terms.append(_clean(search.cpu_family))
+        family = _clean(search.cpu_family)
+        terms.append(VENDOR_TERMS.get(family.lower(), family))
     if search.ram_min:
         terms.append(f"{int(search.ram_min)}go")
     if search.storage_min:
@@ -55,41 +58,33 @@ def _spec_terms(search: Search, full: bool = True) -> list[str]:
     if full and _clean(search.gpu):
         terms.append(_clean(search.gpu))
     if full and search.screen_min:
-        screen = search.screen_min
-        label = f"{screen:g}"
-        terms.append(f"{label} pouces")
+        terms.append(f"{search.screen_min:g} pouces")
     if full and _clean(search.condition):
-        label = CONDITION_LABELS.get(search.condition.lower(), search.condition)
-        terms.append(label)
+        terms.append(CONDITION_LABELS.get(search.condition.lower(), search.condition))
     return terms
 
 
 def _params(search: Search) -> dict[str, Any]:
-    params: dict[str, Any] = {}
-    if search.category:
-        params["category"] = str(search.category)
+    params: dict[str, Any] = {"category": CATEGORY_ID}
     if search.price_min is not None or search.price_max is not None:
         params["price_min"] = search.price_min
         params["price_max"] = search.price_max
-    if search.location:
-        params["location"] = search.location
     return params
 
 
 def generate_queries(search: Search, limit: int = 3) -> list[GeneratedQuery]:
+    """Full query first, then a lighter one without GPU/screen/condition.
+
+    With no inputs at all the text falls back to "pc portable" so the search is not empty.
+    """
     params = _params(search)
     queries: list[GeneratedQuery] = []
     seen: set[str] = set()
 
-    for base in _base_terms(search):
-        full = " ".join([base, *_spec_terms(search, full=True)]).strip()
-        light = " ".join([base, *_spec_terms(search, full=False)]).strip()
-        for text in (full, light):
-            normalized = " ".join(text.split()).lower()
-            if normalized and normalized not in seen:
-                seen.add(normalized)
-                queries.append(GeneratedQuery(text=" ".join(text.split()), params=dict(params)))
-        if len(queries) >= limit:
-            break
+    for full in (True, False):
+        text = " ".join(" ".join(_spec_terms(search, full=full)).split()) or DEFAULT_BASE
+        if text.lower() not in seen:
+            seen.add(text.lower())
+            queries.append(GeneratedQuery(text=text, params=dict(params)))
 
     return queries[:limit]

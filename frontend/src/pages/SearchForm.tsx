@@ -26,6 +26,7 @@ const EMPTY: SearchInput = {
   category: "informatique/ordinateurs",
   auto_check_enabled: false,
   interval: "daily",
+  notify_telegram: true,
 };
 
 function toNumber(value: string): number | null {
@@ -58,7 +59,8 @@ export default function SearchForm() {
       void last_run_at;
       void last_run_status;
       void result_count;
-      setForm(rest);
+      const interval = ["1h", "6h", "12h", "daily"].includes(rest.interval) ? rest.interval : "daily";
+      setForm({ ...rest, interval, category: "informatique/ordinateurs", keyword: "pc portable", location: "" });
     }
   }, [existing.data]);
 
@@ -160,23 +162,6 @@ export default function SearchForm() {
             <Label htmlFor="name">Name *</Label>
             <Input id="name" value={form.name} onChange={(event) => set("name", event.target.value)} placeholder="i5 16GB under 500 €" />
           </div>
-          <div>
-            <Label htmlFor="keyword">Keyword (French)</Label>
-            <Input id="keyword" value={form.keyword} onChange={(event) => set("keyword", event.target.value)} placeholder="pc portable" />
-          </div>
-          <div>
-            <Label htmlFor="category">Category</Label>
-            <Select id="category" value={form.category} onChange={(event) => set("category", event.target.value)}>
-              <option value="">All categories</option>
-              <option value="informatique">Informatique</option>
-              <option value="informatique/ordinateurs">Ordinateurs</option>
-              <option value="informatique/accessoires">Accessoires</option>
-            </Select>
-          </div>
-          <div>
-            <Label htmlFor="location">Location</Label>
-            <Input id="location" value={form.location} onChange={(event) => set("location", event.target.value)} placeholder="Paris, 75" />
-          </div>
         </div>
       </Card>
 
@@ -188,18 +173,13 @@ export default function SearchForm() {
             <Input id="cpu" value={form.cpu} onChange={(event) => set("cpu", event.target.value)} placeholder="i7-11800h" />
           </div>
           <div>
-            <Label htmlFor="cpu_family">CPU family</Label>
+            <Label htmlFor="cpu_family">CPU brand</Label>
             <Select id="cpu_family" value={form.cpu_family} onChange={(event) => set("cpu_family", event.target.value)}>
               <option value="">Any</option>
-              <option value="i3">Intel i3</option>
-              <option value="i5">Intel i5</option>
-              <option value="i7">Intel i7</option>
-              <option value="i9">Intel i9</option>
-              <option value="ryzen 3">Ryzen 3</option>
-              <option value="ryzen 5">Ryzen 5</option>
-              <option value="ryzen 7">Ryzen 7</option>
-              <option value="ryzen 9">Ryzen 9</option>
-              <option value="apple_m">Apple M</option>
+              <option value="intel">Intel</option>
+              <option value="ryzen">Ryzen (AMD)</option>
+              <option value="apple">Apple (M chips)</option>
+              <option value="snapdragon">Snapdragon (ARM)</option>
             </Select>
           </div>
           <div>
@@ -262,15 +242,17 @@ export default function SearchForm() {
       </Card>
 
       <Card>
-        <CardHeader title="Automation" subtitle="The scheduler checks due searches every 15 minutes" />
+        <CardHeader title="Automation" subtitle="Runs this search again on the chosen schedule (checked every 5 minutes)" />
         <div className="flex flex-wrap items-center gap-6 p-4">
           <Switch checked={form.auto_check_enabled} onChange={(value) => set("auto_check_enabled", value)} label="Auto-check enabled" />
+          <Switch checked={form.notify_telegram} onChange={(value) => set("notify_telegram", value)} label="Send best new deals to Telegram" />
           <div className="w-40">
             <Label htmlFor="interval">Interval</Label>
             <Select id="interval" value={form.interval} onChange={(event) => set("interval", event.target.value)}>
+              <option value="1h">Every hour</option>
               <option value="6h">Every 6 hours</option>
-              <option value="daily">Daily</option>
-              <option value="weekly">Weekly</option>
+              <option value="12h">Every 12 hours</option>
+              <option value="daily">Once a day</option>
             </Select>
           </div>
         </div>

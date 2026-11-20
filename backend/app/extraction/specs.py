@@ -40,6 +40,7 @@ CPU_PATTERNS = [
     re.compile(r"\b(?:intel\s+)?core\s+(i[3579])[\s\-]?(\d{4,5}[a-z]{0,2})\b", re.I),
     re.compile(r"\b(i[3579])[\s\-](\d{4,5}[a-z]{0,2})\b", re.I),
     re.compile(r"\bryzen\s+([3579])\s+(\d{4}[a-z]{0,3})\b", re.I),
+    re.compile(r"\bsnapdragon\s*(?:x\s*(?:elite|plus)|x\d*|\d{3,4}\w*)?", re.I),
     re.compile(r"\b(celeron|pentium|athlon)\s*([a-z]?\d{3,4})?\b", re.I),
     re.compile(r"\bn(\d{2,3})\b", re.I),
 ]

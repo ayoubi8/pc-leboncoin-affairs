@@ -28,6 +28,9 @@ def normalize_cpu(value: str) -> str:
     if match:
         suffix = f" {match.group(2)}" if match.group(2) else ""
         return f"m{match.group(1)}{suffix}"
+    match = re.search(r"snapdragon\s*(x\s*(?:elite|plus)|x\d*|\d{3,4}\w*)?", text)
+    if match:
+        return f"snapdragon {match.group(1) or ''}".strip()
     match = re.search(r"\b(celeron|pentium|athlon)\s*([a-z]?\d{3,4})?", text)
     if match:
         return f"{match.group(1)} {match.group(2) or ''}".strip()
@@ -46,10 +49,34 @@ def family_of(cpu: str) -> str:
         return f"ryzen{match.group(1)}"
     if normalized.startswith("m") and re.match(r"m[1-4]", normalized):
         return "apple_m"
+    if normalized.startswith("snapdragon"):
+        return "snapdragon"
     for name in ("celeron", "pentium", "athlon"):
         if normalized.startswith(name):
             return name
     return "unknown"
+
+
+# Vendor groups offered by the search form.
+VENDORS = ("intel", "ryzen", "apple", "snapdragon")
+
+
+def vendor_of(value: str) -> str:
+    """Map a form value or a CPU family (``i7``, ``ryzen5``, ``apple_m``...) to a vendor group."""
+    text = (value or "").lower().replace(" ", "").replace("-", "").replace("_", "")
+    if not text:
+        return ""
+    if text in VENDORS:
+        return text
+    if re.match(r"i[3579]$", text) or text in ("celeron", "pentium"):
+        return "intel"
+    if text.startswith("ryzen") or text == "athlon":
+        return "ryzen"
+    if text in ("applem", "m1", "m2", "m3", "m4"):
+        return "apple"
+    if text.startswith("snapdragon"):
+        return "snapdragon"
+    return ""
 
 
 def lookup(cpu: str) -> Optional[dict[str, Any]]:
