@@ -129,3 +129,25 @@ def test_manual_price_overrides_gemini_for_every_similar_ad(monkeypatch):
 
     rows = client.get("/api/price-book").json()
     assert rows[0]["manual"] is True and rows[0]["key"].startswith("laptop|i5g13|16|512")
+
+
+def test_listing_detail_tolerates_null_columns():
+    """Listings saved before newer columns existed hold NULLs; must not 500."""
+    from app.schemas import ListingDetail
+
+    class Row:
+        id = 1
+        subject = "old ad"
+        dz_sources = None
+        risk_flags = None
+        images = None
+        specs = None
+        is_active = None
+        repost_count = None
+        screen_skip = None
+        price_eur = None
+
+    d = ListingDetail.model_validate(Row())
+    assert d.dz_sources == [] and d.risk_flags == [] and d.images == []
+    assert d.specs == {} and d.is_active is True and d.repost_count == 0
+    assert d.price_eur is None

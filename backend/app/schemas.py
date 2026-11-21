@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Any, Literal, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class ORMModel(BaseModel):
@@ -204,6 +204,21 @@ class RunOut(ORMModel):
 
 # ---------------------------------------------------------------- listings
 class ListingOut(ORMModel):
+    # Rows saved before a column existed hold NULL there. Fall back to the
+    # field default instead of failing validation (which was a 500 error).
+    @field_validator("*", mode="before")
+    @classmethod
+    def _null_to_default(cls, v, info):
+        if v is not None:
+            return v
+        f = cls.model_fields.get(info.field_name)
+        if f is None or f.is_required():
+            return v
+        if f.default_factory is not None:
+            return f.default_factory()
+        # keep explicit Optional[...] = None fields as None
+        return f.default
+
     id: int
     list_id: Optional[str] = None
     url: str = ""
