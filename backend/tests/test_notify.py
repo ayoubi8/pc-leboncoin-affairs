@@ -215,3 +215,30 @@ def test_results_filters_new_only_and_good_only():
     assert names(new_only=True, new_within="7d") == ["new bad", "new good", "old"]
     flags = {i["subject"]: i["is_new"] for i in client.get(f"/api/searches/{search.id}/results").json()["items"]}
     assert flags == {"old": False, "new good": True, "new bad": True}
+
+
+def test_unpriced_fresh_ad_is_priced_and_judged_before_the_alert(monkeypatch):
+    """Scans do no AI by themselves; the alert step prices and judges the freshest new ads first."""
+    from app.intelligence import enrich
+
+    db = _db()
+    settings, search = _setup(db)
+    fresh = _listing(db, "Fresh unpriced laptop", 150_000)
+    fresh.dz_price_median_dzd = fresh.dz_price_low_dzd = fresh.dz_price_high_dzd = None  # nothing priced yet
+    db.commit()
+    sink = Sink(monkeypatch)
+    ai = {"verdict": "great", "headline": "Solid margin", "opinion": "Buy it, resale is strong.", "risks": [], "max_buy_price_eur": 230}
+    monkeypatch.setattr(verdict, "_ask_model", lambda *a, **k: ai)
+
+    def fake_ai(db_, settings_, search_, listings, limit=5):
+        for l in listings:
+            l.dz_price_median_dzd, l.dz_price_low_dzd, l.dz_price_high_dzd, l.dz_confidence = 150_000, 135_000, 165_000, "medium"
+            verdict.apply(db_, settings_, l)  # the Haiku step (stubbed)
+        return len(listings)
+
+    monkeypatch.setattr(enrich, "run_for", fake_ai)
+    stats = deals.notify_run(db, settings, search, [fresh])
+    assert stats["sent"] == 1 and stats["ai_checked"] == 1
+    text = sink.sent[0]["text"]
+    assert "Solid margin" in text and "Buy it, resale is strong." in text
+    assert "Open ad" in [b[0] for b in sink.sent[0]["buttons"]]

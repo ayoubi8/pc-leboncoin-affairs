@@ -104,7 +104,9 @@ def format_message(
     if flags:
         lines.append("⚠️ " + _esc(" · ".join(flags)))
     if result.get("headline"):
-        lines += ["", f"💬 {_esc(result['headline'])}"]
+        lines += ["", f"💬 <b>{_esc(result['headline'])}</b>"]
+    if result.get("opinion") and result.get("source") == "ai":
+        lines.append(f"🧠 {_esc(str(result['opinion'])[:230])}")
     return "\n".join(lines)[:1020]
 
 
@@ -167,6 +169,14 @@ def notify_run(
     pool = [(listing, False) for listing in new_listings] + [
         (listing, True) for listing in (changed_listings or []) if listing.notified_at is not None
     ]
+    # An alert needs an Algerian price and an AI verdict, so the freshest new ads (max 5) get both first.
+    # Ads of a product already in the price book only cost the verdict call.
+    from ..intelligence import enrich
+
+    try:
+        stats["ai_checked"] = enrich.run_for(db, settings, search, [listing for listing, _ in pool])
+    except Exception as exc:  # alerts still go out for ads that were already priced
+        print(f"[notify] AI step failed: {type(exc).__name__}: {exc}")
     candidates = [(l, r) for l, r in pool if _gate(settings, l, r, search)]
     stats["candidates"] = len(candidates)
 

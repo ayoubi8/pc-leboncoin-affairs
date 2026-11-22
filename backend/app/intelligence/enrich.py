@@ -50,13 +50,9 @@ def needs(listing: Listing) -> list[str]:
     return [step for step in todo if (listing.id, step) not in _failed]
 
 
-def pick(db: Session, search: Search, settings: Settings, limit: int = TOP_N) -> list[Listing]:
-    """The freshest ads of the search (same ones the Fresh view lists) that still need AI."""
+def _freshest_needing_ai(rows: list[Listing], search: Search, settings: Settings, limit: int) -> list[Listing]:
     now = datetime.now(timezone.utc).replace(tzinfo=None)
     max_age = float(settings.max_ad_age_hours or 48)
-    rows = db.execute(
-        select(Listing).join(SearchListing, SearchListing.listing_id == Listing.id).where(SearchListing.search_id == search.id)
-    ).scalars().all()
     candidates = []
     for listing in rows:
         if listing.gone_at is not None or listing.is_active is False or listing.screen_skip:
@@ -71,6 +67,25 @@ def pick(db: Session, search: Search, settings: Settings, limit: int = TOP_N) ->
         candidates.append((age if age is not None else 1e9, listing))
     candidates.sort(key=lambda pair: pair[0])
     return [listing for _, listing in candidates[:limit]]
+
+
+def pick(db: Session, search: Search, settings: Settings, limit: int = TOP_N) -> list[Listing]:
+    """The freshest ads of the search (same ones the Fresh view lists) that still need AI."""
+    rows = db.execute(
+        select(Listing).join(SearchListing, SearchListing.listing_id == Listing.id).where(SearchListing.search_id == search.id)
+    ).scalars().all()
+    return _freshest_needing_ai(rows, search, settings, limit)
+
+
+def run_for(db: Session, settings: Settings, search: Search, listings: list[Listing], limit: int = TOP_N) -> int:
+    """Price and judge the freshest of ``listings`` right now (used before Telegram alerts). Returns how many ran."""
+    if not dz_market.api_key(settings):
+        return 0
+    chosen = _freshest_needing_ai(listings, search, settings, limit)
+    for listing in chosen:
+        item: dict[str, Any] = {"steps": {name: "pending" for name in STEPS}, "notes": {}, "verdict": None}
+        enrich_listing(db, settings, listing, search, item)
+    return len(chosen)
 
 
 def _merge_specs(listing: Listing, found: dict[str, Any]) -> list[str]:
