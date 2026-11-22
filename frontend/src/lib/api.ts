@@ -483,6 +483,11 @@ export const api = {
       ),
     enrich: (id: number, auto = true) =>
       request<EnrichStatus & { started: boolean; reason: string }>(`/api/searches/${id}/enrich${qs({ auto })}`, { method: "POST" }),
+    alertNow: (id: number) =>
+      request<{ sent: number; fresh: number; candidates?: number; verdicts?: number; ai_checked?: number; quiet?: number; gone?: number; min_verdict: string }>(
+        `/api/searches/${id}/alert-now`,
+        { method: "POST" },
+      ),
     enrichStatus: (id: number) => request<EnrichStatus>(`/api/searches/${id}/enrich`),
     runs: (id: number) => request<Run[]>(`/api/searches/${id}/runs`),
     results: (id: number, params: Record<string, unknown>) =>

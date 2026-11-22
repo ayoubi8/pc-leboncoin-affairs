@@ -72,6 +72,7 @@ def upsert_ads(
 ) -> dict[str, Any]:
     new_listings: list[Listing] = []
     changed_listings: list[Listing] = []
+    linked_listings: list[Listing] = []  # already stored (e.g. from a deleted search) but new to THIS search
     touched: list[Listing] = []
 
     for position, ad in enumerate(ads, start=1):
@@ -148,6 +149,8 @@ def upsert_ads(
         ).scalar_one_or_none()
         if link is None:
             db.add(SearchListing(search_id=search.id, listing_id=listing.id, run_id=run.id if run else None))
+            if listing not in new_listings:
+                linked_listings.append(listing)
         elif run is not None:
             link.run_id = run.id
 
@@ -170,6 +173,7 @@ def upsert_ads(
         "touched": len(touched),
         "new_listings": new_listings,
         "changed_listings": changed_listings,
+        "linked_listings": linked_listings,
     }
 
 
@@ -251,12 +255,15 @@ def run_search(
         run.updated_count = counts["updated"]
         run.skipped_count = counts["skipped"]
 
-        if settings.telegram_enabled and search.notify_telegram and (counts["new_listings"] or counts["changed_listings"]):
+        # Ads new to this search count for alerts even if the database already knew them; the alert gate
+        # still drops anything stale or already alerted.
+        fresh_for_search = counts["new_listings"] + counts["linked_listings"]
+        if settings.telegram_enabled and search.notify_telegram and (fresh_for_search or counts["changed_listings"]):
             try:
                 from ..notify import deals
 
                 progress.update_run(run_id, stage="alerting", detail="")
-                stats = deals.notify_run(db, settings, search, counts["new_listings"], counts["changed_listings"])
+                stats = deals.notify_run(db, settings, search, fresh_for_search, counts["changed_listings"])
                 if stats and stats.get("sent"):
                     progress.log("alert", f"{stats['sent']} Telegram alert(s) sent for {search.name}", level="success")
             except Exception as exc:  # alerts must never break a run

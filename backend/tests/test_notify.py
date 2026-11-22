@@ -242,3 +242,22 @@ def test_unpriced_fresh_ad_is_priced_and_judged_before_the_alert(monkeypatch):
     text = sink.sent[0]["text"]
     assert "Solid margin" in text and "Buy it, resale is strong." in text
     assert "Open ad" in [b[0] for b in sink.sent[0]["buttons"]]
+
+
+def test_send_best_deals_now_alerts_fresh_ads_already_in_the_search(monkeypatch):
+    db = _db()
+    settings, search = _setup(db)
+    good = _listing(db, "Good laptop already stored", 150_000)
+    old = _listing(db, "Old laptop", 150_000, hours_ago=200)
+    db.add_all([SearchListing(search_id=search.id, listing_id=good.id), SearchListing(search_id=search.id, listing_id=old.id)])
+    db.commit()
+    sink = Sink(monkeypatch)
+    app = FastAPI()
+    app.include_router(searches_api.router)
+    app.dependency_overrides[get_db] = lambda: db
+    client = TestClient(app)
+
+    out = client.post(f"/api/searches/{search.id}/alert-now").json()
+    assert out["sent"] == 1 and out["fresh"] == 1  # the 200 h old ad is not even considered
+    assert "Good laptop already stored" in sink.sent[0]["text"]
+    assert client.post(f"/api/searches/{search.id}/alert-now").json()["sent"] == 0  # never twice

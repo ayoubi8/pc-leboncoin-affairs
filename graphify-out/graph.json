@@ -80,7 +80,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "api_dashboard",
-      "community": 46,
+      "community": 15,
       "norm_label": "dashboard.py"
     },
     {
@@ -120,7 +120,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "api_helpers",
-      "community": 46,
+      "community": 15,
       "norm_label": "helpers.py"
     },
     {
@@ -140,7 +140,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "backend_app_api_helpers_py_session",
-      "community": 1,
+      "community": 15,
       "norm_label": "session"
     },
     {
@@ -160,7 +160,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "api_helpers_search_result_count",
-      "community": 1,
+      "community": 15,
       "norm_label": "search_result_count()"
     },
     {
@@ -200,7 +200,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "api_helpers_run_out",
-      "community": 1,
+      "community": 15,
       "norm_label": "run_out()"
     },
     {
@@ -210,7 +210,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "backend_app_api_helpers_py_run",
-      "community": 1,
+      "community": 15,
       "norm_label": "run"
     },
     {
@@ -270,7 +270,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "api_imports",
-      "community": 46,
+      "community": 19,
       "norm_label": "imports.py"
     },
     {
@@ -280,7 +280,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "api_imports_upload_csv",
-      "community": 32,
+      "community": 3,
       "norm_label": "upload_csv()"
     },
     {
@@ -290,7 +290,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "uploadfile",
-      "community": 32,
+      "community": 3,
       "norm_label": "uploadfile"
     },
     {
@@ -300,7 +300,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "backend_app_api_imports_py_session",
-      "community": 32,
+      "community": 3,
       "norm_label": "session"
     },
     {
@@ -310,7 +310,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "importresult",
-      "community": 32,
+      "community": 3,
       "norm_label": "importresult"
     },
     {
@@ -640,7 +640,7 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "api_ops_pipeline_board",
-      "community": 15,
+      "community": 13,
       "norm_label": "pipeline_board()"
     },
     {
@@ -974,10 +974,20 @@
       "norm_label": "start_enrich()"
     },
     {
-      "label": "enrich_status()",
+      "label": "alert_now()",
       "file_type": "code",
       "source_file": "backend/app/api/searches.py",
       "source_location": "L169",
+      "_origin": "ast",
+      "id": "api_searches_alert_now",
+      "community": 1,
+      "norm_label": "alert_now()"
+    },
+    {
+      "label": "enrich_status()",
+      "file_type": "code",
+      "source_file": "backend/app/api/searches.py",
+      "source_location": "L203",
       "_origin": "ast",
       "id": "api_searches_enrich_status",
       "community": 1,
@@ -987,7 +997,7 @@
       "label": "search_results()",
       "file_type": "code",
       "source_file": "backend/app/api/searches.py",
-      "source_location": "L177",
+      "source_location": "L211",
       "_origin": "ast",
       "id": "api_searches_search_results",
       "community": 1,
@@ -997,7 +1007,7 @@
       "label": "ResultsResponse",
       "file_type": "code",
       "source_file": "backend/app/api/searches.py",
-      "source_location": "L177",
+      "source_location": "L211",
       "_origin": "ast",
       "id": "resultsresponse",
       "community": 1,
@@ -1007,7 +1017,7 @@
       "label": "preview_queries()",
       "file_type": "code",
       "source_file": "backend/app/api/searches.py",
-      "source_location": "L308",
+      "source_location": "L342",
       "_origin": "ast",
       "id": "api_searches_preview_queries",
       "community": 1,
@@ -1017,7 +1027,7 @@
       "label": "QueryPreview",
       "file_type": "code",
       "source_file": "backend/app/api/searches.py",
-      "source_location": "L308",
+      "source_location": "L342",
       "_origin": "ast",
       "id": "querypreview",
       "community": 1,
@@ -1027,7 +1037,7 @@
       "label": "export_csv()",
       "file_type": "code",
       "source_file": "backend/app/api/searches.py",
-      "source_location": "L327",
+      "source_location": "L361",
       "_origin": "ast",
       "id": "api_searches_export_csv",
       "community": 1,
@@ -1052,6 +1062,16 @@
       "id": "api_searches_rationale_160",
       "community": 1,
       "norm_label": "run the ai steps (specs, algerian price, verdict) on the first 5 ads that still"
+    },
+    {
+      "label": "Send the best fresh deals of this search to Telegram right now.      Takes the",
+      "file_type": "rationale",
+      "source_file": "backend/app/api/searches.py",
+      "source_location": "L170",
+      "_origin": "ast",
+      "id": "api_searches_rationale_170",
+      "community": 1,
+      "norm_label": "send the best fresh deals of this search to telegram right now.      takes the"
     },
     {
       "label": "settings.py",
@@ -1200,7 +1220,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_auth",
-      "community": 19,
+      "community": 44,
       "norm_label": "auth.py"
     },
     {
@@ -1210,7 +1230,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "app_auth_token",
-      "community": 19,
+      "community": 44,
       "norm_label": "_token()"
     },
     {
@@ -1220,7 +1240,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "app_auth_is_authenticated",
-      "community": 19,
+      "community": 44,
       "norm_label": "is_authenticated()"
     },
     {
@@ -1230,7 +1250,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "request",
-      "community": 19,
+      "community": 44,
       "norm_label": "request"
     },
     {
@@ -1240,7 +1260,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "app_auth_auth_middleware",
-      "community": 19,
+      "community": 44,
       "norm_label": "auth_middleware()"
     },
     {
@@ -1250,7 +1270,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "app_auth_loginbody",
-      "community": 19,
+      "community": 44,
       "norm_label": "loginbody"
     },
     {
@@ -1260,7 +1280,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "app_auth_me",
-      "community": 19,
+      "community": 44,
       "norm_label": "me()"
     },
     {
@@ -1270,7 +1290,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "app_auth_login",
-      "community": 19,
+      "community": 44,
       "norm_label": "login()"
     },
     {
@@ -1280,7 +1300,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "backend_app_auth_py_response",
-      "community": 19,
+      "community": 44,
       "norm_label": "response"
     },
     {
@@ -1290,7 +1310,7 @@
       "source_location": "L66",
       "_origin": "ast",
       "id": "app_auth_logout",
-      "community": 19,
+      "community": 44,
       "norm_label": "logout()"
     },
     {
@@ -1300,7 +1320,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_auth_rationale_1",
-      "community": 19,
+      "community": 44,
       "norm_label": "optional shared-password login, enabled when app_password is set (public deploym"
     },
     {
@@ -1350,7 +1370,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_db",
-      "community": 46,
+      "community": 19,
       "norm_label": "db.py"
     },
     {
@@ -1360,7 +1380,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "app_db_base",
-      "community": 46,
+      "community": 2,
       "norm_label": "base"
     },
     {
@@ -1370,7 +1390,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "declarativebase",
-      "community": 46,
+      "community": 2,
       "norm_label": "declarativebase"
     },
     {
@@ -1380,7 +1400,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "app_db_get_db",
-      "community": 46,
+      "community": 19,
       "norm_label": "get_db()"
     },
     {
@@ -1430,7 +1450,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "extraction_cpu_db",
-      "community": 20,
+      "community": 32,
       "norm_label": "cpu_db.py"
     },
     {
@@ -1440,7 +1460,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "extraction_cpu_db_db",
-      "community": 20,
+      "community": 32,
       "norm_label": "_db()"
     },
     {
@@ -1450,7 +1470,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "backend_app_extraction_cpu_db_py_any",
-      "community": 20,
+      "community": 32,
       "norm_label": "any"
     },
     {
@@ -1460,7 +1480,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "extraction_cpu_db_normalize_cpu",
-      "community": 20,
+      "community": 32,
       "norm_label": "normalize_cpu()"
     },
     {
@@ -1470,7 +1490,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "extraction_cpu_db_family_of",
-      "community": 20,
+      "community": 32,
       "norm_label": "family_of()"
     },
     {
@@ -1480,7 +1500,7 @@
       "source_location": "L64",
       "_origin": "ast",
       "id": "extraction_cpu_db_vendor_of",
-      "community": 20,
+      "community": 32,
       "norm_label": "vendor_of()"
     },
     {
@@ -1490,7 +1510,7 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "extraction_cpu_db_lookup",
-      "community": 20,
+      "community": 32,
       "norm_label": "lookup()"
     },
     {
@@ -1500,7 +1520,7 @@
       "source_location": "L108",
       "_origin": "ast",
       "id": "extraction_cpu_db_score",
-      "community": 20,
+      "community": 32,
       "norm_label": "score()"
     },
     {
@@ -1510,7 +1530,7 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "extraction_cpu_db_label",
-      "community": 20,
+      "community": 32,
       "norm_label": "label()"
     },
     {
@@ -1520,7 +1540,7 @@
       "source_location": "L65",
       "_origin": "ast",
       "id": "extraction_cpu_db_rationale_65",
-      "community": 20,
+      "community": 32,
       "norm_label": "map a form value or a cpu family (``i7``, ``ryzen5``, ``apple_m``...) to a vendo"
     },
     {
@@ -1830,7 +1850,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "intelligence_init",
-      "community": 9,
+      "community": 4,
       "norm_label": "__init__.py"
     },
     {
@@ -1840,7 +1860,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "intelligence_analyze",
-      "community": 9,
+      "community": 4,
       "norm_label": "analyze.py"
     },
     {
@@ -1960,7 +1980,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "intelligence_deal",
-      "community": 9,
+      "community": 4,
       "norm_label": "deal.py"
     },
     {
@@ -1970,7 +1990,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "intelligence_deal_classify",
-      "community": 9,
+      "community": 4,
       "norm_label": "classify()"
     },
     {
@@ -1980,7 +2000,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "intelligence_deal_score_from_ratio",
-      "community": 9,
+      "community": 4,
       "norm_label": "score_from_ratio()"
     },
     {
@@ -1990,7 +2010,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "intelligence_deal_acquisition_score",
-      "community": 9,
+      "community": 4,
       "norm_label": "acquisition_score()"
     },
     {
@@ -2000,7 +2020,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "intelligence_deal_savings",
-      "community": 9,
+      "community": 4,
       "norm_label": "savings()"
     },
     {
@@ -2010,7 +2030,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "intelligence_deal_savings_pct",
-      "community": 9,
+      "community": 4,
       "norm_label": "savings_pct()"
     },
     {
@@ -2020,7 +2040,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "intelligence_deal_payload",
-      "community": 9,
+      "community": 4,
       "norm_label": "payload()"
     },
     {
@@ -2030,7 +2050,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "backend_app_intelligence_deal_py_any",
-      "community": 9,
+      "community": 4,
       "norm_label": "any"
     },
     {
@@ -2324,24 +2344,14 @@
       "norm_label": "listing"
     },
     {
-      "label": "pick()",
+      "label": "_freshest_needing_ai()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L53",
       "_origin": "ast",
-      "id": "intelligence_enrich_pick",
+      "id": "intelligence_enrich_freshest_needing_ai",
       "community": 45,
-      "norm_label": "pick()"
-    },
-    {
-      "label": "Session",
-      "file_type": "code",
-      "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L53",
-      "_origin": "ast",
-      "id": "backend_app_intelligence_enrich_py_session",
-      "community": 45,
-      "norm_label": "session"
+      "norm_label": "_freshest_needing_ai()"
     },
     {
       "label": "Search",
@@ -2364,10 +2374,40 @@
       "norm_label": "settings"
     },
     {
+      "label": "pick()",
+      "file_type": "code",
+      "source_file": "backend/app/intelligence/enrich.py",
+      "source_location": "L72",
+      "_origin": "ast",
+      "id": "intelligence_enrich_pick",
+      "community": 45,
+      "norm_label": "pick()"
+    },
+    {
+      "label": "Session",
+      "file_type": "code",
+      "source_file": "backend/app/intelligence/enrich.py",
+      "source_location": "L72",
+      "_origin": "ast",
+      "id": "backend_app_intelligence_enrich_py_session",
+      "community": 45,
+      "norm_label": "session"
+    },
+    {
+      "label": "run_for()",
+      "file_type": "code",
+      "source_file": "backend/app/intelligence/enrich.py",
+      "source_location": "L80",
+      "_origin": "ast",
+      "id": "intelligence_enrich_run_for",
+      "community": 45,
+      "norm_label": "run_for()"
+    },
+    {
       "label": "_merge_specs()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L76",
+      "source_location": "L91",
       "_origin": "ast",
       "id": "intelligence_enrich_merge_specs",
       "community": 45,
@@ -2377,7 +2417,7 @@
       "label": "Any",
       "file_type": "code",
       "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L76",
+      "source_location": "L91",
       "_origin": "ast",
       "id": "backend_app_intelligence_enrich_py_any",
       "community": 45,
@@ -2387,7 +2427,7 @@
       "label": "enrich_listing()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L106",
+      "source_location": "L121",
       "_origin": "ast",
       "id": "intelligence_enrich_enrich_listing",
       "community": 45,
@@ -2397,7 +2437,7 @@
       "label": "_run()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L180",
+      "source_location": "L195",
       "_origin": "ast",
       "id": "intelligence_enrich_run",
       "community": 45,
@@ -2407,7 +2447,7 @@
       "label": "start()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L200",
+      "source_location": "L215",
       "_origin": "ast",
       "id": "intelligence_enrich_start",
       "community": 45,
@@ -2417,7 +2457,7 @@
       "label": "summary()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L254",
+      "source_location": "L269",
       "_origin": "ast",
       "id": "intelligence_enrich_summary",
       "community": 45,
@@ -2447,19 +2487,29 @@
       "label": "The freshest ads of the search (same ones the Fresh view lists) that still need",
       "file_type": "rationale",
       "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L54",
+      "source_location": "L73",
       "_origin": "ast",
-      "id": "intelligence_enrich_rationale_54",
+      "id": "intelligence_enrich_rationale_73",
       "community": 45,
       "norm_label": "the freshest ads of the search (same ones the fresh view lists) that still need"
+    },
+    {
+      "label": "Price and judge the freshest of ``listings`` right now (used before Telegram ale",
+      "file_type": "rationale",
+      "source_file": "backend/app/intelligence/enrich.py",
+      "source_location": "L81",
+      "_origin": "ast",
+      "id": "intelligence_enrich_rationale_81",
+      "community": 45,
+      "norm_label": "price and judge the freshest of ``listings`` right now (used before telegram ale"
     },
     {
       "label": "Fill only the specs the regex left empty; return the fields that were set.",
       "file_type": "rationale",
       "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L77",
+      "source_location": "L92",
       "_origin": "ast",
-      "id": "intelligence_enrich_rationale_77",
+      "id": "intelligence_enrich_rationale_92",
       "community": 45,
       "norm_label": "fill only the specs the regex left empty; return the fields that were set."
     },
@@ -2467,9 +2517,9 @@
       "label": "Run the missing steps for one ad, recording each step's outcome in ``item`` (nev",
       "file_type": "rationale",
       "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L107",
+      "source_location": "L122",
       "_origin": "ast",
-      "id": "intelligence_enrich_rationale_107",
+      "id": "intelligence_enrich_rationale_122",
       "community": 45,
       "norm_label": "run the missing steps for one ad, recording each step's outcome in ``item`` (nev"
     },
@@ -2477,9 +2527,9 @@
       "label": "Start (or report) the AI batch of a search. Returns the job summary.",
       "file_type": "rationale",
       "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L209",
+      "source_location": "L224",
       "_origin": "ast",
-      "id": "intelligence_enrich_rationale_209",
+      "id": "intelligence_enrich_rationale_224",
       "community": 45,
       "norm_label": "start (or report) the ai batch of a search. returns the job summary."
     },
@@ -2740,7 +2790,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "intelligence_market",
-      "community": 9,
+      "community": 46,
       "norm_label": "market.py"
     },
     {
@@ -2750,7 +2800,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "intelligence_market_percentile",
-      "community": 9,
+      "community": 46,
       "norm_label": "_percentile()"
     },
     {
@@ -2760,7 +2810,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "intelligence_market_prices_for",
-      "community": 9,
+      "community": 46,
       "norm_label": "_prices_for()"
     },
     {
@@ -2770,7 +2820,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "backend_app_intelligence_market_py_session",
-      "community": 9,
+      "community": 46,
       "norm_label": "session"
     },
     {
@@ -2780,7 +2830,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "backend_app_intelligence_market_py_listing",
-      "community": 9,
+      "community": 46,
       "norm_label": "listing"
     },
     {
@@ -2790,7 +2840,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "intelligence_market_compute_market",
-      "community": 9,
+      "community": 46,
       "norm_label": "compute_market()"
     },
     {
@@ -2800,7 +2850,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "backend_app_intelligence_market_py_any",
-      "community": 9,
+      "community": 46,
       "norm_label": "any"
     },
     {
@@ -2810,7 +2860,7 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "intelligence_market_market_payload",
-      "community": 9,
+      "community": 46,
       "norm_label": "market_payload()"
     },
     {
@@ -2820,7 +2870,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "intelligence_match",
-      "community": 45,
+      "community": 3,
       "norm_label": "match.py"
     },
     {
@@ -2830,7 +2880,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "intelligence_match_norm",
-      "community": 45,
+      "community": 3,
       "norm_label": "_norm()"
     },
     {
@@ -2840,7 +2890,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "backend_app_intelligence_match_py_any",
-      "community": 45,
+      "community": 3,
       "norm_label": "any"
     },
     {
@@ -2850,7 +2900,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "intelligence_match_contains",
-      "community": 45,
+      "community": 3,
       "norm_label": "_contains()"
     },
     {
@@ -2860,7 +2910,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "intelligence_match_compute_match",
-      "community": 45,
+      "community": 3,
       "norm_label": "compute_match()"
     },
     {
@@ -2870,7 +2920,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "backend_app_intelligence_match_py_search",
-      "community": 45,
+      "community": 3,
       "norm_label": "search"
     },
     {
@@ -2880,7 +2930,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "backend_app_intelligence_match_py_listing",
-      "community": 45,
+      "community": 3,
       "norm_label": "listing"
     },
     {
@@ -2890,7 +2940,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "intelligence_match_hard_fail",
-      "community": 45,
+      "community": 3,
       "norm_label": "hard_fail()"
     },
     {
@@ -2900,7 +2950,7 @@
       "source_location": "L119",
       "_origin": "ast",
       "id": "intelligence_match_rationale_119",
-      "community": 45,
+      "community": 3,
       "norm_label": "why the ad does not fit the search's hard criteria (cpu/gpu/ram/storage), or \"\""
     },
     {
@@ -2910,7 +2960,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "intelligence_negotiation",
-      "community": 12,
+      "community": 11,
       "norm_label": "negotiation.py"
     },
     {
@@ -2920,7 +2970,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "intelligence_negotiation_round5",
-      "community": 12,
+      "community": 11,
       "norm_label": "_round5()"
     },
     {
@@ -2930,7 +2980,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "intelligence_negotiation_recommendations",
-      "community": 12,
+      "community": 11,
       "norm_label": "recommendations()"
     },
     {
@@ -2940,7 +2990,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "backend_app_intelligence_negotiation_py_any",
-      "community": 12,
+      "community": 11,
       "norm_label": "any"
     },
     {
@@ -2950,7 +3000,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "intelligence_negotiation_template",
-      "community": 12,
+      "community": 11,
       "norm_label": "_template()"
     },
     {
@@ -2960,7 +3010,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "intelligence_negotiation_build",
-      "community": 12,
+      "community": 11,
       "norm_label": "build()"
     },
     {
@@ -2970,7 +3020,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "backend_app_intelligence_negotiation_py_session",
-      "community": 12,
+      "community": 11,
       "norm_label": "session"
     },
     {
@@ -2980,7 +3030,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "backend_app_intelligence_negotiation_py_settings",
-      "community": 12,
+      "community": 11,
       "norm_label": "settings"
     },
     {
@@ -2990,7 +3040,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "backend_app_intelligence_negotiation_py_listing",
-      "community": 12,
+      "community": 11,
       "norm_label": "listing"
     },
     {
@@ -3000,7 +3050,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "intelligence_pricebook",
-      "community": 22,
+      "community": 32,
       "norm_label": "pricebook.py"
     },
     {
@@ -3010,7 +3060,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "intelligence_pricebook_bucket",
-      "community": 22,
+      "community": 32,
       "norm_label": "_bucket()"
     },
     {
@@ -3020,7 +3070,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "intelligence_pricebook_cpu_tier",
-      "community": 22,
+      "community": 32,
       "norm_label": "cpu_tier()"
     },
     {
@@ -3030,7 +3080,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "intelligence_pricebook_is_gpu_ad",
-      "community": 22,
+      "community": 32,
       "norm_label": "is_gpu_ad()"
     },
     {
@@ -3040,7 +3090,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "backend_app_intelligence_pricebook_py_any",
-      "community": 22,
+      "community": 32,
       "norm_label": "any"
     },
     {
@@ -3050,7 +3100,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "intelligence_pricebook_gpu_name",
-      "community": 22,
+      "community": 32,
       "norm_label": "gpu_name()"
     },
     {
@@ -3060,7 +3110,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "intelligence_pricebook_canonical",
-      "community": 22,
+      "community": 32,
       "norm_label": "canonical()"
     },
     {
@@ -3070,7 +3120,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "backend_app_intelligence_pricebook_py_listing",
-      "community": 22,
+      "community": 32,
       "norm_label": "listing"
     },
     {
@@ -3080,7 +3130,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "intelligence_pricebook_kind_of",
-      "community": 22,
+      "community": 32,
       "norm_label": "kind_of()"
     },
     {
@@ -3090,7 +3140,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "intelligence_pricebook_rationale_1",
-      "community": 22,
+      "community": 32,
       "norm_label": "canonical product keys for the algerian price book.  one gemini lookup (or one"
     },
     {
@@ -3100,7 +3150,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "intelligence_pricebook_rationale_31",
-      "community": 22,
+      "community": 32,
       "norm_label": "i5-13420h' -> 'i5g13', 'ryzen 5 5600h' -> 'r5s5', 'm2 pro' -> 'm2 pro'."
     },
     {
@@ -3110,7 +3160,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "intelligence_pricebook_rationale_48",
-      "community": 22,
+      "community": 32,
       "norm_label": "a bare graphics card ad: a dedicated gpu, no cpu, and no sign of a whole compute"
     },
     {
@@ -3120,7 +3170,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "intelligence_pricebook_rationale_63",
-      "community": 22,
+      "community": 32,
       "norm_label": "return (key, description, kind); (\"\", \"\", \"laptop\") when there is too little to"
     },
     {
@@ -3440,7 +3490,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "logistics_init",
-      "community": 48,
+      "community": 22,
       "norm_label": "__init__.py"
     },
     {
@@ -3450,7 +3500,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "logistics_currency",
-      "community": 53,
+      "community": 2,
       "norm_label": "currency.py"
     },
     {
@@ -3460,7 +3510,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "logistics_currency_rates",
-      "community": 53,
+      "community": 2,
       "norm_label": "rates()"
     },
     {
@@ -3470,7 +3520,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "backend_app_logistics_currency_py_settings",
-      "community": 53,
+      "community": 2,
       "norm_label": "settings"
     },
     {
@@ -3480,7 +3530,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "logistics_currency_to_dzd",
-      "community": 53,
+      "community": 2,
       "norm_label": "to_dzd()"
     },
     {
@@ -3490,7 +3540,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "logistics_currency_to_eur",
-      "community": 53,
+      "community": 2,
       "norm_label": "to_eur()"
     },
     {
@@ -3500,7 +3550,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "logistics_currency_convert",
-      "community": 53,
+      "community": 2,
       "norm_label": "convert()"
     },
     {
@@ -3510,7 +3560,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "logistics_customs",
-      "community": 47,
+      "community": 22,
       "norm_label": "customs.py"
     },
     {
@@ -3520,7 +3570,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "logistics_customs_compute",
-      "community": 47,
+      "community": 22,
       "norm_label": "compute()"
     },
     {
@@ -3530,7 +3580,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "backend_app_logistics_customs_py_settings",
-      "community": 47,
+      "community": 22,
       "norm_label": "settings"
     },
     {
@@ -3540,7 +3590,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "backend_app_logistics_customs_py_any",
-      "community": 47,
+      "community": 22,
       "norm_label": "any"
     },
     {
@@ -3550,7 +3600,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "logistics_customs_rationale_15",
-      "community": 47,
+      "community": 22,
       "norm_label": "algeria import charges on a cif basis.      ``personal`` follows the occasiona"
     },
     {
@@ -3560,7 +3610,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "logistics_landed",
-      "community": 48,
+      "community": 22,
       "norm_label": "landed.py"
     },
     {
@@ -3570,7 +3620,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "logistics_landed_estimate_package",
-      "community": 48,
+      "community": 22,
       "norm_label": "estimate_package()"
     },
     {
@@ -3580,7 +3630,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "backend_app_logistics_landed_py_settings",
-      "community": 48,
+      "community": 22,
       "norm_label": "settings"
     },
     {
@@ -3590,7 +3640,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "backend_app_logistics_landed_py_any",
-      "community": 48,
+      "community": 22,
       "norm_label": "any"
     },
     {
@@ -3600,7 +3650,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "logistics_landed_compute",
-      "community": 48,
+      "community": 22,
       "norm_label": "compute()"
     },
     {
@@ -3610,7 +3660,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "logistics_landed_rationale_10",
-      "community": 48,
+      "community": 22,
       "norm_label": "parcel weight/box from the item: the settings values are for a ~15.6\" laptop; sc"
     },
     {
@@ -3620,7 +3670,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "logistics_porsay",
-      "community": 48,
+      "community": 22,
       "norm_label": "porsay.py"
     },
     {
@@ -3630,7 +3680,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "logistics_porsay_volumetric_kg",
-      "community": 48,
+      "community": 22,
       "norm_label": "volumetric_kg()"
     },
     {
@@ -3640,7 +3690,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "logistics_porsay_tariff",
-      "community": 48,
+      "community": 22,
       "norm_label": "_tariff()"
     },
     {
@@ -3650,7 +3700,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "backend_app_logistics_porsay_py_settings",
-      "community": 48,
+      "community": 22,
       "norm_label": "settings"
     },
     {
@@ -3660,7 +3710,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "backend_app_logistics_porsay_py_any",
-      "community": 48,
+      "community": 22,
       "norm_label": "any"
     },
     {
@@ -3670,7 +3720,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "logistics_porsay_quote",
-      "community": 48,
+      "community": 22,
       "norm_label": "quote()"
     },
     {
@@ -3700,7 +3750,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "fastapi",
-      "community": 2,
+      "community": 19,
       "norm_label": "fastapi"
     },
     {
@@ -3730,7 +3780,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_models",
-      "community": 46,
+      "community": 2,
       "norm_label": "models.py"
     },
     {
@@ -3740,7 +3790,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "app_models_utcnow",
-      "community": 46,
+      "community": 2,
       "norm_label": "utcnow()"
     },
     {
@@ -3750,7 +3800,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "backend_app_models_py_datetime",
-      "community": 46,
+      "community": 2,
       "norm_label": "datetime"
     },
     {
@@ -3760,7 +3810,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "app_models_settings",
-      "community": 47,
+      "community": 2,
       "norm_label": "settings"
     },
     {
@@ -3770,7 +3820,7 @@
       "source_location": "L103",
       "_origin": "ast",
       "id": "app_models_search",
-      "community": 46,
+      "community": 2,
       "norm_label": "search"
     },
     {
@@ -3780,7 +3830,7 @@
       "source_location": "L143",
       "_origin": "ast",
       "id": "app_models_run",
-      "community": 46,
+      "community": 3,
       "norm_label": "run"
     },
     {
@@ -3790,7 +3840,7 @@
       "source_location": "L163",
       "_origin": "ast",
       "id": "app_models_listing",
-      "community": 51,
+      "community": 2,
       "norm_label": "listing"
     },
     {
@@ -3800,7 +3850,7 @@
       "source_location": "L250",
       "_origin": "ast",
       "id": "app_models_searchlisting",
-      "community": 46,
+      "community": 18,
       "norm_label": "searchlisting"
     },
     {
@@ -3810,7 +3860,7 @@
       "source_location": "L264",
       "_origin": "ast",
       "id": "app_models_pricesnapshot",
-      "community": 46,
+      "community": 3,
       "norm_label": "pricesnapshot"
     },
     {
@@ -3820,7 +3870,7 @@
       "source_location": "L276",
       "_origin": "ast",
       "id": "app_models_negotiation",
-      "community": 46,
+      "community": 2,
       "norm_label": "negotiation"
     },
     {
@@ -3830,7 +3880,7 @@
       "source_location": "L294",
       "_origin": "ast",
       "id": "app_models_importbatch",
-      "community": 49,
+      "community": 3,
       "norm_label": "importbatch"
     },
     {
@@ -3850,7 +3900,7 @@
       "source_location": "L318",
       "_origin": "ast",
       "id": "app_models_dzprice",
-      "community": 46,
+      "community": 9,
       "norm_label": "dzprice"
     },
     {
@@ -3860,7 +3910,7 @@
       "source_location": "L319",
       "_origin": "ast",
       "id": "app_models_rationale_319",
-      "community": 46,
+      "community": 9,
       "norm_label": "cached algerian market price per laptop configuration (one gemini lookup each)."
     },
     {
@@ -4017,7 +4067,7 @@
       "label": "negotiation_text()",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L111",
+      "source_location": "L113",
       "_origin": "ast",
       "id": "notify_deals_negotiation_text",
       "community": 11,
@@ -4027,7 +4077,7 @@
       "label": "Session",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L111",
+      "source_location": "L113",
       "_origin": "ast",
       "id": "backend_app_notify_deals_py_session",
       "community": 11,
@@ -4037,7 +4087,7 @@
       "label": "_check_online()",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L124",
+      "source_location": "L126",
       "_origin": "ast",
       "id": "notify_deals_check_online",
       "community": 11,
@@ -4047,7 +4097,7 @@
       "label": "_gate()",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L132",
+      "source_location": "L134",
       "_origin": "ast",
       "id": "notify_deals_gate",
       "community": 11,
@@ -4057,7 +4107,7 @@
       "label": "Search",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L132",
+      "source_location": "L134",
       "_origin": "ast",
       "id": "backend_app_notify_deals_py_search",
       "community": 11,
@@ -4067,7 +4117,7 @@
       "label": "notify_run()",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L155",
+      "source_location": "L157",
       "_origin": "ast",
       "id": "notify_deals_notify_run",
       "community": 11,
@@ -4087,9 +4137,9 @@
       "label": "French opening message, copy-paste ready; the offer sits below the price we expe",
       "file_type": "rationale",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L112",
+      "source_location": "L114",
       "_origin": "ast",
-      "id": "notify_deals_rationale_112",
+      "id": "notify_deals_rationale_114",
       "community": 11,
       "norm_label": "french opening message, copy-paste ready; the offer sits below the price we expe"
     },
@@ -4097,9 +4147,9 @@
       "label": "active' | 'gone' | 'unknown' from the live ad page (one request, never raises).",
       "file_type": "rationale",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L125",
+      "source_location": "L127",
       "_origin": "ast",
-      "id": "notify_deals_rationale_125",
+      "id": "notify_deals_rationale_127",
       "community": 11,
       "norm_label": "active' | 'gone' | 'unknown' from the live ad page (one request, never raises)."
     },
@@ -4107,9 +4157,9 @@
       "label": "Free checks. True when the ad may be considered for an alert.",
       "file_type": "rationale",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L133",
+      "source_location": "L135",
       "_origin": "ast",
-      "id": "notify_deals_rationale_133",
+      "id": "notify_deals_rationale_135",
       "community": 11,
       "norm_label": "free checks. true when the ad may be considered for an alert."
     },
@@ -4117,9 +4167,9 @@
       "label": "Send the best fresh deals of a run. A listing is alerted once, plus once more if",
       "file_type": "rationale",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L162",
+      "source_location": "L164",
       "_origin": "ast",
-      "id": "notify_deals_rationale_162",
+      "id": "notify_deals_rationale_164",
       "community": 11,
       "norm_label": "send the best fresh deals of a run. a listing is alerted once, plus once more if"
     },
@@ -5230,7 +5280,7 @@
       "source_location": "L386",
       "_origin": "ast",
       "id": "app_schemas_dashboardkpis",
-      "community": 25,
+      "community": 15,
       "norm_label": "dashboardkpis"
     },
     {
@@ -5570,7 +5620,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "search_csv_import",
-      "community": 49,
+      "community": 3,
       "norm_label": "csv_import.py"
     },
     {
@@ -5580,7 +5630,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "search_csv_import_resolve",
-      "community": 49,
+      "community": 3,
       "norm_label": "_resolve()"
     },
     {
@@ -5590,7 +5640,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "search_csv_import_parse_price",
-      "community": 49,
+      "community": 3,
       "norm_label": "_parse_price()"
     },
     {
@@ -5600,7 +5650,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "backend_app_search_csv_import_py_any",
-      "community": 49,
+      "community": 3,
       "norm_label": "any"
     },
     {
@@ -5610,7 +5660,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "search_csv_import_import_csv",
-      "community": 49,
+      "community": 3,
       "norm_label": "import_csv()"
     },
     {
@@ -5620,7 +5670,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "backend_app_search_csv_import_py_session",
-      "community": 49,
+      "community": 3,
       "norm_label": "session"
     },
     {
@@ -5630,7 +5680,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "backend_app_search_csv_import_py_settings",
-      "community": 49,
+      "community": 3,
       "norm_label": "settings"
     },
     {
@@ -5640,7 +5690,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "backend_app_search_csv_import_py_search",
-      "community": 49,
+      "community": 3,
       "norm_label": "search"
     },
     {
@@ -5650,7 +5700,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "importbatch",
-      "community": 49,
+      "community": 3,
       "norm_label": "importbatch"
     },
     {
@@ -5937,7 +5987,7 @@
       "label": "run_search()",
       "file_type": "code",
       "source_file": "backend/app/search/runner.py",
-      "source_location": "L176",
+      "source_location": "L180",
       "_origin": "ast",
       "id": "search_runner_run_search",
       "community": 3,
@@ -5960,7 +6010,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scripts_migrate_to_postgres",
-      "community": 55,
+      "community": 19,
       "norm_label": "migrate_to_postgres.py"
     },
     {
@@ -5970,7 +6020,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "scripts_migrate_to_postgres_main",
-      "community": 55,
+      "community": 19,
       "norm_label": "main()"
     },
     {
@@ -5980,7 +6030,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scripts_migrate_to_postgres_rationale_1",
-      "community": 55,
+      "community": 19,
       "norm_label": "copy the local sqlite database into postgres (supabase).  usage (from backend/):"
     },
     {
@@ -5990,7 +6040,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_test_core",
-      "community": 19,
+      "community": 8,
       "norm_label": "test_core.py"
     },
     {
@@ -6000,7 +6050,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "tests_test_core_client",
-      "community": 19,
+      "community": 8,
       "norm_label": "client()"
     },
     {
@@ -6010,7 +6060,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "tests_test_core_settings",
-      "community": 19,
+      "community": 8,
       "norm_label": "settings()"
     },
     {
@@ -6020,7 +6070,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "tests_test_core_test_specs_gaming_laptop",
-      "community": 19,
+      "community": 8,
       "norm_label": "test_specs_gaming_laptop()"
     },
     {
@@ -6030,7 +6080,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "tests_test_core_test_specs_macbook",
-      "community": 19,
+      "community": 8,
       "norm_label": "test_specs_macbook()"
     },
     {
@@ -6040,7 +6090,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "tests_test_core_test_specs_storage_terabyte",
-      "community": 19,
+      "community": 8,
       "norm_label": "test_specs_storage_terabyte()"
     },
     {
@@ -6050,7 +6100,7 @@
       "source_location": "L67",
       "_origin": "ast",
       "id": "tests_test_core_test_porsay_volumetric",
-      "community": 19,
+      "community": 8,
       "norm_label": "test_porsay_volumetric()"
     },
     {
@@ -6060,7 +6110,7 @@
       "source_location": "L74",
       "_origin": "ast",
       "id": "tests_test_core_test_customs_far_below_exemption",
-      "community": 19,
+      "community": 8,
       "norm_label": "test_customs_far_below_exemption()"
     },
     {
@@ -6070,7 +6120,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "tests_test_core_test_customs_flat_rate",
-      "community": 19,
+      "community": 8,
       "norm_label": "test_customs_flat_rate()"
     },
     {
@@ -6080,7 +6130,7 @@
       "source_location": "L88",
       "_origin": "ast",
       "id": "tests_test_core_test_customs_standard",
-      "community": 19,
+      "community": 8,
       "norm_label": "test_customs_standard()"
     },
     {
@@ -6090,7 +6140,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "tests_test_core_test_landed_cost",
-      "community": 19,
+      "community": 8,
       "norm_label": "test_landed_cost()"
     },
     {
@@ -6100,7 +6150,7 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "tests_test_core_test_api_health",
-      "community": 19,
+      "community": 8,
       "norm_label": "test_api_health()"
     },
     {
@@ -6110,7 +6160,7 @@
       "source_location": "L108",
       "_origin": "ast",
       "id": "tests_test_core_test_api_search_lifecycle",
-      "community": 19,
+      "community": 8,
       "norm_label": "test_api_search_lifecycle()"
     },
     {
@@ -6120,7 +6170,7 @@
       "source_location": "L135",
       "_origin": "ast",
       "id": "tests_test_core_test_api_settings_masks_key",
-      "community": 19,
+      "community": 8,
       "norm_label": "test_api_settings_masks_key()"
     },
     {
@@ -6130,7 +6180,7 @@
       "source_location": "L141",
       "_origin": "ast",
       "id": "tests_test_core_test_leboncoin_detects_reader_captcha",
-      "community": 19,
+      "community": 8,
       "norm_label": "test_leboncoin_detects_reader_captcha()"
     },
     {
@@ -6140,7 +6190,7 @@
       "source_location": "L149",
       "_origin": "ast",
       "id": "tests_test_core_test_api_results_landed_sort",
-      "community": 19,
+      "community": 8,
       "norm_label": "test_api_results_landed_sort()"
     },
     {
@@ -6150,7 +6200,7 @@
       "source_location": "L157",
       "_origin": "ast",
       "id": "tests_test_core_test_csv_import_roundtrip",
-      "community": 19,
+      "community": 8,
       "norm_label": "test_csv_import_roundtrip()"
     },
     {
@@ -6220,7 +6270,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_test_dz",
-      "community": 47,
+      "community": 2,
       "norm_label": "test_dz.py"
     },
     {
@@ -6230,7 +6280,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "tests_test_dz_db",
-      "community": 47,
+      "community": 2,
       "norm_label": "_db()"
     },
     {
@@ -6240,7 +6290,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "tests_test_dz_listing",
-      "community": 47,
+      "community": 2,
       "norm_label": "_listing()"
     },
     {
@@ -6250,7 +6300,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "tests_test_dz_test_dz_score_uses_landed_vs_algerian_median",
-      "community": 47,
+      "community": 2,
       "norm_label": "test_dz_score_uses_landed_vs_algerian_median()"
     },
     {
@@ -6260,7 +6310,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "tests_test_dz_listing_landed",
-      "community": 47,
+      "community": 2,
       "norm_label": "listing_landed()"
     },
     {
@@ -6270,7 +6320,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "tests_test_dz_test_failed_lookup_keeps_euro_score",
-      "community": 47,
+      "community": 2,
       "norm_label": "test_failed_lookup_keeps_euro_score()"
     },
     {
@@ -6280,7 +6330,7 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "tests_test_dz_test_implausible_prices_rejected",
-      "community": 47,
+      "community": 2,
       "norm_label": "test_implausible_prices_rejected()"
     },
     {
@@ -6290,7 +6340,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "tests_test_dz_test_no_key_means_no_lookup",
-      "community": 47,
+      "community": 2,
       "norm_label": "test_no_key_means_no_lookup()"
     },
     {
@@ -6300,7 +6350,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_test_freshness",
-      "community": 51,
+      "community": 2,
       "norm_label": "test_freshness.py"
     },
     {
@@ -6310,7 +6360,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "tests_test_freshness_ad",
-      "community": 51,
+      "community": 2,
       "norm_label": "_ad()"
     },
     {
@@ -6320,7 +6370,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "tests_test_freshness_test_paris_conversion_winter_and_summer",
-      "community": 46,
+      "community": 2,
       "norm_label": "test_paris_conversion_winter_and_summer()"
     },
     {
@@ -6330,7 +6380,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "tests_test_freshness_test_fresh_beats_old_and_sold_wording_hurts",
-      "community": 51,
+      "community": 2,
       "norm_label": "test_fresh_beats_old_and_sold_wording_hurts()"
     },
     {
@@ -6340,7 +6390,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "tests_test_freshness_test_recent_bump_keeps_an_old_ad_alive",
-      "community": 51,
+      "community": 2,
       "norm_label": "test_recent_bump_keeps_an_old_ad_alive()"
     },
     {
@@ -6350,7 +6400,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "tests_test_freshness_test_gone_ad_scores_zero",
-      "community": 51,
+      "community": 2,
       "norm_label": "test_gone_ad_scores_zero()"
     },
     {
@@ -6360,7 +6410,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "tests_test_freshness_test_classify_ad_page",
-      "community": 51,
+      "community": 2,
       "norm_label": "test_classify_ad_page()"
     },
     {
@@ -6550,7 +6600,7 @@
       "source_location": "L197",
       "_origin": "ast",
       "id": "tests_test_live_test_gpu_search_rejects_other_cards",
-      "community": 51,
+      "community": 2,
       "norm_label": "test_gpu_search_rejects_other_cards()"
     },
     {
@@ -6580,7 +6630,7 @@
       "source_location": "L267",
       "_origin": "ast",
       "id": "tests_test_live_test_card_search_needs_the_model_in_the_ad_even_when_the_gpu_spec_is_empty",
-      "community": 51,
+      "community": 2,
       "norm_label": "test_card_search_needs_the_model_in_the_ad_even_when_the_gpu_spec_is_empty()"
     },
     {
@@ -6740,7 +6790,7 @@
       "source_location": "L168",
       "_origin": "ast",
       "id": "tests_test_notify_test_quiet_hours_window_wraps_midnight",
-      "community": 46,
+      "community": 2,
       "norm_label": "test_quiet_hours_window_wraps_midnight()"
     },
     {
@@ -6764,6 +6814,26 @@
       "norm_label": "test_results_filters_new_only_and_good_only()"
     },
     {
+      "label": "test_unpriced_fresh_ad_is_priced_and_judged_before_the_alert()",
+      "file_type": "code",
+      "source_file": "backend/tests/test_notify.py",
+      "source_location": "L220",
+      "_origin": "ast",
+      "id": "tests_test_notify_test_unpriced_fresh_ad_is_priced_and_judged_before_the_alert",
+      "community": 18,
+      "norm_label": "test_unpriced_fresh_ad_is_priced_and_judged_before_the_alert()"
+    },
+    {
+      "label": "test_send_best_deals_now_alerts_fresh_ads_already_in_the_search()",
+      "file_type": "code",
+      "source_file": "backend/tests/test_notify.py",
+      "source_location": "L247",
+      "_origin": "ast",
+      "id": "tests_test_notify_test_send_best_deals_now_alerts_fresh_ads_already_in_the_search",
+      "community": 18,
+      "norm_label": "test_send_best_deals_now_alerts_fresh_ads_already_in_the_search()"
+    },
+    {
       "label": "Leboncoin-style timestamp (Paris time, UTC+1 in winter) for an ad published `hou",
       "file_type": "rationale",
       "source_file": "backend/tests/test_notify.py",
@@ -6774,13 +6844,23 @@
       "norm_label": "leboncoin-style timestamp (paris time, utc+1 in winter) for an ad published `hou"
     },
     {
+      "label": "Scans do no AI by themselves; the alert step prices and judges the freshest new",
+      "file_type": "rationale",
+      "source_file": "backend/tests/test_notify.py",
+      "source_location": "L221",
+      "_origin": "ast",
+      "id": "tests_test_notify_rationale_221",
+      "community": 18,
+      "norm_label": "scans do no ai by themselves; the alert step prices and judges the freshest new"
+    },
+    {
       "label": "test_ops.py",
       "file_type": "code",
       "source_file": "backend/tests/test_ops.py",
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_test_ops",
-      "community": 50,
+      "community": 2,
       "norm_label": "test_ops.py"
     },
     {
@@ -6790,7 +6870,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "tests_test_ops_db",
-      "community": 50,
+      "community": 2,
       "norm_label": "_db()"
     },
     {
@@ -6800,7 +6880,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "tests_test_ops_settings",
-      "community": 50,
+      "community": 2,
       "norm_label": "_settings()"
     },
     {
@@ -6810,7 +6890,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "tests_test_ops_test_blocked_streak_and_rejected_key_raise_alerts_once",
-      "community": 50,
+      "community": 2,
       "norm_label": "test_blocked_streak_and_rejected_key_raise_alerts_once()"
     },
     {
@@ -6820,7 +6900,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "tests_test_ops_update",
-      "community": 50,
+      "community": 2,
       "norm_label": "_update()"
     },
     {
@@ -6830,7 +6910,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "tests_test_ops_test_buttons_and_commands_update_the_pipeline",
-      "community": 50,
+      "community": 2,
       "norm_label": "test_buttons_and_commands_update_the_pipeline()"
     },
     {
@@ -6840,7 +6920,7 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "tests_test_ops_test_learning_from_outcomes_needs_three_samples",
-      "community": 50,
+      "community": 2,
       "norm_label": "test_learning_from_outcomes_needs_three_samples()"
     },
     {
@@ -6850,7 +6930,7 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "tests_test_ops_test_manual_price_overrides_gemini_for_every_similar_ad",
-      "community": 50,
+      "community": 2,
       "norm_label": "test_manual_price_overrides_gemini_for_every_similar_ad()"
     },
     {
@@ -6860,7 +6940,7 @@
       "source_location": "L134",
       "_origin": "ast",
       "id": "tests_test_ops_test_listing_detail_tolerates_null_columns",
-      "community": 50,
+      "community": 2,
       "norm_label": "test_listing_detail_tolerates_null_columns()"
     },
     {
@@ -6870,7 +6950,7 @@
       "source_location": "L135",
       "_origin": "ast",
       "id": "tests_test_ops_rationale_135",
-      "community": 50,
+      "community": 2,
       "norm_label": "listings saved before newer columns existed hold nulls; must not 500."
     },
     {
@@ -6880,7 +6960,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_test_scan",
-      "community": 52,
+      "community": 2,
       "norm_label": "test_scan.py"
     },
     {
@@ -6890,7 +6970,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "tests_test_scan_db",
-      "community": 52,
+      "community": 2,
       "norm_label": "_db()"
     },
     {
@@ -6900,7 +6980,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "tests_test_scan_raw",
-      "community": 52,
+      "community": 2,
       "norm_label": "_raw()"
     },
     {
@@ -6910,7 +6990,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "tests_test_scan_patch",
-      "community": 52,
+      "community": 2,
       "norm_label": "_patch()"
     },
     {
@@ -6920,7 +7000,7 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "tests_test_scan_test_stops_paging_when_page_is_already_known",
-      "community": 52,
+      "community": 2,
       "norm_label": "test_stops_paging_when_page_is_already_known()"
     },
     {
@@ -6930,7 +7010,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "tests_test_scan_test_repost_is_linked_and_not_alerted_twice",
-      "community": 52,
+      "community": 2,
       "norm_label": "test_repost_is_linked_and_not_alerted_twice()"
     },
     {
@@ -6940,7 +7020,7 @@
       "source_location": "L76",
       "_origin": "ast",
       "id": "tests_test_scan_test_sold_and_broken_ads_skip_the_paid_lookup",
-      "community": 52,
+      "community": 2,
       "norm_label": "test_sold_and_broken_ads_skip_the_paid_lookup()"
     },
     {
@@ -6950,7 +7030,7 @@
       "source_location": "L96",
       "_origin": "ast",
       "id": "tests_test_scan_test_hard_filters_and_gpu_queries",
-      "community": 52,
+      "community": 2,
       "norm_label": "test_hard_filters_and_gpu_queries()"
     },
     {
@@ -6960,7 +7040,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_test_scheduler",
-      "community": 44,
+      "community": 2,
       "norm_label": "test_scheduler.py"
     },
     {
@@ -6970,7 +7050,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "tests_test_scheduler_now",
-      "community": 44,
+      "community": 2,
       "norm_label": "_now()"
     },
     {
@@ -6980,7 +7060,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "tests_test_scheduler_setup",
-      "community": 44,
+      "community": 2,
       "norm_label": "_setup()"
     },
     {
@@ -6990,7 +7070,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "tests_test_scheduler_search",
-      "community": 44,
+      "community": 2,
       "norm_label": "_search()"
     },
     {
@@ -7000,7 +7080,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "tests_test_scheduler_test_due_searches_run_and_others_wait",
-      "community": 44,
+      "community": 2,
       "norm_label": "test_due_searches_run_and_others_wait()"
     },
     {
@@ -7010,7 +7090,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "tests_test_scheduler_test_global_switch_off_runs_nothing",
-      "community": 44,
+      "community": 2,
       "norm_label": "test_global_switch_off_runs_nothing()"
     },
     {
@@ -7020,7 +7100,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "tests_test_scheduler_test_cadence_stays_close_to_interval",
-      "community": 44,
+      "community": 2,
       "norm_label": "test_cadence_stays_close_to_interval()"
     },
     {
@@ -7030,7 +7110,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_test_screen",
-      "community": 54,
+      "community": 2,
       "norm_label": "test_screen.py"
     },
     {
@@ -7040,7 +7120,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "tests_test_screen_l",
-      "community": 54,
+      "community": 2,
       "norm_label": "_l()"
     },
     {
@@ -7050,7 +7130,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "tests_test_screen_test_sold_pending_broken_and_accessories_are_skipped",
-      "community": 54,
+      "community": 2,
       "norm_label": "test_sold_pending_broken_and_accessories_are_skipped()"
     },
     {
@@ -7060,7 +7140,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "tests_test_screen_test_ship_signal_uses_leboncoin_fields_then_text",
-      "community": 54,
+      "community": 2,
       "norm_label": "test_ship_signal_uses_leboncoin_fields_then_text()"
     },
     {
@@ -7070,7 +7150,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "tests_test_screen_test_flags_and_price_drop_and_scam_price",
-      "community": 54,
+      "community": 2,
       "norm_label": "test_flags_and_price_drop_and_scam_price()"
     },
     {
@@ -7080,7 +7160,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_test_search_form",
-      "community": 3,
+      "community": 2,
       "norm_label": "test_search_form.py"
     },
     {
@@ -7090,7 +7170,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "tests_test_search_form_test_queries_come_only_from_inputs_and_fix_category",
-      "community": 3,
+      "community": 2,
       "norm_label": "test_queries_come_only_from_inputs_and_fix_category()"
     },
     {
@@ -7100,7 +7180,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "tests_test_search_form_test_empty_form_falls_back_to_pc_portable",
-      "community": 3,
+      "community": 2,
       "norm_label": "test_empty_form_falls_back_to_pc_portable()"
     },
     {
@@ -7110,7 +7190,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "tests_test_search_form_test_vendor_terms_and_matching",
-      "community": 3,
+      "community": 2,
       "norm_label": "test_vendor_terms_and_matching()"
     },
     {
@@ -7120,7 +7200,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "tests_test_search_form_test_snapdragon_extraction",
-      "community": 3,
+      "community": 2,
       "norm_label": "test_snapdragon_extraction()"
     },
     {
@@ -7130,7 +7210,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "tests_test_search_form_test_intervals",
-      "community": 3,
+      "community": 2,
       "norm_label": "test_intervals()"
     },
     {
@@ -8337,7 +8417,7 @@
       "label": "Verdict",
       "file_type": "code",
       "source_file": "frontend/src/lib/api.ts",
-      "source_location": "L573",
+      "source_location": "L578",
       "_origin": "ast",
       "id": "lib_api_verdict",
       "community": 33,
@@ -10672,6 +10752,17 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/app/api/searches.py",
+      "source_location": "L178",
+      "weight": 1.0,
+      "source": "api_searches_alert_now",
+      "target": "api_helpers_get_settings"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/app/api/searches.py",
       "source_location": "L204",
       "weight": 1.0,
       "source": "api_searches_search_results",
@@ -10794,9 +10885,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L182",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich",
-      "target": "api_helpers_get_settings",
-      "confidence_score": 1.0
+      "target": "api_helpers_get_settings"
     },
     {
       "relation": "calls",
@@ -10805,9 +10896,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L186",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich_run",
-      "target": "api_helpers_get_settings",
-      "confidence_score": 1.0
+      "target": "api_helpers_get_settings"
     },
     {
       "relation": "references",
@@ -12872,6 +12963,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/api/searches.py",
+      "source_location": "L169",
+      "weight": 1.0,
+      "source": "api_searches",
+      "target": "api_searches_alert_now",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/searches.py",
       "source_location": "L60",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -12894,9 +12995,9 @@
       "source_file": "backend/app/api/searches.py",
       "source_location": "L169",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_searches",
-      "target": "api_searches_enrich_status",
-      "confidence_score": 1.0
+      "target": "api_searches_enrich_status"
     },
     {
       "relation": "contains",
@@ -12984,9 +13085,9 @@
       "source_file": "backend/app/api/searches.py",
       "source_location": "L154",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_searches",
-      "target": "api_searches_start_enrich",
-      "confidence_score": 1.0
+      "target": "api_searches_start_enrich"
     },
     {
       "relation": "contains",
@@ -13212,9 +13313,9 @@
       "source_file": "backend/app/api/searches.py",
       "source_location": "L162",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_searches",
-      "target": "intelligence_enrich",
-      "confidence_score": 1.0
+      "target": "intelligence_enrich"
     },
     {
       "relation": "imports_from",
@@ -13248,6 +13349,17 @@
       "confidence_score": 1.0,
       "source": "api_searches",
       "target": "logistics_landed"
+    },
+    {
+      "relation": "imports_from",
+      "context": "submodule_import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/searches.py",
+      "source_location": "L175",
+      "weight": 1.0,
+      "source": "api_searches",
+      "target": "notify_deals",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -13331,6 +13443,17 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/api/searches.py",
+      "source_location": "L177",
+      "weight": 1.0,
+      "source": "api_searches_alert_now",
+      "target": "api_searches_get_search",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/searches.py",
       "source_location": "L85",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -13344,9 +13467,9 @@
       "source_file": "backend/app/api/searches.py",
       "source_location": "L172",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_searches_enrich_status",
-      "target": "api_searches_get_search",
-      "confidence_score": 1.0
+      "target": "api_searches_get_search"
     },
     {
       "relation": "calls",
@@ -13432,9 +13555,9 @@
       "source_file": "backend/app/api/searches.py",
       "source_location": "L164",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_searches_start_enrich",
-      "target": "api_searches_get_search",
-      "confidence_score": 1.0
+      "target": "api_searches_get_search"
     },
     {
       "relation": "calls",
@@ -13474,6 +13597,17 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/api/searches.py",
+      "source_location": "L169",
+      "weight": 1.0,
+      "source": "api_searches_alert_now",
+      "target": "backend_app_api_searches_py_session",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/searches.py",
       "source_location": "L60",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -13498,9 +13632,9 @@
       "source_file": "backend/app/api/searches.py",
       "source_location": "L169",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_searches_enrich_status",
-      "target": "backend_app_api_searches_py_session",
-      "confidence_score": 1.0
+      "target": "backend_app_api_searches_py_session"
     },
     {
       "relation": "references",
@@ -13586,9 +13720,9 @@
       "source_file": "backend/app/api/searches.py",
       "source_location": "L154",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_searches_start_enrich",
-      "target": "backend_app_api_searches_py_session",
-      "confidence_score": 1.0
+      "target": "backend_app_api_searches_py_session"
     },
     {
       "relation": "references",
@@ -13749,8 +13883,18 @@
       "source_file": "backend/app/api/searches.py",
       "source_location": "L160",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_searches_rationale_160",
-      "target": "api_searches_start_enrich",
+      "target": "api_searches_start_enrich"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/searches.py",
+      "source_location": "L170",
+      "weight": 1.0,
+      "source": "api_searches_rationale_170",
+      "target": "api_searches_alert_now",
       "confidence_score": 1.0
     },
     {
@@ -14135,9 +14279,9 @@
       "source_file": "backend/app/api/settings.py",
       "source_location": "L103",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_settings_rationale_103",
-      "target": "api_settings_test_leboncoin",
-      "confidence_score": 1.0
+      "target": "api_settings_test_leboncoin"
     },
     {
       "relation": "contains",
@@ -14979,9 +15123,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich",
-      "target": "extraction_cpu_db",
-      "confidence_score": 1.0
+      "target": "extraction_cpu_db"
     },
     {
       "relation": "imports_from",
@@ -15192,9 +15336,9 @@
       "source_file": "backend/app/extraction/llm.py",
       "source_location": "L155",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "extraction_llm",
-      "target": "extraction_llm_extract_specs_detailed",
-      "confidence_score": 1.0
+      "target": "extraction_llm_extract_specs_detailed"
     },
     {
       "relation": "contains",
@@ -15254,9 +15398,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich",
-      "target": "extraction_llm",
-      "confidence_score": 1.0
+      "target": "extraction_llm"
     },
     {
       "relation": "imports_from",
@@ -15309,9 +15453,9 @@
       "source_file": "backend/app/extraction/llm.py",
       "source_location": "L162",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "extraction_llm_extract_specs_detailed",
-      "target": "extraction_llm_api_key",
-      "confidence_score": 1.0
+      "target": "extraction_llm_api_key"
     },
     {
       "relation": "references",
@@ -15342,9 +15486,9 @@
       "source_file": "backend/app/extraction/llm.py",
       "source_location": "L155",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "extraction_llm_extract_specs_detailed",
-      "target": "backend_app_extraction_llm_py_settings",
-      "confidence_score": 1.0
+      "target": "backend_app_extraction_llm_py_settings"
     },
     {
       "relation": "references",
@@ -15408,9 +15552,9 @@
       "source_file": "backend/app/extraction/llm.py",
       "source_location": "L168",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "extraction_llm_extract_specs_detailed",
-      "target": "extraction_llm_cache_get",
-      "confidence_score": 1.0
+      "target": "extraction_llm_cache_get"
     },
     {
       "relation": "references",
@@ -15441,9 +15585,9 @@
       "source_file": "backend/app/extraction/llm.py",
       "source_location": "L155",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "extraction_llm_extract_specs_detailed",
-      "target": "backend_app_extraction_llm_py_session",
-      "confidence_score": 1.0
+      "target": "backend_app_extraction_llm_py_session"
     },
     {
       "relation": "references",
@@ -15496,9 +15640,9 @@
       "source_file": "backend/app/extraction/llm.py",
       "source_location": "L214",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "extraction_llm_extract_specs_detailed",
-      "target": "extraction_llm_cache_put",
-      "confidence_score": 1.0
+      "target": "extraction_llm_cache_put"
     },
     {
       "relation": "calls",
@@ -15529,9 +15673,9 @@
       "source_file": "backend/app/extraction/llm.py",
       "source_location": "L216",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "extraction_llm_extract_specs_detailed",
-      "target": "extraction_llm_parse_json",
-      "confidence_score": 1.0
+      "target": "extraction_llm_parse_json"
     },
     {
       "relation": "calls",
@@ -15562,9 +15706,9 @@
       "source_file": "backend/app/extraction/llm.py",
       "source_location": "L155",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "extraction_llm_extract_specs_detailed",
-      "target": "backend_app_extraction_llm_py_any",
-      "confidence_score": 1.0
+      "target": "backend_app_extraction_llm_py_any"
     },
     {
       "relation": "references",
@@ -15594,9 +15738,9 @@
       "source_file": "backend/app/extraction/llm.py",
       "source_location": "L156",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "extraction_llm_rationale_156",
-      "target": "extraction_llm_extract_specs_detailed",
-      "confidence_score": 1.0
+      "target": "extraction_llm_extract_specs_detailed"
     },
     {
       "relation": "contains",
@@ -15955,9 +16099,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich",
-      "target": "intelligence_init",
-      "confidence_score": 1.0
+      "target": "intelligence_init"
     },
     {
       "relation": "imports_from",
@@ -16149,9 +16293,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich",
-      "target": "intelligence_analyze",
-      "confidence_score": 1.0
+      "target": "intelligence_analyze"
     },
     {
       "relation": "imports_from",
@@ -16280,9 +16424,9 @@
       "source_file": "backend/app/intelligence/analyze.py",
       "source_location": "L41",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_analyze_rationale_41",
-      "target": "intelligence_analyze_analyze_listing",
-      "confidence_score": 1.0
+      "target": "intelligence_analyze_analyze_listing"
     },
     {
       "relation": "imports",
@@ -16667,9 +16811,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich",
-      "target": "intelligence_dz_market",
-      "confidence_score": 1.0
+      "target": "intelligence_dz_market"
     },
     {
       "relation": "imports_from",
@@ -16864,9 +17008,9 @@
       "source_file": "backend/app/intelligence/dz_market.py",
       "source_location": "L53",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_dz_market_rationale_53",
-      "target": "intelligence_dz_market_describe",
-      "confidence_score": 1.0
+      "target": "intelligence_dz_market_describe"
     },
     {
       "relation": "references",
@@ -16929,9 +17073,9 @@
       "source_file": "backend/app/intelligence/dz_market.py",
       "source_location": "L59",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_dz_market_rationale_59",
-      "target": "intelligence_dz_market_ad_context",
-      "confidence_score": 1.0
+      "target": "intelligence_dz_market_ad_context"
     },
     {
       "relation": "calls",
@@ -17027,9 +17171,9 @@
       "source_file": "backend/app/intelligence/dz_market.py",
       "source_location": "L117",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_dz_market_rationale_117",
-      "target": "intelligence_dz_market_call_gemini",
-      "confidence_score": 1.0
+      "target": "intelligence_dz_market_call_gemini"
     },
     {
       "relation": "calls",
@@ -17136,9 +17280,9 @@
       "source_file": "backend/app/intelligence/dz_market.py",
       "source_location": "L213",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_dz_market_rationale_213",
-      "target": "intelligence_dz_market_lookup",
-      "confidence_score": 1.0
+      "target": "intelligence_dz_market_lookup"
     },
     {
       "relation": "rationale_for",
@@ -17146,9 +17290,9 @@
       "source_file": "backend/app/intelligence/dz_market.py",
       "source_location": "L243",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_dz_market_rationale_243",
-      "target": "intelligence_dz_market_set_manual",
-      "confidence_score": 1.0
+      "target": "intelligence_dz_market_set_manual"
     },
     {
       "relation": "calls",
@@ -17168,9 +17312,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich",
-      "target": "app_models",
-      "confidence_score": 1.0
+      "target": "app_models"
     },
     {
       "relation": "imports",
@@ -17179,9 +17323,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich",
-      "target": "app_models_listing",
-      "confidence_score": 1.0
+      "target": "app_models_listing"
     },
     {
       "relation": "imports",
@@ -17190,9 +17334,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich",
-      "target": "app_models_search",
-      "confidence_score": 1.0
+      "target": "app_models_search"
     },
     {
       "relation": "imports",
@@ -17201,9 +17345,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich",
-      "target": "app_models_searchlisting",
-      "confidence_score": 1.0
+      "target": "app_models_searchlisting"
     },
     {
       "relation": "imports",
@@ -17212,9 +17356,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich",
-      "target": "app_models_settings",
-      "confidence_score": 1.0
+      "target": "app_models_settings"
     },
     {
       "relation": "contains",
@@ -17222,39 +17366,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L106",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich",
-      "target": "intelligence_enrich_enrich_listing",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L37",
-      "weight": 1.0,
-      "source": "intelligence_enrich",
-      "target": "intelligence_enrich_iso",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L76",
-      "weight": 1.0,
-      "source": "intelligence_enrich",
-      "target": "intelligence_enrich_merge_specs",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L41",
-      "weight": 1.0,
-      "source": "intelligence_enrich",
-      "target": "intelligence_enrich_needs",
-      "confidence_score": 1.0
+      "target": "intelligence_enrich_enrich_listing"
     },
     {
       "relation": "contains",
@@ -17263,8 +17377,48 @@
       "source_location": "L53",
       "weight": 1.0,
       "source": "intelligence_enrich",
-      "target": "intelligence_enrich_pick",
+      "target": "intelligence_enrich_freshest_needing_ai",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/enrich.py",
+      "source_location": "L37",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "intelligence_enrich",
+      "target": "intelligence_enrich_iso"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/enrich.py",
+      "source_location": "L76",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "intelligence_enrich",
+      "target": "intelligence_enrich_merge_specs"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/enrich.py",
+      "source_location": "L41",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "intelligence_enrich",
+      "target": "intelligence_enrich_needs"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/enrich.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "intelligence_enrich",
+      "target": "intelligence_enrich_pick"
     },
     {
       "relation": "contains",
@@ -17272,8 +17426,18 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L180",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich",
-      "target": "intelligence_enrich_run",
+      "target": "intelligence_enrich_run"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/enrich.py",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "intelligence_enrich",
+      "target": "intelligence_enrich_run_for",
       "confidence_score": 1.0
     },
     {
@@ -17282,9 +17446,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L200",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich",
-      "target": "intelligence_enrich_start",
-      "confidence_score": 1.0
+      "target": "intelligence_enrich_start"
     },
     {
       "relation": "contains",
@@ -17292,9 +17456,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L254",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich",
-      "target": "intelligence_enrich_summary",
-      "confidence_score": 1.0
+      "target": "intelligence_enrich_summary"
     },
     {
       "relation": "imports_from",
@@ -17303,9 +17467,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich",
-      "target": "intelligence_freshness",
-      "confidence_score": 1.0
+      "target": "intelligence_freshness"
     },
     {
       "relation": "imports_from",
@@ -17314,9 +17478,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich",
-      "target": "intelligence_match",
-      "confidence_score": 1.0
+      "target": "intelligence_match"
     },
     {
       "relation": "imports_from",
@@ -17325,9 +17489,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich",
-      "target": "intelligence_verdict",
-      "confidence_score": 1.0
+      "target": "intelligence_verdict"
     },
     {
       "relation": "rationale_for",
@@ -17335,7 +17499,18 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich_rationale_1",
+      "target": "intelligence_enrich"
+    },
+    {
+      "relation": "imports_from",
+      "context": "submodule_import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/notify/deals.py",
+      "source_location": "L174",
+      "weight": 1.0,
+      "source": "notify_deals",
       "target": "intelligence_enrich",
       "confidence_score": 1.0
     },
@@ -17346,9 +17521,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L126",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich_enrich_listing",
-      "target": "intelligence_enrich_iso",
-      "confidence_score": 1.0
+      "target": "intelligence_enrich_iso"
     },
     {
       "relation": "calls",
@@ -17357,9 +17532,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L197",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich_run",
-      "target": "intelligence_enrich_iso",
-      "confidence_score": 1.0
+      "target": "intelligence_enrich_iso"
     },
     {
       "relation": "calls",
@@ -17368,9 +17543,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L229",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich_start",
-      "target": "intelligence_enrich_iso",
-      "confidence_score": 1.0
+      "target": "intelligence_enrich_iso"
     },
     {
       "relation": "calls",
@@ -17379,7 +17554,18 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L108",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich_enrich_listing",
+      "target": "intelligence_enrich_needs"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/enrich.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "source": "intelligence_enrich_freshest_needing_ai",
       "target": "intelligence_enrich_needs",
       "confidence_score": 1.0
     },
@@ -17390,9 +17576,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L41",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich_needs",
-      "target": "backend_app_intelligence_enrich_py_listing",
-      "confidence_score": 1.0
+      "target": "backend_app_intelligence_enrich_py_listing"
     },
     {
       "relation": "calls",
@@ -17401,9 +17587,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L69",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich_pick",
-      "target": "intelligence_enrich_needs",
-      "confidence_score": 1.0
+      "target": "intelligence_enrich_needs"
     },
     {
       "relation": "rationale_for",
@@ -17411,9 +17597,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L42",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich_rationale_42",
-      "target": "intelligence_enrich_needs",
-      "confidence_score": 1.0
+      "target": "intelligence_enrich_needs"
     },
     {
       "relation": "references",
@@ -17422,7 +17608,18 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L106",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich_enrich_listing",
+      "target": "backend_app_intelligence_enrich_py_listing"
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/enrich.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "intelligence_enrich_freshest_needing_ai",
       "target": "backend_app_intelligence_enrich_py_listing",
       "confidence_score": 1.0
     },
@@ -17433,9 +17630,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L76",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich_merge_specs",
-      "target": "backend_app_intelligence_enrich_py_listing",
-      "confidence_score": 1.0
+      "target": "backend_app_intelligence_enrich_py_listing"
     },
     {
       "relation": "references",
@@ -17444,7 +17641,18 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L53",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich_pick",
+      "target": "backend_app_intelligence_enrich_py_listing"
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/enrich.py",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "intelligence_enrich_run_for",
       "target": "backend_app_intelligence_enrich_py_listing",
       "confidence_score": 1.0
     },
@@ -17455,7 +17663,7 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L53",
       "weight": 1.0,
-      "source": "intelligence_enrich_pick",
+      "source": "intelligence_enrich_freshest_needing_ai",
       "target": "backend_app_intelligence_enrich_py_search",
       "confidence_score": 1.0
     },
@@ -17466,9 +17674,42 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L53",
       "weight": 1.0,
-      "source": "intelligence_enrich_pick",
-      "target": "backend_app_intelligence_enrich_py_session",
+      "source": "intelligence_enrich_freshest_needing_ai",
+      "target": "backend_app_intelligence_enrich_py_settings",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/enrich.py",
+      "source_location": "L77",
+      "weight": 1.0,
+      "source": "intelligence_enrich_pick",
+      "target": "intelligence_enrich_freshest_needing_ai",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/enrich.py",
+      "source_location": "L84",
+      "weight": 1.0,
+      "source": "intelligence_enrich_run_for",
+      "target": "intelligence_enrich_freshest_needing_ai",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/enrich.py",
+      "source_location": "L106",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "intelligence_enrich_enrich_listing",
+      "target": "backend_app_intelligence_enrich_py_search"
     },
     {
       "relation": "references",
@@ -17477,17 +17718,94 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L53",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich_pick",
+      "target": "backend_app_intelligence_enrich_py_search"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/enrich.py",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "intelligence_enrich_run_for",
+      "target": "backend_app_intelligence_enrich_py_search",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/enrich.py",
+      "source_location": "L200",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "intelligence_enrich_start",
+      "target": "backend_app_intelligence_enrich_py_search"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/enrich.py",
+      "source_location": "L106",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "intelligence_enrich_enrich_listing",
+      "target": "backend_app_intelligence_enrich_py_settings"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/enrich.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "intelligence_enrich_pick",
+      "target": "backend_app_intelligence_enrich_py_settings"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/enrich.py",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "intelligence_enrich_run_for",
       "target": "backend_app_intelligence_enrich_py_settings",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/enrich.py",
+      "source_location": "L200",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "intelligence_enrich_start",
+      "target": "backend_app_intelligence_enrich_py_settings"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/enrich.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "intelligence_enrich_pick",
+      "target": "backend_app_intelligence_enrich_py_session"
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L54",
+      "source_location": "L73",
       "weight": 1.0,
-      "source": "intelligence_enrich_rationale_54",
+      "source": "intelligence_enrich_rationale_73",
       "target": "intelligence_enrich_pick",
       "confidence_score": 1.0
     },
@@ -17498,9 +17816,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L221",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich_start",
-      "target": "intelligence_enrich_pick",
-      "confidence_score": 1.0
+      "target": "intelligence_enrich_pick"
     },
     {
       "relation": "references",
@@ -17509,7 +17827,18 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L106",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich_enrich_listing",
+      "target": "backend_app_intelligence_enrich_py_session"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/enrich.py",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "intelligence_enrich_run_for",
       "target": "backend_app_intelligence_enrich_py_session",
       "confidence_score": 1.0
     },
@@ -17520,52 +17849,29 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L200",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich_start",
-      "target": "backend_app_intelligence_enrich_py_session",
+      "target": "backend_app_intelligence_enrich_py_session"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/enrich.py",
+      "source_location": "L81",
+      "weight": 1.0,
+      "source": "intelligence_enrich_rationale_81",
+      "target": "intelligence_enrich_run_for",
       "confidence_score": 1.0
     },
     {
-      "relation": "references",
-      "context": "generic_arg",
+      "relation": "calls",
+      "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L106",
+      "source_location": "L87",
       "weight": 1.0,
-      "source": "intelligence_enrich_enrich_listing",
-      "target": "backend_app_intelligence_enrich_py_search",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L200",
-      "weight": 1.0,
-      "source": "intelligence_enrich_start",
-      "target": "backend_app_intelligence_enrich_py_search",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L106",
-      "weight": 1.0,
-      "source": "intelligence_enrich_enrich_listing",
-      "target": "backend_app_intelligence_enrich_py_settings",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L200",
-      "weight": 1.0,
-      "source": "intelligence_enrich_start",
-      "target": "backend_app_intelligence_enrich_py_settings",
+      "source": "intelligence_enrich_run_for",
+      "target": "intelligence_enrich_enrich_listing",
       "confidence_score": 1.0
     },
     {
@@ -17575,9 +17881,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L124",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich_enrich_listing",
-      "target": "intelligence_enrich_merge_specs",
-      "confidence_score": 1.0
+      "target": "intelligence_enrich_merge_specs"
     },
     {
       "relation": "references",
@@ -17586,17 +17892,17 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L76",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich_merge_specs",
-      "target": "backend_app_intelligence_enrich_py_any",
-      "confidence_score": 1.0
+      "target": "backend_app_intelligence_enrich_py_any"
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L77",
+      "source_location": "L92",
       "weight": 1.0,
-      "source": "intelligence_enrich_rationale_77",
+      "source": "intelligence_enrich_rationale_92",
       "target": "intelligence_enrich_merge_specs",
       "confidence_score": 1.0
     },
@@ -17607,9 +17913,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L106",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich_enrich_listing",
-      "target": "backend_app_intelligence_enrich_py_any",
-      "confidence_score": 1.0
+      "target": "backend_app_intelligence_enrich_py_any"
     },
     {
       "relation": "references",
@@ -17618,9 +17924,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L180",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich_run",
-      "target": "backend_app_intelligence_enrich_py_any",
-      "confidence_score": 1.0
+      "target": "backend_app_intelligence_enrich_py_any"
     },
     {
       "relation": "references",
@@ -17629,9 +17935,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L200",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich_start",
-      "target": "backend_app_intelligence_enrich_py_any",
-      "confidence_score": 1.0
+      "target": "backend_app_intelligence_enrich_py_any"
     },
     {
       "relation": "references",
@@ -17640,17 +17946,17 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L254",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich_summary",
-      "target": "backend_app_intelligence_enrich_py_any",
-      "confidence_score": 1.0
+      "target": "backend_app_intelligence_enrich_py_any"
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L107",
+      "source_location": "L122",
       "weight": 1.0,
-      "source": "intelligence_enrich_rationale_107",
+      "source": "intelligence_enrich_rationale_122",
       "target": "intelligence_enrich_enrich_listing",
       "confidence_score": 1.0
     },
@@ -17661,9 +17967,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L191",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich_run",
-      "target": "intelligence_enrich_enrich_listing",
-      "confidence_score": 1.0
+      "target": "intelligence_enrich_enrich_listing"
     },
     {
       "relation": "calls",
@@ -17672,17 +17978,17 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L248",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich_start",
-      "target": "intelligence_enrich_run",
-      "confidence_score": 1.0
+      "target": "intelligence_enrich_run"
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L209",
+      "source_location": "L224",
       "weight": 1.0,
-      "source": "intelligence_enrich_rationale_209",
+      "source": "intelligence_enrich_rationale_224",
       "target": "intelligence_enrich_start",
       "confidence_score": 1.0
     },
@@ -17693,9 +17999,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L213",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich_start",
-      "target": "intelligence_enrich_summary",
-      "confidence_score": 1.0
+      "target": "intelligence_enrich_summary"
     },
     {
       "relation": "imports_from",
@@ -18191,9 +18497,9 @@
       "source_file": "backend/app/intelligence/keycheck.py",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_keycheck_rationale_34",
-      "target": "intelligence_keycheck_check_openrouter",
-      "confidence_score": 1.0
+      "target": "intelligence_keycheck_check_openrouter"
     },
     {
       "relation": "imports_from",
@@ -18589,9 +18895,9 @@
       "source_file": "backend/app/intelligence/match.py",
       "source_location": "L119",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_match_rationale_119",
-      "target": "intelligence_match_hard_fail",
-      "confidence_score": 1.0
+      "target": "intelligence_match_hard_fail"
     },
     {
       "relation": "imports_from",
@@ -19687,9 +19993,9 @@
       "source_file": "backend/app/intelligence/verdict.py",
       "source_location": "L96",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_verdict_rationale_96",
-      "target": "intelligence_verdict_compute_numbers",
-      "confidence_score": 1.0
+      "target": "intelligence_verdict_compute_numbers"
     },
     {
       "relation": "rationale_for",
@@ -19697,9 +20003,9 @@
       "source_file": "backend/app/intelligence/verdict.py",
       "source_location": "L151",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_verdict_rationale_151",
-      "target": "intelligence_verdict_max_buy",
-      "confidence_score": 1.0
+      "target": "intelligence_verdict_max_buy"
     },
     {
       "relation": "calls",
@@ -19729,9 +20035,9 @@
       "source_file": "backend/app/intelligence/verdict.py",
       "source_location": "L222",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_verdict_rationale_222",
-      "target": "intelligence_verdict_generate",
-      "confidence_score": 1.0
+      "target": "intelligence_verdict_generate"
     },
     {
       "relation": "imports_from",
@@ -20354,6 +20660,17 @@
       "source_location": "L203",
       "weight": 1.0,
       "source": "tests_test_notify_test_results_filters_new_only_and_good_only",
+      "target": "fastapi"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/tests/test_notify.py",
+      "source_location": "L255",
+      "weight": 1.0,
+      "source": "tests_test_notify_test_send_best_deals_now_alerts_fresh_ads_already_in_the_search",
       "target": "fastapi"
     },
     {
@@ -21640,9 +21957,9 @@
       "source_file": "backend/tests/test_live.py",
       "source_location": "L238",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "tests_test_live_resp",
-      "target": "app_models_searchlisting",
-      "confidence_score": 0.5
+      "target": "app_models_searchlisting"
     },
     {
       "relation": "calls",
@@ -21674,6 +21991,17 @@
       "source_location": "L197",
       "weight": 1.0,
       "source": "tests_test_notify_test_results_filters_new_only_and_good_only",
+      "target": "app_models_searchlisting"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/tests/test_notify.py",
+      "source_location": "L252",
+      "weight": 1.0,
+      "source": "tests_test_notify_test_send_best_deals_now_alerts_fresh_ads_already_in_the_search",
       "target": "app_models_searchlisting"
     },
     {
@@ -21726,9 +22054,9 @@
       "source_file": "backend/app/models.py",
       "source_location": "L319",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_models_rationale_319",
-      "target": "app_models_dzprice",
-      "confidence_score": 1.0
+      "target": "app_models_dzprice"
     },
     {
       "relation": "imports",
@@ -22303,11 +22631,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L112",
+      "source_location": "L114",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "notify_deals_rationale_112",
-      "target": "notify_deals_negotiation_text"
+      "source": "notify_deals_rationale_114",
+      "target": "notify_deals_negotiation_text",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -22335,11 +22663,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L125",
+      "source_location": "L127",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "notify_deals_rationale_125",
-      "target": "notify_deals_check_online"
+      "source": "notify_deals_rationale_127",
+      "target": "notify_deals_check_online",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -22367,11 +22695,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L133",
+      "source_location": "L135",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "notify_deals_rationale_133",
-      "target": "notify_deals_gate"
+      "source": "notify_deals_rationale_135",
+      "target": "notify_deals_gate",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -22388,11 +22716,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L162",
+      "source_location": "L164",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "notify_deals_rationale_162",
-      "target": "notify_deals_notify_run"
+      "source": "notify_deals_rationale_164",
+      "target": "notify_deals_notify_run",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -26655,9 +26983,9 @@
       "source_file": "backend/tests/test_live.py",
       "source_location": "L267",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_live",
-      "target": "tests_test_live_test_card_search_needs_the_model_in_the_ad_even_when_the_gpu_spec_is_empty",
-      "confidence_score": 1.0
+      "target": "tests_test_live_test_card_search_needs_the_model_in_the_ad_even_when_the_gpu_spec_is_empty"
     },
     {
       "relation": "contains",
@@ -26665,9 +26993,9 @@
       "source_file": "backend/tests/test_live.py",
       "source_location": "L221",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_live",
-      "target": "tests_test_live_test_enrich_runs_three_steps_on_the_freshest_ads_only",
-      "confidence_score": 1.0
+      "target": "tests_test_live_test_enrich_runs_three_steps_on_the_freshest_ads_only"
     },
     {
       "relation": "contains",
@@ -26765,9 +27093,9 @@
       "source_file": "backend/tests/test_live.py",
       "source_location": "L205",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_live",
-      "target": "tests_test_live_test_scans_use_no_ai_and_read_only_the_price_cache",
-      "confidence_score": 1.0
+      "target": "tests_test_live_test_scans_use_no_ai_and_read_only_the_price_cache"
     },
     {
       "relation": "contains",
@@ -26797,9 +27125,9 @@
       "source_file": "backend/tests/test_live.py",
       "source_location": "L228",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_live_test_enrich_runs_three_steps_on_the_freshest_ads_only",
-      "target": "tests_test_live_db",
-      "confidence_score": 1.0
+      "target": "tests_test_live_db"
     },
     {
       "relation": "calls",
@@ -26841,9 +27169,9 @@
       "source_file": "backend/tests/test_live.py",
       "source_location": "L208",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_live_test_scans_use_no_ai_and_read_only_the_price_cache",
-      "target": "tests_test_live_db",
-      "confidence_score": 1.0
+      "target": "tests_test_live_db"
     },
     {
       "relation": "calls",
@@ -26940,9 +27268,9 @@
       "source_file": "backend/tests/test_live.py",
       "source_location": "L235",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_live_test_enrich_runs_three_steps_on_the_freshest_ads_only",
-      "target": "tests_test_live_listing",
-      "confidence_score": 1.0
+      "target": "tests_test_live_listing"
     },
     {
       "relation": "calls",
@@ -27142,11 +27470,31 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/tests/test_notify.py",
+      "source_location": "L247",
+      "weight": 1.0,
+      "source": "tests_test_notify",
+      "target": "tests_test_notify_test_send_best_deals_now_alerts_fresh_ads_already_in_the_search",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_notify.py",
       "source_location": "L87",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "tests_test_notify",
       "target": "tests_test_notify_test_stale_or_unshippable_or_rejected_ads_never_alert"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_notify.py",
+      "source_location": "L220",
+      "weight": 1.0,
+      "source": "tests_test_notify",
+      "target": "tests_test_notify_test_unpriced_fresh_ad_is_priced_and_judged_before_the_alert",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -27240,11 +27588,33 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "backend/tests/test_notify.py",
+      "source_location": "L248",
+      "weight": 1.0,
+      "source": "tests_test_notify_test_send_best_deals_now_alerts_fresh_ads_already_in_the_search",
+      "target": "tests_test_notify_db",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_notify.py",
       "source_location": "L88",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "tests_test_notify_test_stale_or_unshippable_or_rejected_ads_never_alert",
       "target": "tests_test_notify_db"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_notify.py",
+      "source_location": "L224",
+      "weight": 1.0,
+      "source": "tests_test_notify_test_unpriced_fresh_ad_is_priced_and_judged_before_the_alert",
+      "target": "tests_test_notify_db",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -27328,11 +27698,33 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "backend/tests/test_notify.py",
+      "source_location": "L249",
+      "weight": 1.0,
+      "source": "tests_test_notify_test_send_best_deals_now_alerts_fresh_ads_already_in_the_search",
+      "target": "tests_test_notify_setup",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_notify.py",
       "source_location": "L89",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "tests_test_notify_test_stale_or_unshippable_or_rejected_ads_never_alert",
       "target": "tests_test_notify_setup"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_notify.py",
+      "source_location": "L225",
+      "weight": 1.0,
+      "source": "tests_test_notify_test_unpriced_fresh_ad_is_priced_and_judged_before_the_alert",
+      "target": "tests_test_notify_setup",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -27448,11 +27840,33 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "backend/tests/test_notify.py",
+      "source_location": "L250",
+      "weight": 1.0,
+      "source": "tests_test_notify_test_send_best_deals_now_alerts_fresh_ads_already_in_the_search",
+      "target": "tests_test_notify_listing",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_notify.py",
       "source_location": "L90",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "tests_test_notify_test_stale_or_unshippable_or_rejected_ads_never_alert",
       "target": "tests_test_notify_listing"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_notify.py",
+      "source_location": "L226",
+      "weight": 1.0,
+      "source": "tests_test_notify_test_unpriced_fresh_ad_is_priced_and_judged_before_the_alert",
+      "target": "tests_test_notify_listing",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -27556,6 +27970,17 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "backend/tests/test_notify.py",
+      "source_location": "L254",
+      "weight": 1.0,
+      "source": "tests_test_notify_test_send_best_deals_now_alerts_fresh_ads_already_in_the_search",
+      "target": "tests_test_notify_sink",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_notify.py",
       "source_location": "L98",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -27567,11 +27992,32 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "backend/tests/test_notify.py",
+      "source_location": "L229",
+      "weight": 1.0,
+      "source": "tests_test_notify_test_unpriced_fresh_ad_is_priced_and_judged_before_the_alert",
+      "target": "tests_test_notify_sink",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_notify.py",
       "source_location": "L121",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "tests_test_notify_test_unverified_availability_is_flagged_but_sent",
       "target": "tests_test_notify_sink"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_notify.py",
+      "source_location": "L221",
+      "weight": 1.0,
+      "source": "tests_test_notify_rationale_221",
+      "target": "tests_test_notify_test_unpriced_fresh_ad_is_priced_and_judged_before_the_alert",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -28801,9 +29247,9 @@
       "source_file": "frontend/src/components/AiPanel.tsx",
       "source_location": "L84",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_aipanel",
-      "target": "components_aipanel_aipanel",
-      "confidence_score": 1.0
+      "target": "components_aipanel_aipanel"
     },
     {
       "relation": "contains",
@@ -28811,9 +29257,9 @@
       "source_file": "frontend/src/components/AiPanel.tsx",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_aipanel",
-      "target": "components_aipanel_reasons",
-      "confidence_score": 1.0
+      "target": "components_aipanel_reasons"
     },
     {
       "relation": "contains",
@@ -28821,9 +29267,9 @@
       "source_file": "frontend/src/components/AiPanel.tsx",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_aipanel",
-      "target": "components_aipanel_step_label",
-      "confidence_score": 1.0
+      "target": "components_aipanel_step_label"
     },
     {
       "relation": "contains",
@@ -28831,9 +29277,9 @@
       "source_file": "frontend/src/components/AiPanel.tsx",
       "source_location": "L65",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_aipanel",
-      "target": "components_aipanel_stepchip",
-      "confidence_score": 1.0
+      "target": "components_aipanel_stepchip"
     },
     {
       "relation": "contains",
@@ -28841,9 +29287,9 @@
       "source_file": "frontend/src/components/AiPanel.tsx",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_aipanel",
-      "target": "components_aipanel_steps",
-      "confidence_score": 1.0
+      "target": "components_aipanel_steps"
     },
     {
       "relation": "contains",
@@ -28851,9 +29297,9 @@
       "source_file": "frontend/src/components/AiPanel.tsx",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_aipanel",
-      "target": "components_aipanel_useenrich",
-      "confidence_score": 1.0
+      "target": "components_aipanel_useenrich"
     },
     {
       "relation": "imports_from",
@@ -28862,9 +29308,9 @@
       "source_file": "frontend/src/components/AiPanel.tsx",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_aipanel",
-      "target": "components_ui",
-      "confidence_score": 1.0
+      "target": "components_ui"
     },
     {
       "relation": "imports",
@@ -28873,9 +29319,9 @@
       "source_file": "frontend/src/components/AiPanel.tsx",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_aipanel",
-      "target": "components_ui_button",
-      "confidence_score": 1.0
+      "target": "components_ui_button"
     },
     {
       "relation": "imports",
@@ -28884,9 +29330,9 @@
       "source_file": "frontend/src/components/AiPanel.tsx",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_aipanel",
-      "target": "components_ui_card",
-      "confidence_score": 1.0
+      "target": "components_ui_card"
     },
     {
       "relation": "imports_from",
@@ -28895,9 +29341,9 @@
       "source_file": "frontend/src/components/AiPanel.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_aipanel",
-      "target": "lib_api",
-      "confidence_score": 1.0
+      "target": "lib_api"
     },
     {
       "relation": "imports",
@@ -28906,9 +29352,9 @@
       "source_file": "frontend/src/components/AiPanel.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_aipanel",
-      "target": "lib_api_api",
-      "confidence_score": 1.0
+      "target": "lib_api_api"
     },
     {
       "relation": "imports",
@@ -28917,9 +29363,9 @@
       "source_file": "frontend/src/components/AiPanel.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_aipanel",
-      "target": "lib_api_enrichitem",
-      "confidence_score": 1.0
+      "target": "lib_api_enrichitem"
     },
     {
       "relation": "imports",
@@ -28928,9 +29374,9 @@
       "source_file": "frontend/src/components/AiPanel.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_aipanel",
-      "target": "lib_api_enrichstep",
-      "confidence_score": 1.0
+      "target": "lib_api_enrichstep"
     },
     {
       "relation": "imports_from",
@@ -28939,9 +29385,9 @@
       "source_file": "frontend/src/components/AiPanel.tsx",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_aipanel",
-      "target": "lib_toast",
-      "confidence_score": 1.0
+      "target": "lib_toast"
     },
     {
       "relation": "imports",
@@ -28950,9 +29396,9 @@
       "source_file": "frontend/src/components/AiPanel.tsx",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_aipanel",
-      "target": "lib_toast_toast",
-      "confidence_score": 1.0
+      "target": "lib_toast_toast"
     },
     {
       "relation": "imports_from",
@@ -28961,9 +29407,9 @@
       "source_file": "frontend/src/components/AiPanel.tsx",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_aipanel",
-      "target": "lib_utils",
-      "confidence_score": 1.0
+      "target": "lib_utils"
     },
     {
       "relation": "imports",
@@ -28972,9 +29418,9 @@
       "source_file": "frontend/src/components/AiPanel.tsx",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_aipanel",
-      "target": "lib_utils_cn",
-      "confidence_score": 1.0
+      "target": "lib_utils_cn"
     },
     {
       "relation": "imports_from",
@@ -28983,9 +29429,9 @@
       "source_file": "frontend/src/pages/Results.tsx",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pages_results",
-      "target": "components_aipanel",
-      "confidence_score": 1.0
+      "target": "components_aipanel"
     },
     {
       "relation": "imports",
@@ -28994,9 +29440,9 @@
       "source_file": "frontend/src/pages/Results.tsx",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pages_results",
-      "target": "components_aipanel_useenrich",
-      "confidence_score": 1.0
+      "target": "components_aipanel_useenrich"
     },
     {
       "relation": "calls",
@@ -31524,9 +31970,9 @@
       "source_file": "frontend/src/lib/api.ts",
       "source_location": "L230",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "lib_api",
-      "target": "lib_api_enrichitem",
-      "confidence_score": 1.0
+      "target": "lib_api_enrichitem"
     },
     {
       "relation": "contains",
@@ -31534,9 +31980,9 @@
       "source_file": "frontend/src/lib/api.ts",
       "source_location": "L238",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "lib_api",
-      "target": "lib_api_enrichstatus",
-      "confidence_score": 1.0
+      "target": "lib_api_enrichstatus"
     },
     {
       "relation": "contains",
@@ -31544,9 +31990,9 @@
       "source_file": "frontend/src/lib/api.ts",
       "source_location": "L229",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "lib_api",
-      "target": "lib_api_enrichstep",
-      "confidence_score": 1.0
+      "target": "lib_api_enrichstep"
     },
     {
       "relation": "contains",
@@ -34406,5 +34852,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "109a76d9c9af06af34e4f58f0b17dc46f6f3b5c1"
+  "built_at_commit": "4cf025ca48b168fd8c00274274a1931ae74c4347"
 }

@@ -165,6 +165,40 @@ def start_enrich(
     return enrich.start(db, search, get_settings(db), auto=auto, limit=limit, inline=SERVERLESS)
 
 
+@router.post("/{search_id}/alert-now")
+def alert_now(search_id: int, db: Session = Depends(get_db)) -> dict:
+    """Send the best fresh deals of this search to Telegram right now.
+
+    Takes the ads of the search that are still online, under the max age and never alerted, prices and
+    judges the freshest 5 that need it, then sends the ones that pass the usual alert rules.
+    """
+    from ..notify import deals
+
+    search = _get_search(db, search_id)
+    settings = get_settings(db)
+    if not settings.telegram_enabled or not (settings.telegram_chat_id or "").strip():
+        raise HTTPException(status_code=400, detail="Telegram is not set up: enable it and link a chat in Settings.")
+
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
+    max_age = float(settings.max_ad_age_hours or 48)
+    rows = db.execute(
+        select(Listing).join(SearchListing, SearchListing.listing_id == Listing.id).where(SearchListing.search_id == search.id)
+    ).scalars().all()
+    fresh = []
+    for listing in rows:
+        if listing.notified_at is not None or listing.gone_at is not None or listing.is_active is False:
+            continue
+        age = freshness.age_hours(listing, now)
+        if age is not None and age > max_age:
+            continue
+        fresh.append(listing)
+
+    stats = deals.notify_run(db, settings, search, fresh) if fresh else {"sent": 0}
+    stats["fresh"] = len(fresh)
+    stats["min_verdict"] = settings.notify_min_verdict or "good"
+    return stats
+
+
 @router.get("/{search_id}/enrich")
 def enrich_status(search_id: int, db: Session = Depends(get_db)) -> dict:
     from ..intelligence import enrich

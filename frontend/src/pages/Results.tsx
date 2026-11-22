@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Copy, Download, Filter, MessageSquareText, X } from "lucide-react";
+import { ArrowLeft, Copy, Download, Filter, MessageSquareText, Send, X } from "lucide-react";
 import { api, type NegotiationOut, type SortKey } from "../lib/api";
 import { eur } from "../lib/utils";
 import { toast } from "../lib/toast";
@@ -105,6 +105,19 @@ export default function Results() {
     onError: (error) => toast(error instanceof Error ? error.message : "Could not start the scan", "error"),
   });
 
+  const alertNow = useMutation({
+    mutationFn: () => api.searches.alertNow(searchId),
+    onSuccess: (r) => {
+      queryClient.invalidateQueries({ queryKey: ["results"] });
+      queryClient.invalidateQueries({ queryKey: ["enrich", searchId] });
+      if (r.sent) toast(`${r.sent} deal${r.sent === 1 ? "" : "s"} sent to Telegram`, "success");
+      else if (r.quiet) toast("Quiet hours: the deals will be sent after quiet hours end", "info");
+      else if (!r.fresh) toast("No fresh ads left to send (all older than the max age, gone, or already sent)", "info");
+      else toast(`Checked ${r.fresh} fresh ads: none rated “${r.min_verdict}” or better. Lower the minimum verdict in Settings to get more.`, "info");
+    },
+    onError: (error) => toast(error instanceof Error ? error.message : "Could not send deals", "error"),
+  });
+
   function editFilters(update: (current: typeof filters) => typeof filters) {
     setPreset(null);
     setFilters(update);
@@ -152,6 +165,15 @@ export default function Results() {
               <Download className="h-4 w-4" /> CSV
             </Button>
           </a>
+          <Button
+            size="sm"
+            variant="secondary"
+            disabled={alertNow.isPending}
+            onClick={() => alertNow.mutate()}
+            title="Price and judge the freshest ads, then send the good ones to Telegram"
+          >
+            <Send className="h-4 w-4" /> {alertNow.isPending ? "Checking deals…" : "Send best deals now"}
+          </Button>
           <Button size="sm" variant="primary" disabled={!!scanning} onClick={() => runNow.mutate()}>
             {scanning ? "Scanning…" : "Run now"}
           </Button>
