@@ -5,6 +5,7 @@ from typing import Any
 
 from ..extraction import cpu_db
 from ..models import Listing, Search
+from ..search.query_generator import wanted_gpu
 
 WEIGHTS = {
     "cpu": 0.22,
@@ -72,10 +73,18 @@ def compute_match(search: Search, listing: Listing, include_missing: bool | None
         known = storage is not None
         record("storage_min", True, known, bool(storage and storage >= search.storage_min),
                f"storage {storage or 'unknown'} vs >= {search.storage_min}")
-    if _norm(search.gpu):
+    wanted = wanted_gpu(search)
+    if _norm(wanted):
         gpu = specs.get("gpu") or ""
-        known = bool(gpu)
-        record("gpu", True, known, _contains(gpu, search.gpu), f"GPU {gpu or 'unknown'} vs {search.gpu}")
+        if getattr(search, "kind", "laptop") == "gpu":
+            # A card search: the model must be named in the ad. An empty GPU spec is not "maybe" here,
+            # because the regex misses cards like "GT 640" and every other card would slip through.
+            text = f"{gpu} {listing.subject or ''} {(listing.description or '')[:600]}"
+            squashed = re.sub(r"[\s\-]+", "", _norm(text))
+            passed = _contains(text, wanted) or re.sub(r"[\s\-]+", "", _norm(wanted)) in squashed
+            record("gpu", True, True, passed, f"GPU {gpu or 'not named'} vs {wanted}")
+        else:
+            record("gpu", True, bool(gpu), _contains(gpu, wanted), f"GPU {gpu or 'unknown'} vs {wanted}")
     if search.screen_min or search.screen_max:
         screen = specs.get("screen_inches")
         known = screen is not None

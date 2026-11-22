@@ -84,10 +84,10 @@ export default function Pipeline() {
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="text-xl font-semibold">Deal pipeline</h1>
+        <h1 className="text-xl font-semibold">Pipeline</h1>
         <p className="text-xs text-ink-muted">
-          Mark deals from the Telegram buttons or here. Outcomes teach the app how much sellers really discount and how
-          far resale prices fall below asking prices.
+          Your deals from first contact to resale: Contacted → Bought → Shipped → Sold. Move them with the Telegram buttons or
+          here. The outcomes teach the app how much sellers really discount and how far resale prices fall below asking.
         </p>
       </div>
       <div className="grid gap-3 sm:grid-cols-4">

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -75,9 +76,28 @@ def _params(search: Search) -> dict[str, Any]:
 GPU_CATEGORY_ID = "83"  # Leboncoin "Accessoires informatique" (graphics cards are listed there)
 
 
+GPU_MODEL_RE = re.compile(r"\b(rtx|gtx|gt|rx|arc)\s*-?\s*(\d{3,4})\s*(ti|super|xt|xtx)?\b", re.I)
+
+
+def wanted_gpu(search: Search) -> str:
+    """The card the user is after: the GPU field, else a model found in the search name ("rtx 3080").
+
+    Without this a card search with an empty GPU field returned every graphics card on Leboncoin.
+    """
+    explicit = _clean(search.gpu)
+    if explicit:
+        return explicit
+    if getattr(search, "kind", "laptop") != "gpu":
+        return ""
+    match = GPU_MODEL_RE.search(_clean(getattr(search, "name", "")))
+    if not match:
+        return ""
+    return " ".join(x for x in (match.group(1).upper(), match.group(2), (match.group(3) or "").upper()) if x)
+
+
 def _gpu_queries(search: Search) -> list[GeneratedQuery]:
     """Bare graphics-card searches: model name first, then the generic French phrase."""
-    model = _clean(search.gpu) or _clean(search.brand)
+    model = wanted_gpu(search) or _clean(search.brand)
     params: dict[str, Any] = {"category": GPU_CATEGORY_ID}
     if search.price_min is not None or search.price_max is not None:
         params["price_min"], params["price_max"] = search.price_min, search.price_max

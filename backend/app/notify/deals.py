@@ -115,7 +115,7 @@ def negotiation_text(db: Session, settings: Settings, listing: Listing, numbers:
     offer = max(round(target * 0.97 / 5) * 5, round(ask * 0.8 / 5) * 5)
     offer = min(offer, ask)
     try:
-        built = negotiation.build(db, settings, listing, tone="friendly", offer_override=offer)
+        built = negotiation.build(db, settings, listing, tone="friendly", offer_override=offer, use_ai=False)
         return built["message_fr"]
     except Exception:
         return f"Bonjour, votre annonce « {listing.subject[:80]} » est-elle toujours disponible ? Je peux vous proposer {offer:.0f} €, paiement rapide. Merci."
@@ -179,7 +179,8 @@ def notify_run(
         if ORDER.index(verdict.label_for(numbers["margin_pct"], numbers["dz_confidence"])) < ORDER.index(min_label):
             continue
         try:
-            result = verdict.apply(db, settings, listing)
+            # Scans never call a model: an ad that already has an AI verdict keeps it, others get the rule-based one.
+            result = listing.ai_verdict if (listing.ai_verdict and listing.ai_verdict.get("numbers")) else verdict.apply(db, settings, listing, use_ai=False)
         except Exception:
             continue
         stats["verdicts"] += 1

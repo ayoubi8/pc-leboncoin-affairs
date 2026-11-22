@@ -116,7 +116,7 @@ export default function SearchForm() {
           </Link>
           <div>
             <h1 className="text-xl font-semibold">{editing ? "Edit search" : "New search"}</h1>
-            <p className="text-xs text-ink-muted">Every field except the name is optional.</p>
+            <p className="text-xs text-ink-muted">Tell it what to hunt. Only the name is required: the more you fill in, the fewer irrelevant ads.</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -170,7 +170,7 @@ export default function SearchForm() {
               <option value="gpu">Graphics cards (GPU)</option>
             </Select>
             {form.kind === "gpu" ? (
-              <p className="mt-1 text-[11px] text-ink-muted">Only the GPU model (e.g. RTX 3060), brand and price are used for card searches.</p>
+              <p className="mt-1 text-[11px] text-ink-muted">Card searches use the GPU model (e.g. RTX 3060), brand and price. If the GPU box is empty, a model written in the name (like "rtx 3080") is used, and other cards are ignored.</p>
             ) : null}
           </div>
         </div>

@@ -4,6 +4,7 @@ import Layout from "./components/Layout";
 import BestDeals from "./pages/BestDeals";
 import Dashboard from "./pages/Dashboard";
 import ListingDetail from "./pages/ListingDetail";
+import Live from "./pages/Live";
 import Pipeline from "./pages/Pipeline";
 import PriceBook from "./pages/PriceBook";
 import Results from "./pages/Results";
@@ -17,6 +18,7 @@ export default function App() {
     <Routes>
       <Route element={<Layout />}>
         <Route index element={<Dashboard />} />
+        <Route path="live" element={<Live />} />
         <Route path="deals" element={<BestDeals />} />
         <Route path="pipeline" element={<Pipeline />} />
         <Route path="price-book" element={<PriceBook />} />

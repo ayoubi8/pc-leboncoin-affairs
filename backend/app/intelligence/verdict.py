@@ -49,13 +49,16 @@ Answer with ONLY this JSON (no markdown):
 max_buy_price_eur = the highest buy price that still leaves at least a {GOOD_PCT:.0f}% margin (you may round it; it must be consistent with the numbers given)."""
 
 
-def apply(db, settings: Settings, listing: Listing, buy_price_eur: Optional[float] = None) -> dict[str, Any]:
-    """Generate the verdict and store it on the listing (fetching the Algerian price first if needed)."""
+def apply(db, settings: Settings, listing: Listing, buy_price_eur: Optional[float] = None, use_ai: bool = True) -> dict[str, Any]:
+    """Generate the verdict and store it on the listing (fetching the Algerian price first if needed).
+
+    ``use_ai=False`` (Telegram alerts after a scan) writes the rule-based verdict and calls no model.
+    """
     from .analyze import apply_dz_comparison
 
     if not listing.dz_price_median_dzd:
-        apply_dz_comparison(db, settings, listing)
-    result = generate(settings, listing, buy_price_eur)  # raises ValueError without an Algerian price
+        apply_dz_comparison(db, settings, listing, allow_call=use_ai)
+    result = generate(settings, listing, buy_price_eur, use_ai=use_ai)  # raises ValueError without an Algerian price
     listing.ai_verdict = result
     listing.ai_verdict_label = result["verdict"]
     listing.ai_profit_eur = result["numbers"]["profit_eur"]
@@ -214,14 +217,14 @@ def _ask_model(settings: Settings, listing: Listing, numbers: dict[str, Any]) ->
 
 
 def generate(
-    settings: Settings, listing: Listing, buy_price_eur: Optional[float] = None
+    settings: Settings, listing: Listing, buy_price_eur: Optional[float] = None, use_ai: bool = True
 ) -> dict[str, Any]:
     """Build and return the verdict dict (also stored on the listing by the caller)."""
     numbers = compute_numbers(settings, listing, buy_price_eur)
     if numbers is None:
         raise ValueError("No Algerian price yet - run the Algerian price search first.")
 
-    data = _ask_model(settings, listing, numbers)
+    data = _ask_model(settings, listing, numbers) if use_ai else None
     source = "ai"
     if data is None:
         data = _fallback(numbers)

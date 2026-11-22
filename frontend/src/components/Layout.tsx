@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
-import { BookOpen, Kanban, Laptop, LayoutDashboard, Trophy, Moon, Monitor, Plus, Search, Settings as SettingsIcon, Sun } from "lucide-react";
+import { Activity, Kanban, Laptop, LayoutDashboard, Trophy, Moon, Monitor, Search, Settings as SettingsIcon, Sun } from "lucide-react";
 import { cn } from "../lib/utils";
 import { applyTheme, getThemePreference, watchSystemTheme, type ThemePreference } from "../lib/theme";
+import { useLiveWatcher } from "../lib/useLive";
+import LivePanel, { LivePill } from "./LivePanel";
 import { Toaster } from "./ui";
 
 const NAV = [
-  { to: "/", label: "Dashboard", icon: LayoutDashboard, end: true },
-  { to: "/deals", label: "Best deals", icon: Trophy, end: true },
-  { to: "/pipeline", label: "Pipeline", icon: Kanban, end: true },
-  { to: "/price-book", label: "Price book", icon: BookOpen, end: true },
-  { to: "/searches", label: "Searches", icon: Search, end: false },
-  { to: "/searches/new", label: "New search", icon: Plus, end: true },
-  { to: "/settings", label: "Settings", icon: SettingsIcon, end: true },
+  { to: "/", label: "Dashboard", short: "Home", icon: LayoutDashboard, end: true },
+  { to: "/live", label: "Live activity", short: "Live", icon: Activity, end: true },
+  { to: "/deals", label: "Best deals", short: "Deals", icon: Trophy, end: true },
+  { to: "/pipeline", label: "Pipeline", short: "Pipeline", icon: Kanban, end: true },
+  { to: "/searches", label: "Searches", short: "Searches", icon: Search, end: false },
+  { to: "/settings", label: "Settings", short: "Settings", icon: SettingsIcon, end: true },
 ];
 
 const THEME_ORDER: ThemePreference[] = ["light", "dark", "system"];
@@ -50,9 +51,10 @@ function ThemeToggle() {
 }
 
 export default function Layout() {
+  useLiveWatcher();
   return (
     <div className="min-h-screen lg:flex">
-      <aside className="hidden w-60 shrink-0 flex-col border-r border-border bg-surface px-3 py-4 lg:flex">
+      <aside className="hidden w-60 shrink-0 flex-col overflow-y-auto border-r border-border bg-surface px-3 py-4 lg:sticky lg:top-0 lg:flex lg:h-screen">
         <div className="mb-6 flex items-center gap-2 px-2">
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-on-primary">
             <Laptop className="h-4 w-4" />
@@ -84,6 +86,8 @@ export default function Layout() {
           ))}
         </nav>
 
+        <LivePanel />
+
         <div className="mt-4 border-t border-border pt-3">
           <ThemeToggle />
         </div>
@@ -97,14 +101,17 @@ export default function Layout() {
             </span>
             <span className="text-sm font-semibold">Deal Finder</span>
           </div>
-          <ThemeToggleInline />
+          <div className="flex items-center gap-1">
+            <LivePill />
+            <ThemeToggleInline />
+          </div>
         </header>
 
         <main className="mx-auto w-full max-w-6xl flex-1 px-3 py-4 pb-24 sm:px-5 lg:py-6 lg:pb-8">
           <Outlet />
         </main>
 
-        <nav className="fixed bottom-0 left-0 right-0 z-30 grid grid-cols-4 border-t border-border bg-surface/95 backdrop-blur lg:hidden">
+        <nav className="fixed bottom-0 left-0 right-0 z-30 grid grid-cols-6 border-t border-border bg-surface/95 backdrop-blur lg:hidden">
           {NAV.map((item) => (
             <NavLink
               key={item.to}
@@ -112,13 +119,13 @@ export default function Layout() {
               end={item.end}
               className={({ isActive }) =>
                 cn(
-                  "flex flex-col items-center gap-1 py-2 text-[11px]",
+                  "flex min-w-0 flex-col items-center gap-1 py-2 text-[10px]",
                   isActive ? "font-semibold text-ink" : "text-ink-muted",
                 )
               }
             >
               <item.icon className="h-4 w-4" />
-              {item.label}
+              <span className="max-w-full truncate">{item.short}</span>
             </NavLink>
           ))}
         </nav>

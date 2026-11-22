@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import time
 from typing import Any, Optional
 
 import httpx
@@ -135,6 +136,94 @@ def extract_specs_llm(
     if not parsed:
         return None
     return {k: v for k, v in parsed.items() if v not in (None, "")}
+
+
+SPEC_MODEL_DEFAULT = "inclusionai/ling-3.2-flash:free"
+DETAIL_SYSTEM = (
+    "You read a French second-hand marketplace ad for a laptop, PC or graphics card and fill in its hardware specs. "
+    "Rules: never invent a value, use null when the ad does not say it. Normalise the CPU to its short name (e.g. i7-11800H, "
+    "Ryzen 5 5600H). For a bare graphics card put the model in gpu and leave cpu/ram_gb null.\n"
+    "Return ONLY this JSON, no markdown:\n"
+    '{"cpu": string|null, "ram_gb": int|null, "storage_gb": int|null, "gpu": string|null, "screen_inches": number|null, '
+    '"brand": string|null, "condition": "new"|"like_new"|"very_good"|"good"|"fair"|"parts"|null, '
+    '"evidence": {"<field you filled>": "the words in the ad (or the reasoning) that gave you this value"}, '
+    '"description": "2 short sentences in English: what the product is, its key specs and anything a buyer should know '
+    '(condition, missing charger, defects, seller says it is negotiable...)"}'
+)
+
+
+def extract_specs_detailed(db: Session, settings: Settings, text: str, known: dict[str, Any]) -> dict[str, Any]:
+    """Free-model spec extraction that also explains itself.
+
+    Returns {"ok", "model", "specs", "evidence", "description", "error"}; never raises.
+    """
+    model = (getattr(settings, "spec_model", "") or SPEC_MODEL_DEFAULT).strip()
+    out: dict[str, Any] = {"ok": False, "model": model, "specs": {}, "evidence": {}, "description": "", "error": ""}
+    if not api_key(settings):
+        out["error"] = "no OpenRouter key"
+        return out
+
+    user = f"Already known (from regex): {json.dumps(known, ensure_ascii=False)}\nAd:\n{text[:4000]}"
+    key = hashlib.sha256(json.dumps(["extract_detail", model, DETAIL_SYSTEM, user], ensure_ascii=False).encode("utf-8")).hexdigest()
+    content = _cache_get(db, key)
+    if content is None:
+        payload = {
+            "model": model,
+            "messages": [{"role": "system", "content": DETAIL_SYSTEM}, {"role": "user", "content": user}],
+            "temperature": 0.1,
+            "max_tokens": 3000,  # headroom: some free models "think" for 1000+ tokens before answering
+            "reasoning": {"effort": "low"},
+        }
+        headers = {
+            "Authorization": f"Bearer {api_key(settings)}",
+            "Content-Type": "application/json",
+            "HTTP-Referer": "http://localhost",
+            "X-Title": "Laptop Deal Finder",
+        }
+        response = None
+        for wait in (0, 5, 12):  # free models answer 429 when busy: wait a little and try again
+            if wait:
+                time.sleep(wait)
+            try:
+                with httpx.Client(timeout=TIMEOUT) as client:
+                    response = client.post(f"{OPENROUTER_BASE_URL}/chat/completions", headers=headers, json=payload)
+            except Exception as exc:
+                out["error"] = f"request failed: {type(exc).__name__}"
+                return out
+            if response.status_code != 429:
+                break
+        if response.status_code != 200:
+            try:
+                err = response.json().get("error", {})
+                detail = ((err.get("metadata") or {}).get("raw") or err.get("message") or "")[:200]  # upstream wording is clearer
+            except Exception:
+                detail = ""
+            hint = " (free models are rate limited, retry in a minute)" if response.status_code == 429 else ""
+            out["error"] = f"{model}: HTTP {response.status_code} {detail[:160]}{hint}"
+            return out
+        finish = ""
+        try:
+            choice = response.json()["choices"][0]
+            finish = choice.get("finish_reason") or ""
+            content = (choice["message"].get("content") or "").strip()
+        except Exception:
+            content = ""
+        if not content:
+            out["error"] = f"{model} returned an empty answer" + (" (it ran out of tokens while thinking; try a non-reasoning model)" if finish == "length" else "")
+            return out
+        _cache_put(db, key, "extract_detail", content)
+
+    parsed = _parse_json(content)
+    if not parsed:
+        out["error"] = f"{model} did not return JSON"
+        return out
+
+    evidence = parsed.get("evidence")
+    out["specs"] = {k: parsed[k] for k in ("cpu", "ram_gb", "storage_gb", "gpu", "screen_inches", "brand", "condition") if parsed.get(k) not in (None, "")}
+    out["evidence"] = {str(k): str(v)[:200] for k, v in evidence.items()} if isinstance(evidence, dict) else {}
+    out["description"] = " ".join(str(parsed.get("description") or "").split())[:500]
+    out["ok"] = True
+    return out
 
 
 def negotiation_message(

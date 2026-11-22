@@ -62,6 +62,8 @@ export function timeAgo(iso?: string | null): string {
 export const DEAL_STYLES: Record<string, string> = {
   excellent:
     "bg-success-bg text-success-ink border-success-border",
+  great: "bg-success-bg text-success-ink border-success-border",
+  skip: "bg-danger-bg text-danger-ink border-danger-border",
   good: "bg-info-bg text-info-ink border-info-border",
   fair: "bg-warning-bg text-warning-ink border-warning-border",
   overpriced:

@@ -8,6 +8,7 @@ from typing import Any, Optional
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from .. import progress
 from ..intelligence.analyze import analyze_listing
 from ..models import Listing, PriceSnapshot, Run, Search, SearchListing, Settings
 from ..processing.dedup import dedupe_ads, listing_fingerprint, price_changed
@@ -73,7 +74,9 @@ def upsert_ads(
     changed_listings: list[Listing] = []
     touched: list[Listing] = []
 
-    for ad in ads:
+    for position, ad in enumerate(ads, start=1):
+        if run is not None:
+            progress.update_run(run.id, stage="pricing", detail=f"ad {position}/{len(ads)}", ads_done=position - 1, ads_total=len(ads))
         listing = _find_listing(db, ad)
         now = datetime.now(timezone.utc).replace(tzinfo=None)
 
@@ -186,10 +189,13 @@ def run_search(
     db.add(run)
     db.commit()
     db.refresh(run)
+    run_id, search_name = run.id, search.name
 
     queries: list[GeneratedQuery] = generate_queries(search)
     run.queries_total = len(queries)
     db.commit()
+    progress.start_run(run_id, search.id, search_name, len(queries), trigger)
+    progress.update_run(run_id, stage="fetching")
 
     ads: list[dict[str, Any]] = []
     blocked = False
@@ -199,6 +205,7 @@ def run_search(
     try:
         for index, query in enumerate(queries):
             for page in range(1, max(1, pages) + 1):
+                progress.update_run(run_id, page=page, detail=f"query {index + 1}/{len(queries)}, page {page}")
                 result = leboncoin.fetch_page(
                     session,
                     query.text,
@@ -218,10 +225,12 @@ def run_search(
                     break
                 page_ads = [leboncoin.normalize_ad(raw) for raw in result.ads]
                 ads.extend(page_ads)
+                progress.update_run(run_id, ads_found=len(ads))
                 if page < pages:
                     if _known_ratio(db, page_ads) >= KNOWN_STOP_RATIO:
                         break  # sorted newest-first: the remaining pages are old news
                     time.sleep(delay * random.uniform(0.7, 1.4))
+            progress.update_run(run_id, queries_done=index + 1)
             if blocked:
                 break
             if index < len(queries) - 1:
@@ -235,6 +244,7 @@ def run_search(
 
         unique = dedupe_ads(ads)
         run.results_total = len(unique)
+        progress.update_run(run_id, stage="saving", detail=f"{len(unique)} ads", ads_found=len(unique))
 
         counts = upsert_ads(db, settings, search, run, unique)
         run.new_count = counts["new"]
@@ -245,7 +255,10 @@ def run_search(
             try:
                 from ..notify import deals
 
-                deals.notify_run(db, settings, search, counts["new_listings"], counts["changed_listings"])
+                progress.update_run(run_id, stage="alerting", detail="")
+                stats = deals.notify_run(db, settings, search, counts["new_listings"], counts["changed_listings"])
+                if stats and stats.get("sent"):
+                    progress.log("alert", f"{stats['sent']} Telegram alert(s) sent for {search.name}", level="success")
             except Exception as exc:  # alerts must never break a run
                 print(f"[notify] search {search.id}: {type(exc).__name__}: {exc}")
 
@@ -268,5 +281,6 @@ def run_search(
         search.last_run_at = run.finished_at
         search.last_run_status = run.status
         db.commit()
+        progress.end_run(run_id, run.status, run.new_count or 0, run.results_total or 0, run.error or "")
 
     return run

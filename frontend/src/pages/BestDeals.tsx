@@ -11,7 +11,8 @@ export default function BestDeals() {
       <div>
         <h1 className="text-xl font-semibold">Best deals</h1>
         <p className="text-xs text-ink-muted">
-          Ads you generated an honest verdict for, ranked by resale profit in Algeria (skips hidden).
+          Every ad that has a verdict, ranked by resale profit in Algeria. For what to buy right now, use “Act now” on the
+          Dashboard: it only shows fresh ads.
         </p>
       </div>
       {isLoading ? (
@@ -24,7 +25,7 @@ export default function BestDeals() {
         </div>
       ) : (
         <Card>
-          <EmptyState title="No verdicts yet" description="Open an ad and press Generate verdict to rank it here." />
+          <EmptyState title="No verdicts yet" description="Ads get a verdict automatically once they are priced. If this stays empty, check Live activity for a key problem." />
         </Card>
       )}
     </div>

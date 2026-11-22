@@ -5,6 +5,8 @@ import { api } from "../lib/api";
 import { cn, dateShort, eur, timeAgo } from "../lib/utils";
 import { Badge, Button, Card, CardHeader, DealBadge, EmptyState, Skeleton } from "../components/ui";
 import ListingCard from "../components/ListingCard";
+import SetupChecklist from "../components/SetupChecklist";
+import { formatDuration, remaining, useLive, useTicker } from "../lib/useLive";
 
 function Stat({
   label,
@@ -50,10 +52,64 @@ function HealthBanner() {
       ))}
       {data.problems.some((p) => p.kind.startsWith("key_")) ? (
         <p className="pl-6">
-          <Link to="/settings" className="underline">Fix it in Settings</Link>
+          <Link to="/settings" className="underline">Open Settings and press “Test key”</Link>
         </p>
       ) : null}
     </div>
+  );
+}
+
+function ActNow() {
+  const { data, isLoading } = useQuery({ queryKey: ["actNow"], queryFn: () => api.ops.actNow(6), refetchInterval: 30_000 });
+  const { live, updatedAt } = useLive();
+  const now = useTicker();
+  const nextIn = remaining(live?.next?.due_in_s, updatedAt, now);
+
+  return (
+    <Card>
+      <CardHeader
+        title="Act now"
+        subtitle={`Fresh (under ${data?.max_age_hours ?? 48} h), still online, profitable at the asking price. Best first.`}
+        action={
+          <Link to="/deals" className="flex items-center gap-1 text-xs text-ink-muted hover:text-ink">
+            All deals <ArrowRight className="h-3 w-3" />
+          </Link>
+        }
+      />
+      {isLoading ? (
+        <div className="grid gap-3 p-3 sm:grid-cols-2 xl:grid-cols-3">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <Skeleton key={index} className="h-72" />
+          ))}
+        </div>
+      ) : data?.items.length ? (
+        <div className="grid gap-3 p-3 sm:grid-cols-2 xl:grid-cols-3">
+          {data.items.map((item) => (
+            <ListingCard key={item.id} card={item} />
+          ))}
+        </div>
+      ) : (
+        <EmptyState
+          title="Nothing worth buying right now"
+          description={
+            data && data.unpriced_fresh > 0 && live?.openrouter !== "ok"
+              ? `${data.unpriced_fresh} fresh ads are waiting for an Algerian price, but the OpenRouter key is not working. Fix it in Settings and they will be priced on the next scan.`
+              : data && data.unpriced_fresh > 0
+                ? `${data.unpriced_fresh} fresh ads are still being priced. Check back after the next scan.`
+                : live?.next
+                  ? `New ads appear here as soon as a scan finds them. Next scan in ${formatDuration(nextIn)}.`
+                  : "Create a search and turn on auto-check, and new ads will appear here."
+          }
+          action={
+            live?.openrouter !== "ok" && data && data.unpriced_fresh > 0 ? (
+              <Link to="/settings">
+                <Button variant="primary" size="sm">Fix the key</Button>
+              </Link>
+            ) : undefined
+          }
+        />
+      )}
+    </Card>
   );
 }
 
@@ -61,6 +117,7 @@ export default function Dashboard() {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["dashboard"],
     queryFn: api.dashboard,
+    refetchInterval: 30_000,
   });
 
   if (isLoading) {
@@ -95,7 +152,7 @@ export default function Dashboard() {
         <div>
           <h1 className="text-xl font-semibold">Dashboard</h1>
           <p className="text-xs text-ink-muted">
-            Live picture of your Leboncoin laptop hunt and landed costs.
+            What to buy right now, and whether the machine finding it is healthy.
           </p>
         </div>
         <Link to="/searches/new">
@@ -107,6 +164,10 @@ export default function Dashboard() {
 
       <HealthBanner />
 
+      <SetupChecklist />
+
+      <ActNow />
+
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Stat label="Active searches" value={kpis.active_searches} icon={Search} hint="with a run or auto-check" />
         <Stat label="New today" value={kpis.new_today} icon={ListChecks} hint="first seen since midnight" />
@@ -115,7 +176,7 @@ export default function Dashboard() {
           label="Best deal"
           value={best ? eur(best.price_eur) : "—"}
           icon={TrendingDown}
-          hint={best ? `${best.subject}` : "run a search to see one"}
+          hint={best ? `${best.subject}` : "none scored yet"}
         />
       </div>
 
@@ -161,8 +222,8 @@ export default function Dashboard() {
 
       <Card>
         <CardHeader
-          title="Best deals"
-          subtitle="Highest deal score across every search"
+          title="Highest scored ads"
+          subtitle="Ranked by market score across every search (not the same as profit: see Act now)"
           action={
             <Link to="/searches" className="flex items-center gap-1 text-xs text-ink-muted hover:text-ink">
               All searches <ArrowRight className="h-3 w-3" />
@@ -177,8 +238,8 @@ export default function Dashboard() {
           </div>
         ) : (
           <EmptyState
-            title="No analyzed deals yet"
-            description="Create a search, run it, and best deals will appear here once the market sample builds up."
+            title="No scored ads yet"
+            description="Ads get a score once a search has run and they have been priced."
           />
         )}
       </Card>
@@ -191,10 +252,10 @@ export default function Dashboard() {
               <thead className="text-ink-muted">
                 <tr className="border-b border-border">
                   <th className="px-4 py-2 font-medium">Search</th>
-                  <th className="px-4 py-2 font-medium">Trigger</th>
+                  <th className="px-4 py-2 font-medium">Started by</th>
                   <th className="px-4 py-2 font-medium">Status</th>
                   <th className="px-4 py-2 text-right font-medium">New</th>
-                  <th className="px-4 py-2 text-right font-medium">Total</th>
+                  <th className="px-4 py-2 text-right font-medium">Ads seen</th>
                   <th className="px-4 py-2 text-right font-medium">When</th>
                 </tr>
               </thead>
@@ -210,12 +271,12 @@ export default function Dashboard() {
                         "—"
                       )}
                     </td>
-                    <td className="px-4 py-2 capitalize text-ink-muted">{run.trigger}</td>
+                    <td className="px-4 py-2 text-ink-muted">{run.trigger === "manual" ? "You" : "Schedule"}</td>
                     <td className="px-4 py-2">
                       <span
                         className={cn(
                           "inline-flex rounded-full px-2 py-0.5 text-[11px] font-medium capitalize",
-                          run.status === "completed"
+                          run.status === "completed" || run.status === "success"
                             ? "bg-success-bg text-success-ink"
                             : run.status === "running"
                               ? "bg-info-bg text-info-ink"

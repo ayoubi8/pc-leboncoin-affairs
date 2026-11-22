@@ -280,6 +280,24 @@ export default function ListingDetail() {
                 </div>
               ))}
             </div>
+            {listing.ai_description || Object.keys(listing.spec_notes?.evidence || {}).length ? (
+              <div className="space-y-2 border-t border-border-subtle p-4 text-sm">
+                {listing.ai_description ? <p className="text-ink-strong">{listing.ai_description}</p> : null}
+                {Object.keys(listing.spec_notes?.evidence || {}).length ? (
+                  <ul className="space-y-0.5 text-xs text-ink-muted">
+                    {Object.entries(listing.spec_notes.evidence || {}).map(([field, why]) => (
+                      <li key={field}>
+                        <b className="text-ink-label">{field}</b>: {why}
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+                <p className="text-[11px] text-ink-faint">
+                  Filled by {listing.spec_notes?.model || "the spec model"}
+                  {listing.spec_notes?.filled?.length ? ` · set ${listing.spec_notes.filled.join(", ")}` : ""}
+                </p>
+              </div>
+            ) : null}
           </Card>
 
           <Card>

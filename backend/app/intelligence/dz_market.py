@@ -31,6 +31,11 @@ MIN_DZD = 15_000
 MAX_DZD = 1_500_000
 
 
+# The model can be free, but OpenRouter's web-search plugin is billed per result (~$0.007 a lookup),
+# so lookups only happen on demand (see enrich.py) and the price book makes repeats free.
+WEB_RESULTS = 3  # 3 results are enough for a median
+
+
 def api_key(settings: Settings) -> str:
     # Same OpenRouter key as the rest of the app's LLM features.
     return (settings.llm_api_key or "").strip() or OPENROUTER_API_KEY
@@ -113,13 +118,14 @@ def _call_gemini(settings: Settings, query: str, context: str = "") -> dict[str,
     model = (getattr(settings, "gemini_model", "") or DEFAULT_MODEL).strip()
     if "/" not in model:
         model = f"google/{model}"
-    if not model.endswith(":online"):
-        model += ":online"  # OpenRouter web-search plugin
+    model = model.removesuffix(":online")  # web search is requested through the plugin below, with a result cap
     body = {
         "model": model,
+        "plugins": [{"id": "web", "max_results": WEB_RESULTS}],
         "messages": [{"role": "user", "content": PROMPT.format(query=query, context=context)}],
         "temperature": 0.1,
-        "max_tokens": 800,
+        "max_tokens": 3000,  # reasoning models spend tokens thinking before the JSON answer
+        "reasoning": {"effort": "low"},
     }
     headers = {
         "Authorization": f"Bearer {api_key(settings)}",
@@ -138,6 +144,10 @@ def _call_gemini(settings: Settings, query: str, context: str = "") -> dict[str,
             message = response.json().get("error", {}).get("message", "")
         except Exception:
             message = ""
+        if response.status_code == 401:
+            from .keycheck import explain_401
+
+            return {"ok": False, "error": "OpenRouter HTTP 401: " + explain_401(message)}
         return {"ok": False, "error": f"OpenRouter HTTP {response.status_code}: {message[:200]}"}
 
     try:
@@ -199,8 +209,11 @@ def _store(db: Session, key: str, query: str, result: dict[str, Any]) -> DzPrice
     return row
 
 
-def lookup(db: Session, settings: Settings, listing: Listing, force: bool = False) -> Optional[DzPrice]:
-    """Cached Algerian price row for the listing's configuration, or None."""
+def lookup(db: Session, settings: Settings, listing: Listing, force: bool = False, allow_call: bool = True) -> Optional[DzPrice]:
+    """Cached Algerian price row for the listing's configuration, or None.
+
+    ``allow_call=False`` returns only what is already cached and never calls a model.
+    """
     if not available(settings):
         return None
     key, query = describe(listing)
@@ -214,6 +227,9 @@ def lookup(db: Session, settings: Settings, listing: Listing, force: bool = Fals
         age = _utcnow() - (row.fetched_at or _utcnow())
         if age < (SUCCESS_TTL if row.ok else FAILURE_TTL):
             return row if row.ok else None
+
+    if not allow_call:
+        return None  # cache only: scans never spend
 
     # Coarse keys are shared by many ads, so only title-keyed (vague) lookups get this ad's own text.
     context = ad_context(listing) if key.startswith("title|") else ""

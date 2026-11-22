@@ -36,7 +36,10 @@ def analyze_listing(
     listing: Listing,
     search: Optional[Search] = None,
     force: bool = False,
+    use_ai: bool = False,
 ) -> None:
+    """Free analysis of one ad. ``use_ai`` is False for scans: no model is called, and the Algerian
+    price only comes from the price-book cache. AI steps live in intelligence/enrich.py."""
     now = datetime.now(timezone.utc).replace(tzinfo=None)
 
     if force or not listing.specs:
@@ -51,7 +54,7 @@ def analyze_listing(
         method = dict(listing.spec_method or {})
 
     missing = specs_mod.missing_fields(extracted)
-    if missing and llm.available(settings):
+    if use_ai and missing and llm.available(settings):
         text = " ".join(part for part in (listing.subject, listing.description) if part)
         extra = llm.extract_specs_llm(db, settings, text[:4000], extracted)
         if extra:
@@ -108,11 +111,11 @@ def analyze_listing(
     listing.risk_flags = flags + [f for f in info["flags"] if f not in flags]
 
     mismatch = match.hard_fail(search, listing) if search is not None else ""
-    if listing.screen_skip or mismatch:  # no paid lookup for junk or for ads that do not fit this search
+    if listing.screen_skip or mismatch:  # junk or an ad that does not fit this search gets no price
         listing.dz_price_low_dzd = listing.dz_price_median_dzd = listing.dz_price_high_dzd = None
         listing.dz_saving_pct = listing.dz_confidence = None
     else:
-        apply_dz_comparison(db, settings, listing)  # cached per config; never forced here
+        apply_dz_comparison(db, settings, listing, allow_call=use_ai)  # without AI: price-book cache only
 
     listing.last_analyzed_at = now
 
@@ -122,6 +125,7 @@ def apply_dz_comparison(
     settings: Settings,
     listing: Listing,
     force: bool = False,
+    allow_call: bool = True,
 ) -> None:
     """Landed cost (price + shipping + customs) in DZD vs. the Algerian market price.
 
@@ -135,7 +139,7 @@ def apply_dz_comparison(
     listing.acquisition_score = deal.acquisition_score(cost["total_eur"], listing.market_median_eur)
     listing.dz_landed_dzd = round(cost["total_eur"] * float(settings.eur_dzd_parallel or 0), 0)
 
-    row = dz_market.lookup(db, settings, listing, force=force)
+    row = dz_market.lookup(db, settings, listing, force=force, allow_call=allow_call)
     if row is None:
         listing.dz_price_low_dzd = listing.dz_price_median_dzd = listing.dz_price_high_dzd = None
         listing.dz_saving_pct = None

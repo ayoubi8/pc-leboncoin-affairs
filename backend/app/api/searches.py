@@ -100,6 +100,41 @@ def trigger_run(
     return run_out(db, run, search.name)
 
 
+@router.post("/{search_id}/run-async")
+def trigger_run_async(
+    search_id: int,
+    pages: int = Query(3, ge=1, le=10),
+    delay: float = Query(1.5, ge=0, le=30),
+    db: Session = Depends(get_db),
+) -> dict:
+    """Start a scan in the background and return at once; progress is read from /api/live.
+
+    Serverless hosts cannot keep a thread alive after the response, so there the scan
+    runs inline (same behaviour as the blocking endpoint)."""
+    import threading
+
+    from .. import progress
+    from ..config import SERVERLESS
+    from ..db import SessionLocal
+
+    search = _get_search(db, search_id)
+    if any(r["search_id"] == search.id for r in progress.running()):
+        return {"started": False, "already_running": True}
+
+    def work() -> None:
+        with SessionLocal() as session:
+            try:
+                run_search(session, search_id, trigger="manual", pages=pages, delay=delay)
+            except Exception as exc:  # the run row records the failure
+                print(f"[run-async] search {search_id}: {type(exc).__name__}: {exc}")
+
+    if SERVERLESS:
+        work()
+        return {"started": True, "already_running": False, "finished": True}
+    threading.Thread(target=work, daemon=True, name=f"run-{search_id}").start()
+    return {"started": True, "already_running": False}
+
+
 @router.get("/{search_id}/runs", response_model=list[RunOut])
 def list_runs(search_id: int, db: Session = Depends(get_db)) -> list[dict]:
     search = _get_search(db, search_id)
@@ -113,6 +148,29 @@ def _latest_run_id(db: Session, search_id: int) -> Optional[int]:
     return db.execute(
         select(Run.id).where(Run.search_id == search_id).order_by(Run.id.desc()).limit(1)
     ).scalar_one_or_none()
+
+
+@router.post("/{search_id}/enrich")
+def start_enrich(
+    search_id: int,
+    auto: bool = Query(True, description="true when the page triggers it by itself (rate limited)"),
+    limit: int = Query(5, ge=1, le=5),
+    db: Session = Depends(get_db),
+) -> dict:
+    """Run the AI steps (specs, Algerian price, verdict) on the first 5 ads that still need them."""
+    from ..config import SERVERLESS
+    from ..intelligence import enrich
+
+    search = _get_search(db, search_id)
+    return enrich.start(db, search, get_settings(db), auto=auto, limit=limit, inline=SERVERLESS)
+
+
+@router.get("/{search_id}/enrich")
+def enrich_status(search_id: int, db: Session = Depends(get_db)) -> dict:
+    from ..intelligence import enrich
+
+    _get_search(db, search_id)
+    return enrich.summary(search_id)
 
 
 @router.get("/{search_id}/results", response_model=ResultsResponse)
@@ -223,7 +281,7 @@ def search_results(
             return (card.acquisition_score is None, -(card.acquisition_score or 0))
         if sort == "opportunity":  # conservative profit weighted by how fresh the ad is
             if card.ai_profit_eur is None:
-                return (True, 0)
+                return (True, -(card.freshness_score or 0))  # not priced yet: freshest first
             return (False, -(card.ai_profit_eur * (0.5 + (card.freshness_score or 50) / 200)))
         if sort == "profit_desc":
             return (card.ai_profit_eur is None, -(card.ai_profit_eur or 0))

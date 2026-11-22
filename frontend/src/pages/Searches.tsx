@@ -16,6 +16,8 @@ import { api, type Search } from "../lib/api";
 import { dateShort, timeAgo } from "../lib/utils";
 import { toast } from "../lib/toast";
 import { Badge, Button, Card, EmptyState, Skeleton } from "../components/ui";
+import { RunningScan } from "../components/LivePanel";
+import { useLive } from "../lib/useLive";
 
 function IntervalBadge({ search }: { search: Search }) {
   if (!search.auto_check_enabled) return <Badge>manual</Badge>;
@@ -64,17 +66,15 @@ export default function Searches() {
 
   const searches = useQuery({ queryKey: ["searches"], queryFn: api.searches.list });
 
+  const { live } = useLive();
   const runMutation = useMutation({
-    mutationFn: (id: number) => api.searches.run(id),
-    onSuccess: (run) => {
-      queryClient.invalidateQueries({ queryKey: ["searches"] });
-      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
-      if (run.status === "failed") toast(run.error || "Run failed", "error");
-      else if (run.datadome_blocked)
-        toast(`Blocked by DataDome — ${run.new_count} new. Import a CSV instead.`, "error");
-      else toast(`Run finished: ${run.new_count} new, ${run.updated_count} updated`, "success");
+    mutationFn: (id: number) => api.searches.runAsync(id),
+    onSuccess: (result) => {
+      queryClient.invalidateQueries({ queryKey: ["live"] });
+      if (result.already_running) toast("That search is already scanning", "info");
+      else toast("Scan started. Progress shows below and in the sidebar.", "info");
     },
-    onError: (error) => toast(error instanceof Error ? error.message : "Run failed", "error"),
+    onError: (error) => toast(error instanceof Error ? error.message : "Could not start the scan", "error"),
   });
 
   const deleteMutation = useMutation({
@@ -101,7 +101,7 @@ export default function Searches() {
       <div className="flex flex-wrap items-end justify-between gap-2">
         <div>
           <h1 className="text-xl font-semibold">Searches</h1>
-          <p className="text-xs text-ink-muted">Saved filters, run history, CSV fallback.</p>
+          <p className="text-xs text-ink-muted">What to hunt. Each search scans Leboncoin on its own schedule and can alert you on Telegram.</p>
         </div>
         <Link to="/searches/new">
           <Button variant="primary" size="sm">
@@ -136,6 +136,11 @@ export default function Searches() {
         <div className="space-y-3">
           {searches.data.map((search) => (
             <Card key={search.id}>
+              {live?.running.find((r) => r.search_id === search.id) ? (
+                <div className="border-b border-border px-4 py-3">
+                  <RunningScan run={live.running.find((r) => r.search_id === search.id)!} />
+                </div>
+              ) : null}
               <div className="flex flex-wrap items-start justify-between gap-3 p-4">
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
@@ -166,9 +171,14 @@ export default function Searches() {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-1.5">
-                  <Button size="sm" variant="primary" onClick={() => runMutation.mutate(search.id)} disabled={runMutation.isPending}>
+                  <Button
+                    size="sm"
+                    variant="primary"
+                    onClick={() => runMutation.mutate(search.id)}
+                    disabled={runMutation.isPending || live?.running.some((r) => r.search_id === search.id)}
+                  >
                     <Play className="h-3.5 w-3.5" />
-                    {runMutation.isPending && runMutation.variables === search.id ? "Running…" : "Run now"}
+                    {live?.running.some((r) => r.search_id === search.id) ? "Scanning…" : "Run now"}
                   </Button>
                   <Link to={`/searches/${search.id}/results`}>
                     <Button size="sm" variant="secondary">

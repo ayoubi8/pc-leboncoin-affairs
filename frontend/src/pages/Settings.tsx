@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus, Save, Trash2 } from "lucide-react";
-import { api, type Settings as SettingsType } from "../lib/api";
+import { Link } from "react-router-dom";
+import { BookOpen, Plus, Save, Trash2 } from "lucide-react";
+import { api, type ConnectionTest, type Settings as SettingsType } from "../lib/api";
 import { toast } from "../lib/toast";
 import { Button, Card, CardHeader, Input, Label, Select, Skeleton, Switch } from "../components/ui";
+import { Dot } from "../components/LivePanel";
 
 function NumberField({
   label,
@@ -59,6 +61,98 @@ function DimsField({
   );
 }
 
+
+type TestState = { pending: boolean; result?: ConnectionTest };
+
+function ConnectionRow({
+  title,
+  help,
+  state,
+  onTest,
+  button,
+}: {
+  title: string;
+  help: string;
+  state: TestState;
+  onTest: () => void;
+  button: string;
+}) {
+  const result = state.result;
+  return (
+    <li className="space-y-2 px-4 py-3">
+      <div className="flex flex-wrap items-center gap-3">
+        <Dot tone={state.pending ? "run" : result ? (result.ok ? "ok" : "bad") : "idle"} />
+        <div className="min-w-0 flex-1 basis-60">
+          <p className="text-sm font-medium">{title}</p>
+          <p className="text-xs text-ink-muted">{state.pending ? "Testing…" : result ? result.message : help}</p>
+        </div>
+        <Button type="button" size="sm" variant="secondary" disabled={state.pending} onClick={onTest}>
+          {button}
+        </Button>
+      </div>
+      {result?.steps?.length ? (
+        <ul className="ml-5 space-y-0.5 text-xs">
+          {result.steps.map((step) => (
+            <li key={step.name} className={step.ok ? "text-success-soft-ink" : "text-danger-ink"}>
+              {step.ok ? "✓" : "✗"} {step.name}: <span className="text-ink-muted">{step.detail}</span>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </li>
+  );
+}
+
+function ConnectionsCard({ unsaved }: { unsaved: boolean }) {
+  const [openrouter, setOpenrouter] = useState<TestState>({ pending: false });
+  const [telegram, setTelegram] = useState<TestState>({ pending: false });
+  const [leboncoin, setLeboncoin] = useState<TestState>({ pending: false });
+
+  async function run(set: (s: TestState) => void, call: () => Promise<ConnectionTest>) {
+    set({ pending: true });
+    try {
+      set({ pending: false, result: await call() });
+    } catch (error) {
+      set({ pending: false, result: { ok: false, message: error instanceof Error ? error.message : "Test failed" } });
+    }
+  }
+
+  return (
+    <Card>
+      <CardHeader
+        title="Connections"
+        subtitle={unsaved ? "You have unsaved changes: press Save first, tests use the saved values" : "Tested live with the saved values. A red dot means it is not working right now"}
+      />
+      <ul className="divide-y divide-border-subtle">
+        <ConnectionRow
+          title="OpenRouter · Algerian prices, verdicts, messages"
+          help="Runs the same model calls the app makes."
+          state={openrouter}
+          button="Test key"
+          onTest={() => run(setOpenrouter, api.settings.testOpenrouter)}
+        />
+        <ConnectionRow
+          title="Telegram · deal alerts and buttons"
+          help="Sends a test message to your chat."
+          state={telegram}
+          button="Send test"
+          onTest={() => run(setTelegram, async () => {
+            await api.settings.telegramTest();
+            return { ok: true, message: "Test message sent. Check Telegram." };
+          })}
+        />
+        <ConnectionRow
+          title="Leboncoin · scanning"
+          help="Fetches one real results page."
+          state={leboncoin}
+          button="Test fetch"
+          onTest={() => run(setLeboncoin, api.settings.testLeboncoin)}
+        />
+      </ul>
+    </Card>
+  );
+}
+
 export default function Settings() {
   const queryClient = useQueryClient();
   const { data, isLoading, isError } = useQuery({ queryKey: ["settings"], queryFn: api.settings.get });
@@ -67,6 +161,13 @@ export default function Settings() {
   useEffect(() => {
     if (data) setForm(data);
   }, [data]);
+
+  const ready = form !== null;
+  useEffect(() => {
+    if (ready && window.location.hash === "#customs") {
+      document.getElementById("customs")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [ready]);
 
   const saveMutation = useMutation({
     mutationFn: (payload: SettingsType) => {
@@ -109,12 +210,21 @@ export default function Settings() {
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
           <h1 className="text-xl font-semibold">Settings</h1>
-          <p className="text-xs text-ink-muted">Rates, customs, Porsay tariff, and LLM access.</p>
+          <p className="text-xs text-ink-muted">Connections first, then how profit is calculated. Press Save after changing anything.</p>
         </div>
-        <Button type="submit" variant="primary" size="sm" disabled={saveMutation.isPending}>
-          <Save className="h-4 w-4" /> {saveMutation.isPending ? "Saving…" : "Save settings"}
-        </Button>
+        <div className="flex items-center gap-2">
+          <Link to="/price-book">
+            <Button type="button" size="sm" variant="secondary">
+              <BookOpen className="h-4 w-4" /> Price book
+            </Button>
+          </Link>
+          <Button type="submit" variant="primary" size="sm" disabled={saveMutation.isPending}>
+            <Save className="h-4 w-4" /> {saveMutation.isPending ? "Saving…" : "Save settings"}
+          </Button>
+        </div>
       </div>
+
+      <ConnectionsCard unsaved={JSON.stringify(form) !== JSON.stringify(data)} />
 
       <Card>
         <CardHeader title="Currency" subtitle="Official rate is used for customs valuation; parallel rate for your real cost" />
@@ -125,8 +235,9 @@ export default function Settings() {
         </div>
       </Card>
 
+      <div id="customs" className="scroll-mt-4">
       <Card>
-        <CardHeader title="Customs" subtitle="Personal exemption and standard regime are both editable" />
+        <CardHeader title="Customs" subtitle="Every profit figure depends on this. Confirm which regime really applies to your resale imports" />
         <div className="grid gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3">
           <div>
             <Label>Default mode</Label>
@@ -144,6 +255,7 @@ export default function Settings() {
           <NumberField label="Fixed customs fee" value={form.customs_fixed_fee_eur} step={1} suffix="EUR" onChange={(value) => set("customs_fixed_fee_eur", value)} />
         </div>
       </Card>
+      </div>
 
       <Card>
         <CardHeader
@@ -154,7 +266,7 @@ export default function Settings() {
               type="button"
               size="sm"
               variant="secondary"
-              onClick={() => set("porsay_tariff", [...form.porsay_tariff, { up_to_kg: 0, price_eur: 0 }])}
+              onClick={() => set("porsay_tariff", [...form.porsay_tariff, { max_kg: 0, price_eur: 0 }])}
             >
               <Plus className="h-3.5 w-3.5" /> Tier
             </Button>
@@ -165,11 +277,11 @@ export default function Settings() {
             <div key={index} className="grid grid-cols-[1fr_1fr_auto] items-end gap-2">
               <NumberField
                 label={`Up to (kg) #${index + 1}`}
-                value={tier.up_to_kg}
+                value={tier.max_kg}
                 step={0.5}
                 onChange={(value) => {
                   const next = [...form.porsay_tariff];
-                  next[index] = { ...next[index], up_to_kg: value };
+                  next[index] = { ...next[index], max_kg: value };
                   set("porsay_tariff", next);
                 }}
               />
@@ -217,14 +329,15 @@ export default function Settings() {
       </Card>
 
       <Card>
-        <CardHeader title="LLM (optional)" subtitle="Only used for ambiguous extraction and negotiation wording" />
+        <CardHeader title="OpenRouter key and models" subtitle="One key powers Algerian prices, verdicts and negotiation messages. Without it, ads cannot be priced" />
         <div className="grid gap-4 p-4 sm:grid-cols-2">
           <div className="sm:col-span-2">
             <Switch checked={form.llm_enabled} onChange={(value) => set("llm_enabled", value)} label="Enable LLM features" />
           </div>
           <div>
-            <Label>Model</Label>
-            <Input value={form.llm_model} onChange={(event) => set("llm_model", event.target.value)} placeholder="openai/gpt-4o-mini" />
+            <Label>French message model</Label>
+            <Input value={form.llm_model} onChange={(event) => set("llm_model", event.target.value)} placeholder="anthropic/claude-haiku-5.5" />
+            <p className="mt-1 text-[11px] text-ink-faint">Only used when you press “Generate French message”.</p>
           </div>
           <div>
             <Label>API key</Label>
@@ -234,28 +347,36 @@ export default function Settings() {
               onChange={(event) => set("llm_api_key", event.target.value)}
               placeholder="sk-or-v1-…"
             />
-            <p className="mt-1 text-[11px] text-ink-faint">Stored in backend/.env / database; leave the masked value to keep it.</p>
+            <p className="mt-1 text-[11px] text-ink-faint">Create a normal key at openrouter.ai/keys (not a “Management key”: those cannot run models). Leave the masked value to keep the saved one.</p>
           </div>
         </div>
       </Card>
 
       <Card>
-        <CardHeader title="Algerian price lookup" subtitle="Gemini (via OpenRouter) searches the web for the local price, compared with the landed cost" />
+        <CardHeader
+          title="Which model does what"
+          subtitle="AI never runs during scans. It runs when you open Hot deals or Fresh ads, on the first 5 ads that still need it"
+        />
         <div className="grid gap-4 p-4 sm:grid-cols-2">
           <div className="sm:col-span-2">
-            <Switch checked={form.dz_price_enabled} onChange={(value) => set("dz_price_enabled", value)} label="Compare with Algerian prices (Gemini)" />
+            <Switch checked={form.dz_price_enabled} onChange={(value) => set("dz_price_enabled", value)} label="Look up Algerian prices" />
           </div>
           <div>
-            <Label>Model</Label>
-            <Input value={form.gemini_model} onChange={(event) => set("gemini_model", event.target.value)} placeholder="google/gemini-2.5-flash-lite" />
+            <Label>1. Fill specs + write the product description</Label>
+            <Input value={form.spec_model} onChange={(event) => set("spec_model", event.target.value)} placeholder="inclusionai/ling-3.2-flash:free" />
+            <p className="mt-1 text-[11px] text-ink-faint">A free model is fine. It also says why it set each spec.</p>
           </div>
           <div>
-            <Label>Verdict model (Claude Haiku)</Label>
+            <Label>2. Algerian price (web search)</Label>
+            <Input value={form.gemini_model} onChange={(event) => set("gemini_model", event.target.value)} placeholder="nvidia/nemotron-3-ultra-550b-a55b:free" />
+            <p className="mt-1 text-[11px] text-ink-faint">The model can be free, but OpenRouter charges about $0.007 per lookup for the web search itself.</p>
+          </div>
+          <div>
+            <Label>3. Verdict</Label>
             <Input value={form.verdict_model} onChange={(event) => set("verdict_model", event.target.value)} placeholder="anthropic/claude-haiku-5.5" />
+            <p className="mt-1 text-[11px] text-ink-faint">Writes the opinion from the computed numbers.</p>
           </div>
-          <p className="text-[11px] text-ink-faint sm:self-end">
-            Uses the OpenRouter API key above (or OPENROUTER_API_KEY in backend/.env) with web search enabled.
-          </p>
+          <p className="text-[11px] text-ink-faint sm:self-end">Uses the OpenRouter key above. Free models are rate limited; a failed step shows its reason on the results page.</p>
         </div>
       </Card>
 

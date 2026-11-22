@@ -68,6 +68,7 @@ def listing_card(listing: Listing, found_at: Optional[datetime] = None, is_new: 
         first_publication_date=listing.first_publication_date or "",
         specs=listing.specs or {},
         spec_confidence=listing.spec_confidence or {},
+        ai_description=listing.ai_description or "",
         deal_score=listing.deal_score,
         deal_label=listing.deal_label,
         match_score=listing.match_score,

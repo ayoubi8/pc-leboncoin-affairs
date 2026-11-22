@@ -79,6 +79,7 @@ export interface ListingCard {
   first_publication_date: string;
   specs: Record<string, any>;
   spec_confidence: Record<string, string>;
+  ai_description: string;
   deal_score: number | null;
   deal_label: string | null;
   match_score: number | null;
@@ -156,6 +157,8 @@ export interface ListingDetail {
   specs: Record<string, any>;
   spec_confidence: Record<string, string>;
   spec_method: Record<string, string>;
+  ai_description: string;
+  spec_notes: { model?: string; at?: string; evidence?: Record<string, string>; filled?: string[] };
   model_key: string;
   market_low_eur: number | null;
   market_median_eur: number | null;
@@ -223,6 +226,24 @@ export interface NegotiationOut {
   created_at: string | null;
 }
 
+export type EnrichStep = "specs" | "price" | "verdict";
+export interface EnrichItem {
+  id: number;
+  subject: string;
+  steps: Record<EnrichStep, "pending" | "running" | "done" | "skipped" | "error">;
+  notes: Partial<Record<EnrichStep, string>>;
+  verdict: string | null;
+  finished: boolean;
+}
+export interface EnrichStatus {
+  running: boolean;
+  items: EnrichItem[];
+  models: Partial<Record<EnrichStep, string>>;
+  error: string;
+  started_at: string | null;
+  finished_at: string | null;
+}
+
 export interface Settings {
   id: number;
   porsay_address: string;
@@ -232,6 +253,7 @@ export interface Settings {
   llm_provider: string;
   llm_api_key: string;
   llm_model: string;
+  spec_model: string;
   dz_price_enabled: boolean;
   gemini_model: string;
   verdict_model: string;
@@ -256,7 +278,7 @@ export interface Settings {
   personal_flat_rate: number;
   customs_fixed_fee_eur: number;
   transfer_fee_eur: number;
-  porsay_tariff: { up_to_kg: number; price_eur: number }[];
+  porsay_tariff: { max_kg: number; price_eur: number }[];
   porsay_per_kg_over: number;
   porsay_handling_eur: number;
   default_packaging_kg: number;
@@ -304,6 +326,60 @@ export interface SystemHealth {
     expected_interval_minutes: number | null;
   };
   dz_lookups_24h: { ok: number; total: number };
+}
+
+export interface LiveRun {
+  run_id: number;
+  search_id: number;
+  search_name: string;
+  trigger: string;
+  stage: string;
+  stage_label: string;
+  pct: number;
+  queries_done: number;
+  queries_total: number;
+  ads_found: number;
+  started_at: string;
+  elapsed_s: number;
+}
+
+export interface LiveEvent {
+  at: string;
+  kind: string;
+  level: "info" | "success" | "error";
+  message: string;
+  search_id?: number;
+}
+
+export interface LiveStatus {
+  now: string;
+  scheduler: "running" | "starting" | "cron";
+  uptime_s: number;
+  tick_every_s: number;
+  last_tick_s_ago: number | null;
+  auto_enabled: boolean;
+  running: LiveRun[];
+  next: { search_id: number; name: string; due_in_s: number } | null;
+  upcoming: { search_id: number; name: string; due_in_s: number }[];
+  last_run: { id: number; search_id: number | null; status: string; new_count: number; results_total: number; finished_at: string | null } | null;
+  telegram: { enabled: boolean; linked: boolean; last_poll_s_ago: number | null };
+  openrouter: "ok" | "missing" | "rejected" | "unknown";
+  ok: boolean;
+  problems: { kind: string; severity: "error" | "warning"; message: string }[];
+  events: LiveEvent[];
+}
+
+export interface ActNow {
+  items: ListingCard[];
+  unpriced_fresh: number;
+  max_age_hours: number;
+}
+
+export interface ConnectionTest {
+  ok: boolean;
+  message: string;
+  steps?: { name: string; ok: boolean; detail: string }[];
+  ads?: number;
 }
 
 export interface PriceBookRow {
@@ -400,6 +476,14 @@ export const api = {
     remove: (id: number) => request<void>(`/api/searches/${id}`, { method: "DELETE" }),
     run: (id: number, pages = 3, delay = 1.5) =>
       request<Run>(`/api/searches/${id}/run${qs({ pages, delay })}`, { method: "POST" }),
+    runAsync: (id: number, pages = 3, delay = 1.5) =>
+      request<{ started: boolean; already_running: boolean; finished?: boolean }>(
+        `/api/searches/${id}/run-async${qs({ pages, delay })}`,
+        { method: "POST" },
+      ),
+    enrich: (id: number, auto = true) =>
+      request<EnrichStatus & { started: boolean; reason: string }>(`/api/searches/${id}/enrich${qs({ auto })}`, { method: "POST" }),
+    enrichStatus: (id: number) => request<EnrichStatus>(`/api/searches/${id}/enrich`),
     runs: (id: number) => request<Run[]>(`/api/searches/${id}/runs`),
     results: (id: number, params: Record<string, unknown>) =>
       request<ResultsResponse>(`/api/searches/${id}/results${qs(params)}`),
@@ -458,6 +542,8 @@ export const api = {
 
   ops: {
     health: () => request<SystemHealth>("/api/health/system"),
+    live: () => request<LiveStatus>("/api/live"),
+    actNow: (limit = 6) => request<ActNow>(`/api/deals/act-now?limit=${limit}`),
     pipeline: () => request<PipelineBoard>("/api/pipeline"),
     setPipeline: (id: number, payload: { status: string; bought_price_eur?: number | null; sold_price_dzd?: number | null }) =>
       request<{ status: string }>(`/api/listings/${id}/pipeline`, { method: "PATCH", body: JSON.stringify(payload) }),
@@ -479,6 +565,8 @@ export const api = {
       request<Settings>("/api/settings", { method: "PUT", body: JSON.stringify(payload) }),
     telegramDetect: () => request<{ chat_id: string; title: string }>("/api/settings/telegram/detect", { method: "POST" }),
     telegramTest: () => request<{ ok: boolean }>("/api/settings/telegram/test", { method: "POST" }),
+    testOpenrouter: () => request<ConnectionTest>("/api/settings/test/openrouter", { method: "POST" }),
+    testLeboncoin: () => request<ConnectionTest>("/api/settings/test/leboncoin", { method: "POST" }),
   },
 };
 

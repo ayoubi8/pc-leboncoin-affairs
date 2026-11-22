@@ -68,7 +68,7 @@ def compute_health(db: Session, settings: Settings) -> dict[str, Any]:
     if key in ("missing", "rejected"):
         problems.append({
             "kind": f"key_{key}", "severity": "error",
-            "message": "No OpenRouter key saved." if key == "missing" else "OpenRouter rejected the API key (HTTP 401): no Algerian prices or verdicts until it is fixed.",
+            "message": "No OpenRouter key saved." if key == "missing" else "OpenRouter rejected the API key (HTTP 401): no Algerian prices or verdicts until it is fixed. Often this means a management key was pasted: create a normal key at openrouter.ai/keys.",
         })
     if streak >= BLOCKED_STREAK:
         problems.append({"kind": "scanner_blocked", "severity": "error", "message": f"The last {streak} scans were blocked or failed. Leboncoin may be blocking this IP."})

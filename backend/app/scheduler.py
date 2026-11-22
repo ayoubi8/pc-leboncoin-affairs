@@ -6,6 +6,7 @@ from datetime import datetime, timedelta, timezone
 
 from sqlalchemy import select
 
+from . import progress
 from .db import SessionLocal
 from .models import Listing, Search
 from .notify import poller, system
@@ -63,6 +64,7 @@ def housekeeping(db, settings, now: datetime) -> None:
 
 def poll_telegram() -> None:
     """Button presses and commands, polled often (a few seconds) so taps feel instant."""
+    progress.tick("telegram_poll")
     try:
         with SessionLocal() as db:
             from .api.helpers import get_settings
@@ -80,6 +82,7 @@ def check_due_searches(budget_seconds: float | None = None) -> dict:
         result["busy"] = True
         return result
     started = time.monotonic()
+    progress.tick("scan_tick")
     try:
         with SessionLocal() as db:
             from .api.helpers import get_settings

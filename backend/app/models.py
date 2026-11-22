@@ -53,9 +53,11 @@ class Settings(Base):
     llm_api_key = Column(String(500), default="")
     llm_model = Column(String(200), default="google/gemini-2.0-flash-lite-001")
 
-    # Algerian price lookup (Gemini via OpenRouter web search)
+    # Which model does which job (all through OpenRouter). AI never runs during scans: only on demand
+    # for the top ads of the Hot deals / Fresh ads views (see intelligence/enrich.py).
+    spec_model = Column(String(200), default="inclusionai/ling-3.2-flash:free")  # fills specs + product description
     dz_price_enabled = Column(Boolean, default=True)
-    gemini_model = Column(String(100), default="google/gemini-2.5-flash-lite")
+    gemini_model = Column(String(100), default="nvidia/nemotron-3-ultra-550b-a55b:free")  # Algerian price (web search)
     verdict_model = Column(String(100), default="anthropic/claude-haiku-5.5")
 
     # Telegram deal alerts
@@ -183,6 +185,8 @@ class Listing(Base):
     specs = Column(JSON, default=dict)
     spec_confidence = Column(JSON, default=dict)
     spec_method = Column(JSON, default=dict)
+    ai_description = Column(Text, default="")  # what the product is, written by the spec model
+    spec_notes = Column(JSON, default=dict)  # {"model", "at", "evidence": {field: why}}
     model_key = Column(String(160), index=True, default="")
 
     # intelligence (cached)

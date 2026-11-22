@@ -99,6 +99,7 @@ def build(
     tone: str = "friendly",
     offer_override: Optional[float] = None,
     custom_note: str = "",
+    use_ai: bool = True,
 ) -> dict[str, Any]:
     recs = recommendations(listing.price_eur, listing.market_median_eur, listing.deal_label)
     offer = offer_override if offer_override else recs["offer_eur"]
@@ -117,7 +118,7 @@ def build(
 
     message: Optional[str] = None
     model = "template"
-    if llm.available(settings):
+    if use_ai and llm.available(settings):
         generated = llm.negotiation_message(db, settings, context, tone)
         if generated:
             message = generated

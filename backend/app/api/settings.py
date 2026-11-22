@@ -42,6 +42,19 @@ def update_settings(payload: SettingsUpdate, db: Session = Depends(get_db)) -> S
         else:
             updates["telegram_bot_token"] = value
 
+    if isinstance(updates.get("porsay_tariff"), list):
+        # Keep only well-formed tiers with the keys the shipping maths reads (max_kg, price_eur).
+        tiers = []
+        for tier in updates["porsay_tariff"]:
+            if not isinstance(tier, dict):
+                continue
+            kg = tier.get("max_kg", tier.get("up_to_kg"))
+            price = tier.get("price_eur")
+            if kg is None or price is None:
+                continue
+            tiers.append({"max_kg": float(kg), "price_eur": float(price)})
+        updates["porsay_tariff"] = tiers
+
     for field, value in updates.items():
         setattr(settings, field, value)
 
@@ -69,3 +82,30 @@ def telegram_test(db: Session = Depends(get_db)) -> dict:
     if not result["ok"]:
         raise HTTPException(status_code=400, detail=result["error"])
     return {"ok": True}
+
+
+@router.post("/test/openrouter")
+def test_openrouter(db: Session = Depends(get_db)) -> dict:
+    """Run the real model calls with the saved key and say what is wrong."""
+    from ..intelligence import dz_market, keycheck
+
+    settings = get_settings(db)
+    return keycheck.check_openrouter(
+        dz_market.api_key(settings),
+        model=(settings.verdict_model or "anthropic/claude-haiku-5.5"),
+        search_model=(settings.gemini_model or "nvidia/nemotron-3-ultra-550b-a55b:free").replace(":online", ""),
+        spec_model=(settings.spec_model or "inclusionai/ling-3.2-flash:free"),
+    )
+
+
+@router.post("/test/leboncoin")
+def test_leboncoin() -> dict:
+    """Fetch one real results page the way a scan does."""
+    from ..scraping import leboncoin
+
+    result = leboncoin.fetch_page(leboncoin.make_session(), "ordinateur portable", page=1)
+    if result.blocked:
+        return {"ok": False, "message": "Leboncoin blocked the request. Try again later or set a proxy.", "ads": 0}
+    if result.error:
+        return {"ok": False, "message": f"Fetch failed: {result.error}", "ads": 0}
+    return {"ok": True, "message": f"Fetched a page with {len(result.ads)} ads.", "ads": len(result.ads)}

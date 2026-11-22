@@ -1,31 +1,39 @@
 import { useMemo, useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Copy, Download, Filter, MessageSquareText, Sparkles, X } from "lucide-react";
+import { ArrowLeft, Copy, Download, Filter, MessageSquareText, X } from "lucide-react";
 import { api, type NegotiationOut, type SortKey } from "../lib/api";
 import { eur } from "../lib/utils";
 import { toast } from "../lib/toast";
 import { Button, Card, CardHeader, EmptyState, Input, Label, Select, Skeleton } from "../components/ui";
 import ListingCard from "../components/ListingCard";
+import { RunningScan } from "../components/LivePanel";
+import AiPanel, { useEnrich } from "../components/AiPanel";
+import { useLive } from "../lib/useLive";
 
 const SORTS: { value: SortKey; label: string }[] = [
-  { value: "best_deal", label: "Best deal" },
-  { value: "price_asc", label: "Lowest price" },
-  { value: "price_desc", label: "Highest price" },
-  { value: "ram_desc", label: "Most RAM" },
-  { value: "match_desc", label: "Best hardware match" },
-  { value: "acquisition_desc", label: "Best acquisition" },
-  { value: "newest", label: "Newest" },
   { value: "opportunity", label: "Best opportunity (profit × freshness)" },
-  { value: "profit_desc", label: "Highest resale profit" },
-  { value: "landed_asc", label: "Lowest landed cost" },
+  { value: "newest", label: "Newest first" },
+  { value: "price_asc", label: "Lowest price" },
+  { value: "profit_desc", label: "Highest profit" },
+];
+
+type Preset = "hot" | "fresh" | "all";
+const PRESETS: { id: Preset; label: string; hint: string }[] = [
+  { id: "hot", label: "Hot deals", hint: "Good verdict, under 48 h, still online. Opening it runs the AI on the first 5 unpriced ads" },
+  { id: "fresh", label: "Fresh ads", hint: "Under 48 h, still online, matching your search. Opening it runs the AI on the first 5 unpriced ads" },
+  { id: "all", label: "Everything", hint: "Every stored ad, including old and sold" },
 ];
 
 export default function Results() {
   const { id } = useParams();
   const searchId = Number(id);
-  const [sort, setSort] = useState<SortKey>("best_deal");
-  const [showFilters, setShowFilters] = useState(true);
+  const [sort, setSort] = useState<SortKey>("opportunity");
+  const [preset, setPreset] = useState<Preset | null>("fresh");
+  const [showFilters, setShowFilters] = useState(false);
+  const queryClient = useQueryClient();
+  const { live } = useLive();
+  const scanning = live?.running.find((r) => r.search_id === Number(id));
   const [selected, setSelected] = useState<number[]>([]);
   const [tone, setTone] = useState<"friendly" | "direct" | "firm">("friendly");
   const [messages, setMessages] = useState<NegotiationOut[] | null>(null);
@@ -44,7 +52,7 @@ export default function Results() {
     good_only: false,
     relevant_only: true,
     show_gone: false,
-    max_age_hours: "",
+    max_age_hours: "48",
   });
 
   const params = useMemo(
@@ -87,7 +95,39 @@ export default function Results() {
     setSelected((current) => (current.includes(id) ? current.filter((value) => value !== id) : [...current, id]));
   }
 
+  const runNow = useMutation({
+    mutationFn: () => api.searches.runAsync(searchId),
+    onSuccess: (result) => {
+      queryClient.invalidateQueries({ queryKey: ["live"] });
+      if (result.already_running) toast("This search is already scanning", "info");
+      else toast("Scan started. Progress shows here and in the sidebar.", "info");
+    },
+    onError: (error) => toast(error instanceof Error ? error.message : "Could not start the scan", "error"),
+  });
+
+  function editFilters(update: (current: typeof filters) => typeof filters) {
+    setPreset(null);
+    setFilters(update);
+  }
+
+  function applyPreset(next: Preset) {
+    setPreset(next);
+    setSort(next === "all" ? "newest" : "opportunity");
+    setFilters((current) => ({
+      ...current,
+      good_only: next === "hot",
+      max_age_hours: next === "all" ? "" : "48",
+      relevant_only: next !== "all",
+      show_gone: next === "all",
+      new_only: false,
+      min_price: "", max_price: "", min_ram: "", min_storage: "", brand: "", condition: "", city: "",
+      hide_missing_specs: false,
+    }));
+  }
+
   const items = results.data?.items || [];
+  // AI only runs from these two views, on the first 5 ads that still need it (never during scans).
+  const enrich = useEnrich(searchId, preset === "hot" || preset === "fresh");
 
   return (
     <div className="space-y-4">
@@ -107,52 +147,59 @@ export default function Results() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button
-            size="sm"
-            variant={filters.new_only && filters.good_only ? "primary" : "secondary"}
-            onClick={() => {
-              const on = !(filters.new_only && filters.good_only);
-              setFilters((current) => ({ ...current, new_only: on, good_only: on }));
-              setSort("best_deal");
-            }}
-          >
-            <Sparkles className="h-4 w-4" /> Best new deals
-          </Button>
-          <Button size="sm" variant="secondary" onClick={() => setShowFilters((value) => !value)}>
-            <Filter className="h-4 w-4" /> Filters
-          </Button>
           <a href={api.searches.exportUrl(searchId)}>
             <Button size="sm" variant="secondary">
               <Download className="h-4 w-4" /> CSV
             </Button>
           </a>
-          <Button size="sm" variant="primary" onClick={() => api.searches.run(searchId).then(() => results.refetch())}>
-            Run now
+          <Button size="sm" variant="primary" disabled={!!scanning} onClick={() => runNow.mutate()}>
+            {scanning ? "Scanning…" : "Run now"}
+          </Button>
+        </div>
+      </div>
+
+      {scanning ? (
+        <Card>
+          <div className="p-3">
+            <RunningScan run={scanning} />
+          </div>
+        </Card>
+      ) : null}
+
+      <AiPanel enrich={enrich} />
+
+      <div className="flex flex-wrap items-center gap-2">
+        {PRESETS.map((item) => (
+          <Button key={item.id} size="sm" variant={preset === item.id ? "primary" : "secondary"} title={item.hint} onClick={() => applyPreset(item.id)}>
+            {item.label}
+          </Button>
+        ))}
+        <div className="ml-auto flex items-center gap-2">
+          <Label htmlFor="sort" className="mb-0">Sort</Label>
+          <Select id="sort" value={sort} onChange={(event) => setSort(event.target.value as SortKey)} className="h-8 w-auto py-1 text-xs">
+            {SORTS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </Select>
+          <Button size="sm" variant="secondary" onClick={() => setShowFilters((value) => !value)}>
+            <Filter className="h-4 w-4" /> {showFilters ? "Fewer filters" : "More filters"}
           </Button>
         </div>
       </div>
 
       {showFilters ? (
         <Card>
-          <CardHeader title="Filter & sort" subtitle="Filters apply to the stored results of this search" />
+          <CardHeader title="More filters" subtitle="Applied to the stored ads of this search. Changing one clears the preset" />
           <div className="grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-4">
-            <div>
-              <Label htmlFor="sort">Sort</Label>
-              <Select id="sort" value={sort} onChange={(event) => setSort(event.target.value as SortKey)}>
-                {SORTS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </Select>
-            </div>
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <Label>Price min</Label>
                 <Input
                   type="number"
                   value={filters.min_price}
-                  onChange={(event) => setFilters((current) => ({ ...current, min_price: event.target.value }))}
+                  onChange={(event) => editFilters((current) => ({ ...current, min_price: event.target.value }))}
                   placeholder="€"
                 />
               </div>
@@ -161,7 +208,7 @@ export default function Results() {
                 <Input
                   type="number"
                   value={filters.max_price}
-                  onChange={(event) => setFilters((current) => ({ ...current, max_price: event.target.value }))}
+                  onChange={(event) => editFilters((current) => ({ ...current, max_price: event.target.value }))}
                   placeholder="€"
                 />
               </div>
@@ -172,7 +219,7 @@ export default function Results() {
                 <Input
                   type="number"
                   value={filters.min_ram}
-                  onChange={(event) => setFilters((current) => ({ ...current, min_ram: event.target.value }))}
+                  onChange={(event) => editFilters((current) => ({ ...current, min_ram: event.target.value }))}
                   placeholder="GB"
                 />
               </div>
@@ -181,7 +228,7 @@ export default function Results() {
                 <Input
                   type="number"
                   value={filters.min_storage}
-                  onChange={(event) => setFilters((current) => ({ ...current, min_storage: event.target.value }))}
+                  onChange={(event) => editFilters((current) => ({ ...current, min_storage: event.target.value }))}
                   placeholder="GB"
                 />
               </div>
@@ -191,7 +238,7 @@ export default function Results() {
                 <Label>Brand</Label>
                 <Input
                   value={filters.brand}
-                  onChange={(event) => setFilters((current) => ({ ...current, brand: event.target.value }))}
+                  onChange={(event) => editFilters((current) => ({ ...current, brand: event.target.value }))}
                   placeholder="Lenovo"
                 />
               </div>
@@ -199,7 +246,7 @@ export default function Results() {
                 <Label>City</Label>
                 <Input
                   value={filters.city}
-                  onChange={(event) => setFilters((current) => ({ ...current, city: event.target.value }))}
+                  onChange={(event) => editFilters((current) => ({ ...current, city: event.target.value }))}
                   placeholder="Paris"
                 />
               </div>
@@ -208,7 +255,7 @@ export default function Results() {
               <Label>Condition</Label>
               <Select
                 value={filters.condition}
-                onChange={(event) => setFilters((current) => ({ ...current, condition: event.target.value }))}
+                onChange={(event) => editFilters((current) => ({ ...current, condition: event.target.value }))}
               >
                 <option value="">Any</option>
                 <option value="new">New</option>
@@ -224,7 +271,7 @@ export default function Results() {
                 type="checkbox"
                 className="h-4 w-4 accent-primary"
                 checked={filters.hide_missing_specs}
-                onChange={(event) => setFilters((current) => ({ ...current, hide_missing_specs: event.target.checked }))}
+                onChange={(event) => editFilters((current) => ({ ...current, hide_missing_specs: event.target.checked }))}
               />
               Hide listings without CPU
             </label>
@@ -233,7 +280,7 @@ export default function Results() {
                 type="checkbox"
                 className="h-4 w-4 accent-primary"
                 checked={filters.good_only}
-                onChange={(event) => setFilters((current) => ({ ...current, good_only: event.target.checked }))}
+                onChange={(event) => editFilters((current) => ({ ...current, good_only: event.target.checked }))}
               />
               Good deals only
             </label>
@@ -242,7 +289,7 @@ export default function Results() {
                 type="checkbox"
                 className="h-4 w-4 accent-primary"
                 checked={filters.relevant_only}
-                onChange={(event) => setFilters((current) => ({ ...current, relevant_only: event.target.checked }))}
+                onChange={(event) => editFilters((current) => ({ ...current, relevant_only: event.target.checked }))}
               />
               Only ads matching my search (CPU/GPU/RAM/storage)
             </label>
@@ -251,7 +298,7 @@ export default function Results() {
                 type="checkbox"
                 className="h-4 w-4 accent-primary"
                 checked={filters.show_gone}
-                onChange={(event) => setFilters((current) => ({ ...current, show_gone: event.target.checked }))}
+                onChange={(event) => editFilters((current) => ({ ...current, show_gone: event.target.checked }))}
               />
               Show sold / gone ads
             </label>
@@ -259,7 +306,7 @@ export default function Results() {
               <span className="pb-2 text-xs text-ink-label">Max age</span>
               <Select
                 value={filters.max_age_hours}
-                onChange={(event) => setFilters((current) => ({ ...current, max_age_hours: event.target.value }))}
+                onChange={(event) => editFilters((current) => ({ ...current, max_age_hours: event.target.value }))}
                 className="h-8 w-28 py-1 text-xs"
               >
                 <option value="">Any</option>
@@ -275,14 +322,14 @@ export default function Results() {
                   type="checkbox"
                   className="h-4 w-4 accent-primary"
                   checked={filters.new_only}
-                  onChange={(event) => setFilters((current) => ({ ...current, new_only: event.target.checked }))}
+                  onChange={(event) => editFilters((current) => ({ ...current, new_only: event.target.checked }))}
                 />
                 New only
               </label>
               <Select
                 value={filters.new_within}
                 disabled={!filters.new_only}
-                onChange={(event) => setFilters((current) => ({ ...current, new_within: event.target.value }))}
+                onChange={(event) => editFilters((current) => ({ ...current, new_within: event.target.value }))}
                 className="h-8 w-32 py-1 text-xs"
               >
                 <option value="last_run">Last check</option>

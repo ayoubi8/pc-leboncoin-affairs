@@ -18,8 +18,9 @@ class SettingsOut(ORMModel):
     llm_provider: str = "openrouter"
     llm_api_key: str = ""
     llm_model: str = ""
+    spec_model: str = "inclusionai/ling-3.2-flash:free"
     dz_price_enabled: bool = True
-    gemini_model: str = "google/gemini-2.5-flash-lite"
+    gemini_model: str = "nvidia/nemotron-3-ultra-550b-a55b:free"
     verdict_model: str = "anthropic/claude-haiku-5.5"
     telegram_enabled: bool = False
     telegram_bot_token: str = ""
@@ -65,6 +66,7 @@ class SettingsUpdate(BaseModel):
     llm_provider: Optional[str] = None
     llm_api_key: Optional[str] = None
     llm_model: Optional[str] = None
+    spec_model: Optional[str] = None
     dz_price_enabled: Optional[bool] = None
     gemini_model: Optional[str] = None
     verdict_model: Optional[str] = None
@@ -239,6 +241,8 @@ class ListingOut(ORMModel):
     specs: dict[str, Any] = Field(default_factory=dict)
     spec_confidence: dict[str, Any] = Field(default_factory=dict)
     spec_method: dict[str, Any] = Field(default_factory=dict)
+    ai_description: str = ""
+    spec_notes: dict[str, Any] = Field(default_factory=dict)
     model_key: str = ""
     market_low_eur: Optional[float] = None
     market_median_eur: Optional[float] = None
@@ -289,6 +293,7 @@ class ListingCard(BaseModel):
     first_publication_date: str = ""
     specs: dict[str, Any] = Field(default_factory=dict)
     spec_confidence: dict[str, Any] = Field(default_factory=dict)
+    ai_description: str = ""
     deal_score: Optional[float] = None
     deal_label: Optional[str] = None
     match_score: Optional[float] = None
