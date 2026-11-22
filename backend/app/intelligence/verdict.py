@@ -194,7 +194,7 @@ def _ask_model(settings: Settings, listing: Listing, numbers: dict[str, Any]) ->
         "model": model,
         "messages": [{"role": "system", "content": SYSTEM}, {"role": "user", "content": user}],
         "temperature": 0.2,
-        "max_tokens": 600,
+        "max_tokens": 1500,  # 600 was too tight: a longer opinion got cut off mid-JSON and counted as "no answer"
     }
     headers = {
         "Authorization": f"Bearer {dz_market.api_key(settings)}",
