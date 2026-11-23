@@ -130,7 +130,7 @@ def apply_dz_comparison(
     force: bool = False,
     allow_call: bool = True,
 ) -> None:
-    """Landed cost (price + shipping + customs) in DZD vs. the Algerian market price.
+    """Landed cost (price + shipping) in DZD vs. the Algerian market price.
 
     When a Gemini lookup succeeds, the deal score/label are driven by that comparison;
     otherwise they stay on the European-median score computed earlier.

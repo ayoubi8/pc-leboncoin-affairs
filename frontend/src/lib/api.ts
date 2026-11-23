@@ -120,7 +120,6 @@ export interface LandedCost {
   kind: string;
   price_eur: number;
   shipping: Record<string, any>;
-  customs: Record<string, any>;
   transfer_fee_eur: number;
   total_eur: number;
   total_dzd: number;
@@ -269,14 +268,6 @@ export interface Settings {
   resale_haircut_pct: number;
   avg_discount_pct: number;
   alert_pickup_only: boolean;
-  customs_mode: string;
-  duty_rate: number;
-  vat_rate: number;
-  solidarity_rate: number;
-  personal_exemption_dzd: number;
-  personal_flat_threshold_dzd: number;
-  personal_flat_rate: number;
-  customs_fixed_fee_eur: number;
   transfer_fee_eur: number;
   porsay_tariff: { max_kg: number; price_eur: number }[];
   porsay_per_kg_over: number;
@@ -589,7 +580,6 @@ export interface Verdict {
     buy_price_eur: number;
     negotiation_saving_eur: number;
     shipping_eur: number;
-    customs_eur: number;
     transfer_fee_eur: number;
     total_cost_eur: number;
     total_cost_dzd: number;

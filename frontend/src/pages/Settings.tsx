@@ -162,13 +162,6 @@ export default function Settings() {
     if (data) setForm(data);
   }, [data]);
 
-  const ready = form !== null;
-  useEffect(() => {
-    if (ready && window.location.hash === "#customs") {
-      document.getElementById("customs")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }, [ready]);
-
   const saveMutation = useMutation({
     mutationFn: (payload: SettingsType) => {
       const { id: _id, updated_at: _updatedAt, ...rest } = payload;
@@ -227,35 +220,12 @@ export default function Settings() {
       <ConnectionsCard unsaved={JSON.stringify(form) !== JSON.stringify(data)} />
 
       <Card>
-        <CardHeader title="Currency" subtitle="Official rate is used for customs valuation; parallel rate for your real cost" />
-        <div className="grid gap-4 p-4 sm:grid-cols-3">
-          <NumberField label="Official EUR → DZD" value={form.eur_dzd_official} step={0.1} onChange={(value) => set("eur_dzd_official", value)} />
+        <CardHeader title="Currency" subtitle="The rate you really pay for euros. No customs is counted: parcels are received as gifts" />
+        <div className="grid gap-4 p-4 sm:grid-cols-2">
           <NumberField label="Parallel EUR → DZD" value={form.eur_dzd_parallel} step={0.1} onChange={(value) => set("eur_dzd_parallel", value)} />
           <NumberField label="Bank transfer fee" value={form.transfer_fee_eur} step={1} suffix="EUR" onChange={(value) => set("transfer_fee_eur", value)} />
         </div>
       </Card>
-
-      <div id="customs" className="scroll-mt-4">
-      <Card>
-        <CardHeader title="Customs" subtitle="Every profit figure depends on this. Confirm which regime really applies to your resale imports" />
-        <div className="grid gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3">
-          <div>
-            <Label>Default mode</Label>
-            <Select value={form.customs_mode} onChange={(event) => set("customs_mode", event.target.value)}>
-              <option value="personal">Personal (occasional)</option>
-              <option value="standard">Standard (commercial)</option>
-            </Select>
-          </div>
-          <NumberField label="Duty rate" value={form.duty_rate} step={0.01} onChange={(value) => set("duty_rate", value)} />
-          <NumberField label="Solidarity rate" value={form.solidarity_rate} step={0.01} onChange={(value) => set("solidarity_rate", value)} />
-          <NumberField label="VAT rate" value={form.vat_rate} step={0.01} onChange={(value) => set("vat_rate", value)} />
-          <NumberField label="Personal exemption" value={form.personal_exemption_dzd} step={1000} suffix="DZD" onChange={(value) => set("personal_exemption_dzd", value)} />
-          <NumberField label="Flat-rate ceiling" value={form.personal_flat_threshold_dzd} step={1000} suffix="DZD" onChange={(value) => set("personal_flat_threshold_dzd", value)} />
-          <NumberField label="Flat rate" value={form.personal_flat_rate} step={0.01} onChange={(value) => set("personal_flat_rate", value)} />
-          <NumberField label="Fixed customs fee" value={form.customs_fixed_fee_eur} step={1} suffix="EUR" onChange={(value) => set("customs_fixed_fee_eur", value)} />
-        </div>
-      </Card>
-      </div>
 
       <Card>
         <CardHeader

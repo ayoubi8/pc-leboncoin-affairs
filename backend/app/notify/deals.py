@@ -95,7 +95,7 @@ def format_message(
         f"💶 <b>Leboncoin:</b> {_eur(n['ask_price_eur'])}"
         + (f" (was {_eur(previous_price)})" if previous_price else "")
         + f" → expected buy ~{_eur(n['buy_price_eur'])}",
-        f"🚚 <b>Landed:</b> {_eur(n['total_cost_eur'])} ({_dzd(n['total_cost_dzd'])}) = shipping {_eur(n['shipping_eur'])} + customs {_eur(n['customs_eur'])}",
+        f"🚚 <b>Landed:</b> {_eur(n['total_cost_eur'])} ({_dzd(n['total_cost_dzd'])}) = price + shipping {_eur(n['shipping_eur'])}",
         f"🇩🇿 <b>Algeria:</b> {_dzd(n['dz_median_dzd'])} ≈ {_eur(n['dz_median_eur'])} asking"
         f" → {_eur(n['dz_net_eur'])} after {n['resale_haircut_pct']:.0f}% haircut ({_esc(n['dz_confidence'] or '?')} confidence)",
         f"📈 <b>Profit:</b> {_signed(n['profit_eur'])} ({n['margin_pct']}%) expected · {_signed(n['profit_ask_eur'])} at asking price",

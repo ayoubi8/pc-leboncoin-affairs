@@ -278,17 +278,14 @@ def test_landed_cost_of_a_300_eur_gpu_matches_a_hand_calculation():
     from app.logistics import landed
 
     settings = Settings(
-        eur_dzd_parallel=280, eur_dzd_official=151.2, customs_mode="personal", personal_exemption_dzd=50_000,
-        personal_flat_threshold_dzd=100_000, personal_flat_rate=0.30, customs_fixed_fee_eur=0, transfer_fee_eur=0,
+        eur_dzd_parallel=280, eur_dzd_official=151.2, transfer_fee_eur=0,
         porsay_handling_eur=0, porsay_per_kg_over=5.7, default_packaging_kg=0.3, gpu_weight_kg=1.8, gpu_box_cm=[35, 20, 10],
         porsay_tariff=[{"max_kg": 2, "price_eur": 27.25}, {"max_kg": 5, "price_eur": 41.87}],
     )
     out = landed.compute(settings, 300, kind="gpu")
     assert out["shipping"]["chargeable_kg"] == 2.1 and out["shipping"]["total_eur"] == 41.87
-    # (300 + 41.87) x 151.2 = 51,690.74 DA declared; 30% = 15,507.22 DA; / 280 = 55.38 EUR
-    assert round(out["customs"]["tax_dzd"], 2) == 15507.22 and out["customs"]["total_eur"] == 55.38
-    assert out["total_eur"] == 397.25
-    assert landed.compute(settings, 288, kind="gpu")["customs"]["total_eur"] == 0  # under 50,000 DA declared
+    assert out["total_eur"] == 341.87  # price + shipping, no customs
+    assert "customs" not in out and all(row["key"] != "customs" for row in out["breakdown"])
 
 
 def test_one_price_request_per_product_then_maths_for_every_ad(monkeypatch):
@@ -355,8 +352,8 @@ def test_only_specific_products_share_a_price():
 def test_price_far_below_the_product_value_gets_no_verdict():
     from app.intelligence import verdict
 
-    settings = Settings(id=1, eur_dzd_parallel=280, eur_dzd_official=151.2, personal_exemption_dzd=50000, personal_flat_threshold_dzd=100000,
-                        personal_flat_rate=0.3, customs_mode="personal", default_packaging_kg=0.3, gpu_weight_kg=1.8, laptop_weight_kg=2.5,
+    settings = Settings(id=1, eur_dzd_parallel=280, eur_dzd_official=151.2,
+                        default_packaging_kg=0.3, gpu_weight_kg=1.8, laptop_weight_kg=2.5,
                         gpu_box_cm=[35, 20, 10], laptop_box_cm=[40, 30, 8], porsay_tariff=[{"max_kg": 5, "price_eur": 41.87}])
     ad = Listing(subject="Pc acer", price_eur=1, dz_price_median_dzd=86000, dz_confidence="high", specs={})
     assert verdict.apply_math(settings, ad) is False

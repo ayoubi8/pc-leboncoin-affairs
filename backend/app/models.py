@@ -77,14 +77,6 @@ class Settings(Base):
     avg_discount_pct = Column(Float, default=6.0)  # discount sellers really accept (learned from outcomes)
     alert_pickup_only = Column(Boolean, default=False)  # also alert on ads that cannot be shipped
 
-    customs_mode = Column(String(30), default="personal")
-    duty_rate = Column(Float, default=0.05)
-    vat_rate = Column(Float, default=0.19)
-    solidarity_rate = Column(Float, default=0.03)
-    personal_exemption_dzd = Column(Float, default=50000.0)
-    personal_flat_threshold_dzd = Column(Float, default=100000.0)
-    personal_flat_rate = Column(Float, default=0.30)
-    customs_fixed_fee_eur = Column(Float, default=0.0)
     transfer_fee_eur = Column(Float, default=0.0)
 
     porsay_tariff = Column(JSON, default=lambda: list(DEFAULT_PORSAY_TARIFF))

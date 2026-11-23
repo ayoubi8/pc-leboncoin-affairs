@@ -34,14 +34,6 @@ class SettingsOut(ORMModel):
     resale_haircut_pct: float = 10.0
     avg_discount_pct: float = 6.0
     alert_pickup_only: bool = False
-    customs_mode: str = "personal"
-    duty_rate: float = 0.05
-    vat_rate: float = 0.19
-    solidarity_rate: float = 0.03
-    personal_exemption_dzd: float = 50000
-    personal_flat_threshold_dzd: float = 100000
-    personal_flat_rate: float = 0.30
-    customs_fixed_fee_eur: float = 0.0
     transfer_fee_eur: float = 0.0
     porsay_tariff: list[dict[str, Any]] = Field(default_factory=list)
     porsay_per_kg_over: float = 8.0
@@ -81,14 +73,6 @@ class SettingsUpdate(BaseModel):
     resale_haircut_pct: Optional[float] = None
     avg_discount_pct: Optional[float] = None
     alert_pickup_only: Optional[bool] = None
-    customs_mode: Optional[str] = None
-    duty_rate: Optional[float] = None
-    vat_rate: Optional[float] = None
-    solidarity_rate: Optional[float] = None
-    personal_exemption_dzd: Optional[float] = None
-    personal_flat_threshold_dzd: Optional[float] = None
-    personal_flat_rate: Optional[float] = None
-    customs_fixed_fee_eur: Optional[float] = None
     transfer_fee_eur: Optional[float] = None
     porsay_tariff: Optional[list[dict[str, Any]]] = None
     porsay_per_kg_over: Optional[float] = None

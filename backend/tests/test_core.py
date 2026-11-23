@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import os
 from pathlib import Path
@@ -10,7 +10,7 @@ from fastapi.testclient import TestClient
 
 from app.db import SessionLocal, init_db
 from app.extraction import specs as specs_mod
-from app.logistics import customs, landed, porsay
+from app.logistics import landed, porsay
 from app.main import app
 from app.models import Listing, Settings
 
@@ -71,34 +71,12 @@ def test_porsay_volumetric(settings):
     assert result["total_eur"] > 0
 
 
-def test_customs_far_below_exemption(settings):
-    result = customs.compute(settings, goods_eur=150, shipping_eur=30, mode="personal")
-    assert result["mode"] == "personal"
-    assert result["total_eur"] == 0
-
-
-def test_customs_flat_rate(settings):
-    # CIF > 50,000 DZD but â‰¤ 100,000 DZD â†’ 30% flat
-    result = customs.compute(settings, goods_eur=400, shipping_eur=50, mode="personal")
-    assert result["mode"] == "personal"
-    assert result["flat_eur"] > 0
-    # 450 EUR x 151.2 = 68,040 DA declared; 30% = 20,412 DA to pay; bought at 280 DA/EUR = 72.90 EUR
-    assert result["tax_dzd"] == pytest.approx(20412, rel=1e-3)
-    assert result["total_eur"] == pytest.approx(72.9, rel=1e-3)
-
-
-def test_customs_standard(settings):
-    result = customs.compute(settings, goods_eur=1000, shipping_eur=100, mode="standard")
-    assert result["mode"] == "standard"
-    assert result["duty_eur"] == pytest.approx(55 * 151.2 / 280, rel=1e-3)  # assessed officially, paid in dinars
-    assert result["total_eur"] > result["duty_eur"]
-
 
 def test_landed_cost(settings):
     result = landed.compute(settings, 500, kind="laptop")
     assert result["total_eur"] > 500
     assert result["total_dzd"] == pytest.approx(result["total_eur"] * settings.eur_dzd_parallel, rel=1e-3)
-    assert len(result["breakdown"]) == 5
+    assert len(result["breakdown"]) == 4
 
 
 def test_api_health(client):

@@ -1,7 +1,7 @@
 """Honest AI verdict on a listing: resell margin in Algeria after all costs.
 
 All the arithmetic is done here in Python (buy price after negotiation + shipping +
-customs + fees, vs. the Algerian price found by Gemini). A small, cheap model
+fees, vs. the Algerian price found by Gemini). A small, cheap model
 (Claude Haiku on OpenRouter) only writes the opinion from those numbers, so it
 cannot invent figures. If the model is unavailable a rule-based verdict is returned.
 """
@@ -33,7 +33,7 @@ You receive pre-computed numbers. NEVER recompute or invent figures; quote only 
 
 How the money works:
 - Buy price = asking price minus the discount sellers typically accept (assumed_discount_pct); profit_ask_eur is the worst case if the seller refuses to negotiate.
-- Total cost = buy price + shipping France->Algeria + customs/taxes + transfer fees. Costs depend on the weight/box size.
+- Total cost = buy price + shipping France->Algeria + transfer fees. There is no customs cost: parcels are received as gifts. Costs depend on the weight/box size.
 - Algerian resale price = the median ASKING price found online for the same config in DZD, converted to EUR at the parallel rate (1 EUR = rate DZD), then reduced by resale_haircut_pct to a realistic selling price (dz_net_eur).
 - Profit = dz_net_eur - total cost (EUR). Margin = profit / total cost. If profit_ask_eur is negative, say the deal only works if the seller negotiates.
 
@@ -43,7 +43,7 @@ Definition of a good deal (margin on total cost):
 - fair: margin >= {FAIR_PCT:.0f}% (thin; only worth it if little effort/risk)
 - skip: below {FAIR_PCT:.0f}% or negative, or the ad looks risky (parts/faulty, missing specs, very low-confidence Algerian price)
 
-Be honest, not salesy. Lower the verdict if the Algerian price confidence is low, samples are few, specs are missing/uncertain, or the condition is bad. Mention the real risks (fake ad, missing charger, battery, customs surprises).
+Be honest, not salesy. Lower the verdict if the Algerian price confidence is low, samples are few, specs are missing/uncertain, or the condition is bad. Mention the real risks (fake ad, missing charger, battery).
 
 Answer with ONLY this JSON (no markdown):
 {{"verdict": "great"|"good"|"fair"|"skip", "headline": "max 12 words", "opinion": "3-5 short sentences, plain English", "risks": ["short risk", ...], "max_buy_price_eur": number}}
@@ -172,7 +172,6 @@ def compute_numbers(
         "negotiation_saving_eur": round(ask - buy, 2),
         "assumed_discount_pct": round(discount, 1),
         "shipping_eur": cost["shipping"]["total_eur"],
-        "customs_eur": cost["customs"]["total_eur"],
         "transfer_fee_eur": cost["transfer_fee_eur"],
         "total_cost_eur": cost["total_eur"],
         "total_cost_dzd": round(cost["total_eur"] * rate),

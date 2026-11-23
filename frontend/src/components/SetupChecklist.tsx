@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Check } from "lucide-react";
@@ -7,23 +6,12 @@ import { cn } from "../lib/utils";
 import { useLive } from "../lib/useLive";
 import { Button, Card, CardHeader } from "./ui";
 
-const CUSTOMS_KEY = "df_customs_confirmed";
-
-function readFlag(): boolean {
-  try {
-    return localStorage.getItem(CUSTOMS_KEY) === "1";
-  } catch {
-    return false;
-  }
-}
-
-/** The four things that must be true before the system can find and judge deals.
+/** The three things that must be true before the system can find and judge deals.
  *  Disappears by itself once everything is done. */
 export default function SetupChecklist() {
   const { live } = useLive();
   const settings = useQuery({ queryKey: ["settings"], queryFn: api.settings.get });
   const searches = useQuery({ queryKey: ["searches"], queryFn: api.searches.list });
-  const [customs, setCustoms] = useState(readFlag);
 
   if (!live || !settings.data || !searches.data) return null;
 
@@ -41,14 +29,6 @@ export default function SetupChecklist() {
       why: "Alerts and the copy-paste message reach your phone.",
       to: "/settings",
       action: "Open Settings",
-    },
-    {
-      done: customs,
-      title: "Confirm your customs regime",
-      why: "A €240 laptop and a €300 one can differ by €100+ in costs depending on this.",
-      to: "/settings#customs",
-      action: "Check it",
-      confirm: true,
     },
     {
       done: searches.data.length > 0,
@@ -82,22 +62,6 @@ export default function SetupChecklist() {
             </div>
             {!step.done ? (
               <div className="flex items-center gap-2">
-                {step.confirm ? (
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => {
-                      try {
-                        localStorage.setItem(CUSTOMS_KEY, "1");
-                      } catch {
-                        /* private mode: the step simply stays open */
-                      }
-                      setCustoms(true);
-                    }}
-                  >
-                    I checked it
-                  </Button>
-                ) : null}
                 <Link to={step.to}>
                   <Button size="sm" variant="secondary">
                     {step.action}

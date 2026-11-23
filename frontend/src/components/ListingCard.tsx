@@ -99,7 +99,7 @@ export default function ListingCard({
               "rounded-md border px-2 py-1.5 text-xs",
               card.profit_ask_eur > 0 ? "border-success-border bg-success-bg text-success-soft-ink" : "border-danger-border bg-danger-bg text-danger-ink",
             )}
-            title="Resale profit if you pay the asking price, after shipping, customs and a resale haircut"
+            title="Resale profit if you pay the asking price, after shipping and a resale haircut"
           >
             <b className="text-sm">
               {card.profit_ask_eur >= 0 ? "+" : "−"}

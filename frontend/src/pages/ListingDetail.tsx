@@ -452,7 +452,7 @@ export default function ListingDetail() {
           <Card>
             <CardHeader
               title="Honest verdict"
-              subtitle="Resale margin in Algeria after negotiation, shipping and customs"
+              subtitle="Resale margin in Algeria after negotiation and shipping"
               action={
                 <Button size="sm" variant="primary" onClick={() => verdictMutation.mutate()} disabled={verdictMutation.isPending}>
                   <Sparkles className="h-4 w-4" />
@@ -472,7 +472,7 @@ export default function ListingDetail() {
                       ["Asking price", eur(listing.ai_verdict.numbers.ask_price_eur)],
                       ["Buy price (after negotiation)", `${eur(listing.ai_verdict.numbers.buy_price_eur)} (−${eur(listing.ai_verdict.numbers.negotiation_saving_eur)})`],
                       ["Shipping", eur(listing.ai_verdict.numbers.shipping_eur, 2)],
-                      ["Customs + fees", eur(listing.ai_verdict.numbers.customs_eur + listing.ai_verdict.numbers.transfer_fee_eur, 2)],
+                      ["Transfer fee", eur(listing.ai_verdict.numbers.transfer_fee_eur, 2)],
                       ["Total cost", `${eur(listing.ai_verdict.numbers.total_cost_eur, 2)} · ${dzd(listing.ai_verdict.numbers.total_cost_dzd)}`],
                       [`Algerian asking price (÷${listing.ai_verdict.numbers.rate})`, `${eur(listing.ai_verdict.numbers.dz_median_eur, 2)} · ${dzd(listing.ai_verdict.numbers.dz_median_dzd)}`],
                       ...(listing.ai_verdict.numbers.dz_net_eur !== undefined
@@ -516,7 +516,7 @@ export default function ListingDetail() {
                 </>
               ) : (
                 <p className="text-xs text-ink-muted">
-                  Click Generate to get an honest opinion: buy price after negotiation, shipping, customs, and what it sells for in Algeria.
+                  Click Generate to get an honest opinion: buy price after negotiation, shipping, and what it sells for in Algeria.
                 </p>
               )}
             </div>
