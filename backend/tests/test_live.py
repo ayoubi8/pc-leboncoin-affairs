@@ -346,7 +346,8 @@ def test_only_specific_products_share_a_price():
 
     assert p.is_specific("gpu|rtx 3070|") and p.is_specific("laptop|i5g13|16|512|igpu")
     assert not p.is_specific("laptop|?|32|?|igpu")  # could be two RAM sticks
-    assert not p.is_specific("laptop|i5g13|?|512|igpu") and not p.is_specific("title|pc acer")
+    assert p.is_specific("laptop|i5g13|?|?|igpu") and p.is_specific("model|latitude 5440")
+    assert not p.is_specific("title|pc acer")
 
 
 def test_price_far_below_the_product_value_gets_no_verdict():
@@ -358,3 +359,58 @@ def test_price_far_below_the_product_value_gets_no_verdict():
     ad = Listing(subject="Pc acer", price_eur=1, dz_price_median_dzd=86000, dz_confidence="high", specs={})
     assert verdict.apply_math(settings, ad) is False
     assert ad.profit_ask_eur is None and ad.dz_price_median_dzd is None and "suspiciously" in ad.risk_flags[0]
+
+
+def test_cpu_generations_are_read_correctly():
+    from app.intelligence import pricebook as p
+
+    for cpu, tier in (("i5-1335U", "i5g13"), ("i5-1235U", "i5g12"), ("i7-1165G7", "i7g11"), ("i5-1035G1", "i5g10"),
+                      ("i5-13420H", "i5g13"), ("i5-8250U", "i5g8"), ("i5 13th Gen", "i5g13"), ("i7-12th gen", "i7g12")):
+        assert p.cpu_tier(cpu) == tier, cpu
+    assert p.title_cpu("Dell latitude 3550 - i5 13 Gen - 8go") == "i5 13th gen"
+
+
+def test_named_laptop_models_share_one_key():
+    from app.intelligence import pricebook as p
+
+    assert p.model_name("Dell Latitude 5440") == "latitude 5440"
+    assert p.model_name("Dell Inspiron 14 7430 2-en-1") == "inspiron 7430"
+    assert p.model_name("Pc portable HP EliteBook 840 G10") == "elitebook 840 g10"
+    assert p.model_name("Lenovo ThinkPad T14 Gen 3") == "thinkpad t14 g3"
+    assert p.model_name("Ordinateur portable Dell") == ""
+    a = Listing(subject="Dell Latitude 5440", specs={})
+    b = Listing(subject="dell latitude 5440 tres bon etat", specs={})
+    assert p.canonical(a)[0] == p.canonical(b)[0] == "model|latitude 5440"
+
+
+def test_unknown_ram_uses_the_cheapest_config_of_that_cpu_at_low_confidence():
+    from app.intelligence import dz_market
+    from app.models import DzPrice
+
+    db = _db()
+    db.add_all([
+        DzPrice(cache_key="laptop|i5g13|16|512|igpu", ok=True, median_dzd=90000, confidence="high", fetched_at=datetime.utcnow()),
+        DzPrice(cache_key="laptop|i5g13|8|256|igpu", ok=True, median_dzd=70000, confidence="high", fetched_at=datetime.utcnow()),
+    ])
+    db.commit()
+    assert dz_market._book_row(db, "laptop|i5g13|?|?|igpu").median_dzd == 70000
+    from app.intelligence import pricebook
+
+    assert pricebook.is_estimate("laptop|i5g13|?|?|igpu") and not pricebook.is_estimate("laptop|i5g13|16|512|igpu")
+
+
+def test_out_of_credit_never_wipes_a_price_or_blames_the_product(monkeypatch):
+    from app.intelligence import dz_market
+    from app.models import DzPrice
+
+    db = _db()
+    settings = Settings(id=1, llm_api_key="k")
+    old = datetime.utcnow() - timedelta(days=30)
+    db.add_all([settings, DzPrice(cache_key="gpu|rtx 3070|", ok=True, median_dzd=75000, confidence="high", fetched_at=old)])
+    db.commit()
+    monkeypatch.setattr(dz_market, "_call_gemini", lambda *a, **k: {"ok": False, "error": "OpenRouter HTTP 402: limit"})
+    ad = Listing(list_id="1", subject="RTX 3070", specs={"gpu": "RTX 3070"})
+    assert dz_market.lookup(db, settings, ad).median_dzd == 75000
+    assert db.query(DzPrice).filter_by(cache_key="gpu|rtx 3070|").one().ok is True
+    assert "out of credit" in dz_market.last_error(db, ad)
+    dz_market._temporary.clear()

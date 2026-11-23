@@ -34,6 +34,7 @@ MAX_DZD = 1_500_000
 # The model can be free, but OpenRouter's web-search plugin is billed per result (~$0.007 a lookup),
 # so lookups only happen on demand (see enrich.py) and the price book makes repeats free.
 WEB_RESULTS = 3  # 3 results are enough for a median
+_temporary: dict[str, str] = {}  # product key -> why the last call failed for a reason that is not about the product
 
 
 def api_key(settings: Settings) -> str:
@@ -209,11 +210,37 @@ def _store(db: Session, key: str, query: str, result: dict[str, Any]) -> DzPrice
     return row
 
 
+def _is_temporary(error: str) -> bool:
+    return error.startswith("request failed") or any(f"HTTP {code}" in error for code in (402, 408, 429, 500, 502, 503, 504))
+
+
+def _explain_temporary(error: str) -> str:
+    if "HTTP 402" in error:
+        return "OpenRouter key is out of credit: raise its limit at openrouter.ai/keys"
+    return error[:200]
+
+
+def is_temporary_failure(listing: Listing) -> bool:
+    return describe(listing)[0] in _temporary
+
+
 def _book_row(db: Session, key: str) -> Optional[DzPrice]:
     """The price-book row for a product. A card ad with no stated VRAM shares the price of the same model
     (and the reverse); two different stated VRAM sizes, like RTX 3060 8 GB and 12 GB, stay separate."""
     row = db.query(DzPrice).filter(DzPrice.cache_key == key).first()
-    if (row is not None and row.ok) or not key.startswith("gpu|"):
+    if row is not None and row.ok:
+        return row
+    if key.startswith("laptop|") and pricebook.is_specific(key) and pricebook.is_estimate(key):
+        # RAM unknown: the cheapest known configuration of this CPU, so the estimate never flatters the deal
+        _, tier, _, _, gpu = (key.split("|") + [""] * 5)[:5]
+        same_cpu = (
+            db.query(DzPrice)
+            .filter(DzPrice.cache_key.like(f"laptop|{tier}|%|{gpu}"), DzPrice.ok.is_(True), DzPrice.median_dzd.isnot(None))
+            .order_by(DzPrice.median_dzd.asc())
+            .first()
+        )
+        return same_cpu or row
+    if not key.startswith("gpu|"):
         return row
     _, name, vram = (key.split("|") + ["", ""])[:3]
     family = (
@@ -255,7 +282,13 @@ def lookup(db: Session, settings: Settings, listing: Listing, force: bool = Fals
 
     # Coarse keys are shared by many ads, so only title-keyed (vague) lookups get this ad's own text.
     context = ad_context(listing) if key.startswith("title|") else ""
-    row = _store(db, key, query, _call_gemini(settings, query, context))
+    result = _call_gemini(settings, query, context)
+    if not result.get("ok") and _is_temporary(result.get("error", "")):
+        # No credit, rate limit or network: say nothing about the product and never wipe a price we already have.
+        _temporary[key] = _explain_temporary(result["error"])
+        return row if row is not None and row.ok else None
+    _temporary.pop(key, None)
+    row = _store(db, key, query, result)
     row.kind = pricebook.canonical(listing)[2]
     db.commit()
     return row if row.ok else None
@@ -285,5 +318,7 @@ def last_error(db: Session, listing: Listing) -> str:
     key, _ = describe(listing)
     if not key:
         return "The ad has no usable title or specs to look up an Algerian price."
+    if key in _temporary:
+        return _temporary[key]
     row = db.query(DzPrice).filter(DzPrice.cache_key == key).first()
     return (row.note if row and not row.ok else "") or ""

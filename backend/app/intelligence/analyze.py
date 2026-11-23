@@ -154,7 +154,8 @@ def apply_dz_comparison(
     listing.dz_price_low_dzd = row.low_dzd
     listing.dz_price_median_dzd = row.median_dzd
     listing.dz_price_high_dzd = row.high_dzd
-    listing.dz_confidence = row.confidence
+    key = dz_market.describe(listing)[0]
+    listing.dz_confidence = "low" if pricebook.is_estimate(key) else row.confidence
     listing.dz_query = row.query
     listing.dz_sources = row.sources or []
     listing.dz_saving_pct = deal.savings_pct(listing.dz_landed_dzd, row.median_dzd)

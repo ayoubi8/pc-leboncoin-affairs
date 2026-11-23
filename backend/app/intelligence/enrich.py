@@ -204,7 +204,8 @@ def enrich_listing(
             if listing.dz_price_median_dzd:
                 step("price", "done", f"{settings.gemini_model}: {listing.dz_price_median_dzd:,.0f} DA ({listing.dz_confidence or '?'} confidence)")
             elif item["steps"]["price"] != "error":
-                _failed.add((listing.id, "price"))
+                if not dz_market.is_temporary_failure(listing):  # out of credit or busy: retry later
+                    _failed.add((listing.id, "price"))
                 step("price", "error", dz_market.last_error(db, listing) or "no Algerian price found")
     else:
         step("price", "skipped", "price already known")

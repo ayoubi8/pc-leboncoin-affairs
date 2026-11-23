@@ -80,7 +80,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "api_dashboard",
-      "community": 26,
+      "community": 15,
       "norm_label": "dashboard.py"
     },
     {
@@ -90,7 +90,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "api_dashboard_dashboard",
-      "community": 15,
+      "community": 32,
       "norm_label": "dashboard()"
     },
     {
@@ -100,7 +100,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "backend_app_api_dashboard_py_session",
-      "community": 15,
+      "community": 32,
       "norm_label": "session"
     },
     {
@@ -110,7 +110,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "dashboardout",
-      "community": 15,
+      "community": 32,
       "norm_label": "dashboardout"
     },
     {
@@ -220,7 +220,7 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "api_helpers_listing_card",
-      "community": 15,
+      "community": 13,
       "norm_label": "listing_card()"
     },
     {
@@ -230,7 +230,7 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "backend_app_api_helpers_py_listing",
-      "community": 15,
+      "community": 13,
       "norm_label": "listing"
     },
     {
@@ -240,7 +240,7 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "backend_app_api_helpers_py_datetime",
-      "community": 15,
+      "community": 13,
       "norm_label": "datetime"
     },
     {
@@ -250,7 +250,7 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "backend_app_api_helpers_py_listingcard",
-      "community": 15,
+      "community": 13,
       "norm_label": "listingcard"
     },
     {
@@ -270,7 +270,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "api_imports",
-      "community": 26,
+      "community": 15,
       "norm_label": "imports.py"
     },
     {
@@ -280,7 +280,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "api_imports_upload_csv",
-      "community": 26,
+      "community": 41,
       "norm_label": "upload_csv()"
     },
     {
@@ -290,7 +290,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "uploadfile",
-      "community": 26,
+      "community": 41,
       "norm_label": "uploadfile"
     },
     {
@@ -300,7 +300,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "backend_app_api_imports_py_session",
-      "community": 26,
+      "community": 41,
       "norm_label": "session"
     },
     {
@@ -310,7 +310,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "importresult",
-      "community": 26,
+      "community": 41,
       "norm_label": "importresult"
     },
     {
@@ -320,7 +320,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "api_listings",
-      "community": 25,
+      "community": 47,
       "norm_label": "listings.py"
     },
     {
@@ -400,7 +400,7 @@
       "source_location": "L89",
       "_origin": "ast",
       "id": "api_listings_verdictrequest",
-      "community": 25,
+      "community": 47,
       "norm_label": "verdictrequest"
     },
     {
@@ -430,7 +430,7 @@
       "source_location": "L112",
       "_origin": "ast",
       "id": "api_listings_best_deals",
-      "community": 15,
+      "community": 47,
       "norm_label": "best_deals()"
     },
     {
@@ -440,7 +440,7 @@
       "source_location": "L112",
       "_origin": "ast",
       "id": "backend_app_api_listings_py_listingcard",
-      "community": 15,
+      "community": 47,
       "norm_label": "listingcard"
     },
     {
@@ -550,7 +550,7 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "api_listings_rationale_113",
-      "community": 15,
+      "community": 47,
       "norm_label": "listings with an ai verdict that are still online, ranked by profit weighted by"
     },
     {
@@ -1370,7 +1370,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_db",
-      "community": 26,
+      "community": 15,
       "norm_label": "db.py"
     },
     {
@@ -1380,7 +1380,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "app_db_base",
-      "community": 2,
+      "community": 15,
       "norm_label": "base"
     },
     {
@@ -1390,7 +1390,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "declarativebase",
-      "community": 2,
+      "community": 15,
       "norm_label": "declarativebase"
     },
     {
@@ -1400,7 +1400,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "app_db_get_db",
-      "community": 26,
+      "community": 15,
       "norm_label": "get_db()"
     },
     {
@@ -2067,7 +2067,7 @@
       "label": "api_key()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L39",
+      "source_location": "L40",
       "_origin": "ast",
       "id": "intelligence_dz_market_api_key",
       "community": 9,
@@ -2077,7 +2077,7 @@
       "label": "Settings",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L39",
+      "source_location": "L40",
       "_origin": "ast",
       "id": "backend_app_intelligence_dz_market_py_settings",
       "community": 9,
@@ -2087,7 +2087,7 @@
       "label": "available()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L44",
+      "source_location": "L45",
       "_origin": "ast",
       "id": "intelligence_dz_market_available",
       "community": 9,
@@ -2097,7 +2097,7 @@
       "label": "_utcnow()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L48",
+      "source_location": "L49",
       "_origin": "ast",
       "id": "intelligence_dz_market_utcnow",
       "community": 9,
@@ -2107,7 +2107,7 @@
       "label": "datetime",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L48",
+      "source_location": "L49",
       "_origin": "ast",
       "id": "backend_app_intelligence_dz_market_py_datetime",
       "community": 9,
@@ -2117,7 +2117,7 @@
       "label": "describe()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L52",
+      "source_location": "L53",
       "_origin": "ast",
       "id": "intelligence_dz_market_describe",
       "community": 9,
@@ -2127,7 +2127,7 @@
       "label": "Listing",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L52",
+      "source_location": "L53",
       "_origin": "ast",
       "id": "backend_app_intelligence_dz_market_py_listing",
       "community": 9,
@@ -2137,7 +2137,7 @@
       "label": "ad_context()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L58",
+      "source_location": "L59",
       "_origin": "ast",
       "id": "intelligence_dz_market_ad_context",
       "community": 9,
@@ -2147,7 +2147,7 @@
       "label": "_parse_json()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L94",
+      "source_location": "L95",
       "_origin": "ast",
       "id": "intelligence_dz_market_parse_json",
       "community": 9,
@@ -2157,7 +2157,7 @@
       "label": "Any",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L94",
+      "source_location": "L95",
       "_origin": "ast",
       "id": "backend_app_intelligence_dz_market_py_any",
       "community": 9,
@@ -2167,7 +2167,7 @@
       "label": "_num()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L104",
+      "source_location": "L105",
       "_origin": "ast",
       "id": "intelligence_dz_market_num",
       "community": 9,
@@ -2177,7 +2177,7 @@
       "label": "_call_gemini()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L116",
+      "source_location": "L117",
       "_origin": "ast",
       "id": "intelligence_dz_market_call_gemini",
       "community": 9,
@@ -2187,7 +2187,7 @@
       "label": "_store()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L172",
+      "source_location": "L173",
       "_origin": "ast",
       "id": "intelligence_dz_market_store",
       "community": 9,
@@ -2197,7 +2197,7 @@
       "label": "Session",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L172",
+      "source_location": "L173",
       "_origin": "ast",
       "id": "backend_app_intelligence_dz_market_py_session",
       "community": 9,
@@ -2207,17 +2207,47 @@
       "label": "DzPrice",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L172",
+      "source_location": "L173",
       "_origin": "ast",
       "id": "backend_app_intelligence_dz_market_py_dzprice",
       "community": 9,
       "norm_label": "dzprice"
     },
     {
+      "label": "_is_temporary()",
+      "file_type": "code",
+      "source_file": "backend/app/intelligence/dz_market.py",
+      "source_location": "L213",
+      "_origin": "ast",
+      "id": "intelligence_dz_market_is_temporary",
+      "community": 9,
+      "norm_label": "_is_temporary()"
+    },
+    {
+      "label": "_explain_temporary()",
+      "file_type": "code",
+      "source_file": "backend/app/intelligence/dz_market.py",
+      "source_location": "L217",
+      "_origin": "ast",
+      "id": "intelligence_dz_market_explain_temporary",
+      "community": 9,
+      "norm_label": "_explain_temporary()"
+    },
+    {
+      "label": "is_temporary_failure()",
+      "file_type": "code",
+      "source_file": "backend/app/intelligence/dz_market.py",
+      "source_location": "L223",
+      "_origin": "ast",
+      "id": "intelligence_dz_market_is_temporary_failure",
+      "community": 9,
+      "norm_label": "is_temporary_failure()"
+    },
+    {
       "label": "_book_row()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L212",
+      "source_location": "L227",
       "_origin": "ast",
       "id": "intelligence_dz_market_book_row",
       "community": 9,
@@ -2227,7 +2257,7 @@
       "label": "lookup()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L232",
+      "source_location": "L259",
       "_origin": "ast",
       "id": "intelligence_dz_market_lookup",
       "community": 9,
@@ -2237,7 +2267,7 @@
       "label": "set_manual()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L264",
+      "source_location": "L297",
       "_origin": "ast",
       "id": "intelligence_dz_market_set_manual",
       "community": 9,
@@ -2247,7 +2277,7 @@
       "label": "last_error()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L284",
+      "source_location": "L317",
       "_origin": "ast",
       "id": "intelligence_dz_market_last_error",
       "community": 9,
@@ -2267,9 +2297,9 @@
       "label": "Return (cache_key, human description) for a listing, or (\"\", \"\") if too vague.",
       "file_type": "rationale",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L53",
+      "source_location": "L54",
       "_origin": "ast",
-      "id": "intelligence_dz_market_rationale_53",
+      "id": "intelligence_dz_market_rationale_54",
       "community": 9,
       "norm_label": "return (cache_key, human description) for a listing, or (\"\", \"\") if too vague."
     },
@@ -2277,9 +2307,9 @@
       "label": "Extra facts from the ad itself (title, condition, all extracted specs, descripti",
       "file_type": "rationale",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L59",
+      "source_location": "L60",
       "_origin": "ast",
-      "id": "intelligence_dz_market_rationale_59",
+      "id": "intelligence_dz_market_rationale_60",
       "community": 9,
       "norm_label": "extra facts from the ad itself (title, condition, all extracted specs, descripti"
     },
@@ -2287,9 +2317,9 @@
       "label": "Return {\"ok\": bool, \"data\": {...}, \"sources\": [...], \"error\": str}.",
       "file_type": "rationale",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L117",
+      "source_location": "L118",
       "_origin": "ast",
-      "id": "intelligence_dz_market_rationale_117",
+      "id": "intelligence_dz_market_rationale_118",
       "community": 9,
       "norm_label": "return {\"ok\": bool, \"data\": {...}, \"sources\": [...], \"error\": str}."
     },
@@ -2297,9 +2327,9 @@
       "label": "The price-book row for a product. A card ad with no stated VRAM shares the price",
       "file_type": "rationale",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L213",
+      "source_location": "L228",
       "_origin": "ast",
-      "id": "intelligence_dz_market_rationale_213",
+      "id": "intelligence_dz_market_rationale_228",
       "community": 9,
       "norm_label": "the price-book row for a product. a card ad with no stated vram shares the price"
     },
@@ -2307,9 +2337,9 @@
       "label": "Cached Algerian price row for the listing's configuration, or None.      ``all",
       "file_type": "rationale",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L233",
+      "source_location": "L260",
       "_origin": "ast",
-      "id": "intelligence_dz_market_rationale_233",
+      "id": "intelligence_dz_market_rationale_260",
       "community": 9,
       "norm_label": "cached algerian price row for the listing's configuration, or none.      ``all"
     },
@@ -2317,9 +2347,9 @@
       "label": "Store the user's own Algerian price for this listing's product key (overrides Ge",
       "file_type": "rationale",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L265",
+      "source_location": "L298",
       "_origin": "ast",
-      "id": "intelligence_dz_market_rationale_265",
+      "id": "intelligence_dz_market_rationale_298",
       "community": 9,
       "norm_label": "store the user's own algerian price for this listing's product key (overrides ge"
     },
@@ -2477,7 +2507,7 @@
       "label": "_run()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L244",
+      "source_location": "L245",
       "_origin": "ast",
       "id": "intelligence_enrich_run",
       "community": 45,
@@ -2487,7 +2517,7 @@
       "label": "start()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L266",
+      "source_location": "L267",
       "_origin": "ast",
       "id": "intelligence_enrich_start",
       "community": 45,
@@ -2497,7 +2527,7 @@
       "label": "summary()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L322",
+      "source_location": "L323",
       "_origin": "ast",
       "id": "intelligence_enrich_summary",
       "community": 45,
@@ -2577,9 +2607,9 @@
       "label": "Start (or report) the AI batch of a search. Returns the job summary.",
       "file_type": "rationale",
       "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L275",
+      "source_location": "L276",
       "_origin": "ast",
-      "id": "intelligence_enrich_rationale_275",
+      "id": "intelligence_enrich_rationale_276",
       "community": 45,
       "norm_label": "start (or report) the ai batch of a search. returns the job summary."
     },
@@ -3104,10 +3134,30 @@
       "norm_label": "pricebook.py"
     },
     {
+      "label": "title_cpu()",
+      "file_type": "code",
+      "source_file": "backend/app/intelligence/pricebook.py",
+      "source_location": "L29",
+      "_origin": "ast",
+      "id": "intelligence_pricebook_title_cpu",
+      "community": 22,
+      "norm_label": "title_cpu()"
+    },
+    {
+      "label": "model_name()",
+      "file_type": "code",
+      "source_file": "backend/app/intelligence/pricebook.py",
+      "source_location": "L35",
+      "_origin": "ast",
+      "id": "intelligence_pricebook_model_name",
+      "community": 22,
+      "norm_label": "model_name()"
+    },
+    {
       "label": "_bucket()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/pricebook.py",
-      "source_location": "L20",
+      "source_location": "L44",
       "_origin": "ast",
       "id": "intelligence_pricebook_bucket",
       "community": 22,
@@ -3117,7 +3167,7 @@
       "label": "cpu_tier()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/pricebook.py",
-      "source_location": "L30",
+      "source_location": "L54",
       "_origin": "ast",
       "id": "intelligence_pricebook_cpu_tier",
       "community": 22,
@@ -3127,7 +3177,7 @@
       "label": "is_gpu_ad()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/pricebook.py",
-      "source_location": "L47",
+      "source_location": "L75",
       "_origin": "ast",
       "id": "intelligence_pricebook_is_gpu_ad",
       "community": 22,
@@ -3137,7 +3187,7 @@
       "label": "Any",
       "file_type": "code",
       "source_file": "backend/app/intelligence/pricebook.py",
-      "source_location": "L47",
+      "source_location": "L75",
       "_origin": "ast",
       "id": "backend_app_intelligence_pricebook_py_any",
       "community": 22,
@@ -3147,7 +3197,7 @@
       "label": "gpu_name()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/pricebook.py",
-      "source_location": "L55",
+      "source_location": "L83",
       "_origin": "ast",
       "id": "intelligence_pricebook_gpu_name",
       "community": 22,
@@ -3157,7 +3207,7 @@
       "label": "canonical()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/pricebook.py",
-      "source_location": "L62",
+      "source_location": "L90",
       "_origin": "ast",
       "id": "intelligence_pricebook_canonical",
       "community": 22,
@@ -3167,7 +3217,7 @@
       "label": "Listing",
       "file_type": "code",
       "source_file": "backend/app/intelligence/pricebook.py",
-      "source_location": "L62",
+      "source_location": "L90",
       "_origin": "ast",
       "id": "backend_app_intelligence_pricebook_py_listing",
       "community": 22,
@@ -3177,17 +3227,27 @@
       "label": "is_specific()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/pricebook.py",
-      "source_location": "L107",
+      "source_location": "L142",
       "_origin": "ast",
       "id": "intelligence_pricebook_is_specific",
       "community": 22,
       "norm_label": "is_specific()"
     },
     {
+      "label": "is_estimate()",
+      "file_type": "code",
+      "source_file": "backend/app/intelligence/pricebook.py",
+      "source_location": "L153",
+      "_origin": "ast",
+      "id": "intelligence_pricebook_is_estimate",
+      "community": 22,
+      "norm_label": "is_estimate()"
+    },
+    {
       "label": "kind_of()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/pricebook.py",
-      "source_location": "L119",
+      "source_location": "L158",
       "_origin": "ast",
       "id": "intelligence_pricebook_kind_of",
       "community": 22,
@@ -3204,12 +3264,32 @@
       "norm_label": "canonical product keys for the algerian price book.  one gemini lookup (or one"
     },
     {
+      "label": "Dell Latitude - i5 13 Gen' -> 'i5 13th gen', when the spec parser found no CPU.",
+      "file_type": "rationale",
+      "source_file": "backend/app/intelligence/pricebook.py",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "intelligence_pricebook_rationale_30",
+      "community": 22,
+      "norm_label": "dell latitude - i5 13 gen' -> 'i5 13th gen', when the spec parser found no cpu."
+    },
+    {
+      "label": "Dell Latitude 5440 tres bon etat' -> 'latitude 5440'; \"\" when no laptop model is",
+      "file_type": "rationale",
+      "source_file": "backend/app/intelligence/pricebook.py",
+      "source_location": "L36",
+      "_origin": "ast",
+      "id": "intelligence_pricebook_rationale_36",
+      "community": 22,
+      "norm_label": "dell latitude 5440 tres bon etat' -> 'latitude 5440'; \"\" when no laptop model is"
+    },
+    {
       "label": "i5-13420h' -> 'i5g13', 'ryzen 5 5600h' -> 'r5s5', 'm2 pro' -> 'm2 pro'.",
       "file_type": "rationale",
       "source_file": "backend/app/intelligence/pricebook.py",
-      "source_location": "L31",
+      "source_location": "L55",
       "_origin": "ast",
-      "id": "intelligence_pricebook_rationale_31",
+      "id": "intelligence_pricebook_rationale_55",
       "community": 22,
       "norm_label": "i5-13420h' -> 'i5g13', 'ryzen 5 5600h' -> 'r5s5', 'm2 pro' -> 'm2 pro'."
     },
@@ -3217,9 +3297,9 @@
       "label": "A bare graphics card ad: a dedicated GPU, no CPU, and no sign of a whole compute",
       "file_type": "rationale",
       "source_file": "backend/app/intelligence/pricebook.py",
-      "source_location": "L48",
+      "source_location": "L76",
       "_origin": "ast",
-      "id": "intelligence_pricebook_rationale_48",
+      "id": "intelligence_pricebook_rationale_76",
       "community": 22,
       "norm_label": "a bare graphics card ad: a dedicated gpu, no cpu, and no sign of a whole compute"
     },
@@ -3227,21 +3307,31 @@
       "label": "Return (key, description, kind); (\"\", \"\", \"laptop\") when there is too little to",
       "file_type": "rationale",
       "source_file": "backend/app/intelligence/pricebook.py",
-      "source_location": "L63",
+      "source_location": "L91",
       "_origin": "ast",
-      "id": "intelligence_pricebook_rationale_63",
+      "id": "intelligence_pricebook_rationale_91",
       "community": 22,
       "norm_label": "return (key, description, kind); (\"\", \"\", \"laptop\") when there is too little to"
     },
     {
-      "label": "Can this key's price be reused for other ads? A card model can. A laptop needs a",
+      "label": "Can this key's price be reused for other ads? A card model or a named laptop mod",
       "file_type": "rationale",
       "source_file": "backend/app/intelligence/pricebook.py",
-      "source_location": "L108",
+      "source_location": "L143",
       "_origin": "ast",
-      "id": "intelligence_pricebook_rationale_108",
+      "id": "intelligence_pricebook_rationale_143",
       "community": 22,
-      "norm_label": "can this key's price be reused for other ads? a card model can. a laptop needs a"
+      "norm_label": "can this key's price be reused for other ads? a card model or a named laptop mod"
+    },
+    {
+      "label": "The exact configuration is unknown (no RAM stated, or only a model name), so the",
+      "file_type": "rationale",
+      "source_file": "backend/app/intelligence/pricebook.py",
+      "source_location": "L154",
+      "_origin": "ast",
+      "id": "intelligence_pricebook_rationale_154",
+      "community": 22,
+      "norm_label": "the exact configuration is unknown (no ram stated, or only a model name), so the"
     },
     {
       "label": "screen.py",
@@ -3630,7 +3720,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "logistics_currency",
-      "community": 2,
+      "community": 53,
       "norm_label": "currency.py"
     },
     {
@@ -3640,7 +3730,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "logistics_currency_rates",
-      "community": 2,
+      "community": 53,
       "norm_label": "rates()"
     },
     {
@@ -3650,7 +3740,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "backend_app_logistics_currency_py_settings",
-      "community": 2,
+      "community": 53,
       "norm_label": "settings"
     },
     {
@@ -3660,7 +3750,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "logistics_currency_to_dzd",
-      "community": 2,
+      "community": 53,
       "norm_label": "to_dzd()"
     },
     {
@@ -3670,7 +3760,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "logistics_currency_to_eur",
-      "community": 2,
+      "community": 53,
       "norm_label": "to_eur()"
     },
     {
@@ -3680,7 +3770,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "logistics_currency_convert",
-      "community": 2,
+      "community": 53,
       "norm_label": "convert()"
     },
     {
@@ -3830,7 +3920,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "fastapi",
-      "community": 26,
+      "community": 2,
       "norm_label": "fastapi"
     },
     {
@@ -3860,7 +3950,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_models",
-      "community": 2,
+      "community": 15,
       "norm_label": "models.py"
     },
     {
@@ -3870,7 +3960,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "app_models_utcnow",
-      "community": 2,
+      "community": 15,
       "norm_label": "utcnow()"
     },
     {
@@ -3880,7 +3970,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "backend_app_models_py_datetime",
-      "community": 2,
+      "community": 15,
       "norm_label": "datetime"
     },
     {
@@ -3890,7 +3980,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "app_models_settings",
-      "community": 2,
+      "community": 50,
       "norm_label": "settings"
     },
     {
@@ -3900,7 +3990,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "app_models_search",
-      "community": 2,
+      "community": 15,
       "norm_label": "search"
     },
     {
@@ -3910,7 +4000,7 @@
       "source_location": "L135",
       "_origin": "ast",
       "id": "app_models_run",
-      "community": 3,
+      "community": 15,
       "norm_label": "run"
     },
     {
@@ -3940,7 +4030,7 @@
       "source_location": "L256",
       "_origin": "ast",
       "id": "app_models_pricesnapshot",
-      "community": 3,
+      "community": 15,
       "norm_label": "pricesnapshot"
     },
     {
@@ -3950,7 +4040,7 @@
       "source_location": "L268",
       "_origin": "ast",
       "id": "app_models_negotiation",
-      "community": 2,
+      "community": 15,
       "norm_label": "negotiation"
     },
     {
@@ -3960,7 +4050,7 @@
       "source_location": "L286",
       "_origin": "ast",
       "id": "app_models_importbatch",
-      "community": 2,
+      "community": 41,
       "norm_label": "importbatch"
     },
     {
@@ -4000,7 +4090,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "notify_init",
-      "community": 5,
+      "community": 11,
       "norm_label": "__init__.py"
     },
     {
@@ -4470,7 +4560,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "notify_poller",
-      "community": 5,
+      "community": 11,
       "norm_label": "poller.py"
     },
     {
@@ -4480,7 +4570,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "notify_poller_chat_ok",
-      "community": 5,
+      "community": 11,
       "norm_label": "_chat_ok()"
     },
     {
@@ -4490,7 +4580,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "backend_app_notify_poller_py_settings",
-      "community": 5,
+      "community": 11,
       "norm_label": "settings"
     },
     {
@@ -4500,7 +4590,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "backend_app_notify_poller_py_any",
-      "community": 5,
+      "community": 11,
       "norm_label": "any"
     },
     {
@@ -4510,7 +4600,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "notify_poller_reply",
-      "community": 5,
+      "community": 11,
       "norm_label": "_reply()"
     },
     {
@@ -4520,7 +4610,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "notify_poller_handle_callback",
-      "community": 5,
+      "community": 11,
       "norm_label": "_handle_callback()"
     },
     {
@@ -4530,7 +4620,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "backend_app_notify_poller_py_session",
-      "community": 5,
+      "community": 11,
       "norm_label": "session"
     },
     {
@@ -4540,7 +4630,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "notify_poller_handle_message",
-      "community": 5,
+      "community": 11,
       "norm_label": "_handle_message()"
     },
     {
@@ -4550,7 +4640,7 @@
       "source_location": "L83",
       "_origin": "ast",
       "id": "notify_poller_process_updates",
-      "community": 5,
+      "community": 11,
       "norm_label": "process_updates()"
     },
     {
@@ -4560,7 +4650,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "notify_poller_rationale_1",
-      "community": 5,
+      "community": 11,
       "norm_label": "handle telegram button presses and commands (contacted / bought / skip, /paid, /"
     },
     {
@@ -4570,7 +4660,7 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "notify_poller_rationale_84",
-      "community": 5,
+      "community": 11,
       "norm_label": "fetch and handle pending updates once. returns how many were handled."
     },
     {
@@ -4970,7 +5060,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_progress",
-      "community": 13,
+      "community": 43,
       "norm_label": "progress.py"
     },
     {
@@ -4980,7 +5070,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "app_progress_now_iso",
-      "community": 13,
+      "community": 43,
       "norm_label": "_now_iso()"
     },
     {
@@ -4990,7 +5080,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "app_progress_log",
-      "community": 13,
+      "community": 43,
       "norm_label": "log()"
     },
     {
@@ -5000,7 +5090,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "backend_app_progress_py_any",
-      "community": 13,
+      "community": 43,
       "norm_label": "any"
     },
     {
@@ -5010,7 +5100,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "app_progress_start_run",
-      "community": 13,
+      "community": 43,
       "norm_label": "start_run()"
     },
     {
@@ -5020,7 +5110,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "app_progress_update_run",
-      "community": 13,
+      "community": 43,
       "norm_label": "update_run()"
     },
     {
@@ -5030,7 +5120,7 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "app_progress_end_run",
-      "community": 13,
+      "community": 43,
       "norm_label": "end_run()"
     },
     {
@@ -5040,7 +5130,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "app_progress_public",
-      "community": 13,
+      "community": 43,
       "norm_label": "_public()"
     },
     {
@@ -5050,7 +5140,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "app_progress_running",
-      "community": 13,
+      "community": 43,
       "norm_label": "running()"
     },
     {
@@ -5060,7 +5150,7 @@
       "source_location": "L112",
       "_origin": "ast",
       "id": "app_progress_events",
-      "community": 13,
+      "community": 43,
       "norm_label": "events()"
     },
     {
@@ -5070,7 +5160,7 @@
       "source_location": "L117",
       "_origin": "ast",
       "id": "app_progress_tick",
-      "community": 13,
+      "community": 43,
       "norm_label": "tick()"
     },
     {
@@ -5080,7 +5170,7 @@
       "source_location": "L122",
       "_origin": "ast",
       "id": "app_progress_last_tick",
-      "community": 13,
+      "community": 43,
       "norm_label": "last_tick()"
     },
     {
@@ -5090,7 +5180,7 @@
       "source_location": "L127",
       "_origin": "ast",
       "id": "app_progress_uptime_seconds",
-      "community": 13,
+      "community": 43,
       "norm_label": "uptime_seconds()"
     },
     {
@@ -5100,7 +5190,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_progress_rationale_1",
-      "community": 13,
+      "community": 43,
       "norm_label": "what the backend is doing right now, kept in memory for the live ui.  nothing"
     },
     {
@@ -5340,7 +5430,7 @@
       "source_location": "L268",
       "_origin": "ast",
       "id": "app_schemas_listingcard",
-      "community": 15,
+      "community": 25,
       "norm_label": "listingcard"
     },
     {
@@ -5770,7 +5860,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "search_csv_import",
-      "community": 2,
+      "community": 41,
       "norm_label": "csv_import.py"
     },
     {
@@ -5780,7 +5870,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "search_csv_import_resolve",
-      "community": 2,
+      "community": 41,
       "norm_label": "_resolve()"
     },
     {
@@ -5790,7 +5880,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "search_csv_import_parse_price",
-      "community": 2,
+      "community": 41,
       "norm_label": "_parse_price()"
     },
     {
@@ -5800,7 +5890,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "backend_app_search_csv_import_py_any",
-      "community": 2,
+      "community": 41,
       "norm_label": "any"
     },
     {
@@ -5810,7 +5900,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "search_csv_import_import_csv",
-      "community": 2,
+      "community": 41,
       "norm_label": "import_csv()"
     },
     {
@@ -5820,7 +5910,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "backend_app_search_csv_import_py_session",
-      "community": 2,
+      "community": 41,
       "norm_label": "session"
     },
     {
@@ -5830,7 +5920,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "backend_app_search_csv_import_py_settings",
-      "community": 2,
+      "community": 41,
       "norm_label": "settings"
     },
     {
@@ -5840,7 +5930,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "backend_app_search_csv_import_py_search",
-      "community": 2,
+      "community": 41,
       "norm_label": "search"
     },
     {
@@ -5850,7 +5940,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "importbatch",
-      "community": 2,
+      "community": 41,
       "norm_label": "importbatch"
     },
     {
@@ -6160,7 +6250,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scripts_migrate_to_postgres",
-      "community": 26,
+      "community": 15,
       "norm_label": "migrate_to_postgres.py"
     },
     {
@@ -6170,7 +6260,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "scripts_migrate_to_postgres_main",
-      "community": 26,
+      "community": 15,
       "norm_label": "main()"
     },
     {
@@ -6180,7 +6270,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scripts_migrate_to_postgres_rationale_1",
-      "community": 26,
+      "community": 15,
       "norm_label": "copy the local sqlite database into postgres (supabase).  usage (from backend/):"
     },
     {
@@ -6390,7 +6480,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_test_dz",
-      "community": 2,
+      "community": 50,
       "norm_label": "test_dz.py"
     },
     {
@@ -6400,7 +6490,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "tests_test_dz_db",
-      "community": 2,
+      "community": 50,
       "norm_label": "_db()"
     },
     {
@@ -6410,7 +6500,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "tests_test_dz_listing",
-      "community": 2,
+      "community": 50,
       "norm_label": "_listing()"
     },
     {
@@ -6420,7 +6510,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "tests_test_dz_test_dz_score_uses_landed_vs_algerian_median",
-      "community": 2,
+      "community": 50,
       "norm_label": "test_dz_score_uses_landed_vs_algerian_median()"
     },
     {
@@ -6430,7 +6520,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "tests_test_dz_listing_landed",
-      "community": 2,
+      "community": 50,
       "norm_label": "listing_landed()"
     },
     {
@@ -6440,7 +6530,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "tests_test_dz_test_failed_lookup_keeps_euro_score",
-      "community": 2,
+      "community": 50,
       "norm_label": "test_failed_lookup_keeps_euro_score()"
     },
     {
@@ -6450,7 +6540,7 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "tests_test_dz_test_implausible_prices_rejected",
-      "community": 2,
+      "community": 50,
       "norm_label": "test_implausible_prices_rejected()"
     },
     {
@@ -6460,7 +6550,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "tests_test_dz_test_no_key_means_no_lookup",
-      "community": 2,
+      "community": 50,
       "norm_label": "test_no_key_means_no_lookup()"
     },
     {
@@ -6470,7 +6560,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_test_freshness",
-      "community": 2,
+      "community": 49,
       "norm_label": "test_freshness.py"
     },
     {
@@ -6480,7 +6570,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "tests_test_freshness_ad",
-      "community": 2,
+      "community": 49,
       "norm_label": "_ad()"
     },
     {
@@ -6490,7 +6580,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "tests_test_freshness_test_paris_conversion_winter_and_summer",
-      "community": 2,
+      "community": 15,
       "norm_label": "test_paris_conversion_winter_and_summer()"
     },
     {
@@ -6500,7 +6590,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "tests_test_freshness_test_fresh_beats_old_and_sold_wording_hurts",
-      "community": 2,
+      "community": 49,
       "norm_label": "test_fresh_beats_old_and_sold_wording_hurts()"
     },
     {
@@ -6510,7 +6600,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "tests_test_freshness_test_recent_bump_keeps_an_old_ad_alive",
-      "community": 2,
+      "community": 49,
       "norm_label": "test_recent_bump_keeps_an_old_ad_alive()"
     },
     {
@@ -6520,7 +6610,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "tests_test_freshness_test_gone_ad_scores_zero",
-      "community": 2,
+      "community": 49,
       "norm_label": "test_gone_ad_scores_zero()"
     },
     {
@@ -6530,7 +6620,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "tests_test_freshness_test_classify_ad_page",
-      "community": 2,
+      "community": 49,
       "norm_label": "test_classify_ad_page()"
     },
     {
@@ -6760,7 +6850,7 @@
       "source_location": "L277",
       "_origin": "ast",
       "id": "tests_test_live_test_landed_cost_of_a_300_eur_gpu_matches_a_hand_calculation",
-      "community": 2,
+      "community": 50,
       "norm_label": "test_landed_cost_of_a_300_eur_gpu_matches_a_hand_calculation()"
     },
     {
@@ -6807,11 +6897,51 @@
       "label": "test_price_far_below_the_product_value_gets_no_verdict()",
       "file_type": "code",
       "source_file": "backend/tests/test_live.py",
-      "source_location": "L352",
+      "source_location": "L353",
       "_origin": "ast",
       "id": "tests_test_live_test_price_far_below_the_product_value_gets_no_verdict",
       "community": 2,
       "norm_label": "test_price_far_below_the_product_value_gets_no_verdict()"
+    },
+    {
+      "label": "test_cpu_generations_are_read_correctly()",
+      "file_type": "code",
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L364",
+      "_origin": "ast",
+      "id": "tests_test_live_test_cpu_generations_are_read_correctly",
+      "community": 2,
+      "norm_label": "test_cpu_generations_are_read_correctly()"
+    },
+    {
+      "label": "test_named_laptop_models_share_one_key()",
+      "file_type": "code",
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L373",
+      "_origin": "ast",
+      "id": "tests_test_live_test_named_laptop_models_share_one_key",
+      "community": 2,
+      "norm_label": "test_named_laptop_models_share_one_key()"
+    },
+    {
+      "label": "test_unknown_ram_uses_the_cheapest_config_of_that_cpu_at_low_confidence()",
+      "file_type": "code",
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L386",
+      "_origin": "ast",
+      "id": "tests_test_live_test_unknown_ram_uses_the_cheapest_config_of_that_cpu_at_low_confidence",
+      "community": 2,
+      "norm_label": "test_unknown_ram_uses_the_cheapest_config_of_that_cpu_at_low_confidence()"
+    },
+    {
+      "label": "test_out_of_credit_never_wipes_a_price_or_blames_the_product()",
+      "file_type": "code",
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L402",
+      "_origin": "ast",
+      "id": "tests_test_live_test_out_of_credit_never_wipes_a_price_or_blames_the_product",
+      "community": 2,
+      "norm_label": "test_out_of_credit_never_wipes_a_price_or_blames_the_product()"
     },
     {
       "label": "test_notify.py",
@@ -6970,7 +7100,7 @@
       "source_location": "L168",
       "_origin": "ast",
       "id": "tests_test_notify_test_quiet_hours_window_wraps_midnight",
-      "community": 2,
+      "community": 15,
       "norm_label": "test_quiet_hours_window_wraps_midnight()"
     },
     {
@@ -7070,7 +7200,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_test_ops",
-      "community": 2,
+      "community": 51,
       "norm_label": "test_ops.py"
     },
     {
@@ -7080,7 +7210,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "tests_test_ops_db",
-      "community": 2,
+      "community": 51,
       "norm_label": "_db()"
     },
     {
@@ -7090,7 +7220,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "tests_test_ops_settings",
-      "community": 2,
+      "community": 51,
       "norm_label": "_settings()"
     },
     {
@@ -7100,7 +7230,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "tests_test_ops_test_blocked_streak_and_rejected_key_raise_alerts_once",
-      "community": 2,
+      "community": 51,
       "norm_label": "test_blocked_streak_and_rejected_key_raise_alerts_once()"
     },
     {
@@ -7110,7 +7240,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "tests_test_ops_update",
-      "community": 2,
+      "community": 51,
       "norm_label": "_update()"
     },
     {
@@ -7120,7 +7250,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "tests_test_ops_test_buttons_and_commands_update_the_pipeline",
-      "community": 2,
+      "community": 51,
       "norm_label": "test_buttons_and_commands_update_the_pipeline()"
     },
     {
@@ -7130,7 +7260,7 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "tests_test_ops_test_learning_from_outcomes_needs_three_samples",
-      "community": 2,
+      "community": 51,
       "norm_label": "test_learning_from_outcomes_needs_three_samples()"
     },
     {
@@ -7140,7 +7270,7 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "tests_test_ops_test_manual_price_overrides_gemini_for_every_similar_ad",
-      "community": 2,
+      "community": 51,
       "norm_label": "test_manual_price_overrides_gemini_for_every_similar_ad()"
     },
     {
@@ -7150,7 +7280,7 @@
       "source_location": "L134",
       "_origin": "ast",
       "id": "tests_test_ops_test_listing_detail_tolerates_null_columns",
-      "community": 2,
+      "community": 51,
       "norm_label": "test_listing_detail_tolerates_null_columns()"
     },
     {
@@ -7160,7 +7290,7 @@
       "source_location": "L135",
       "_origin": "ast",
       "id": "tests_test_ops_rationale_135",
-      "community": 2,
+      "community": 51,
       "norm_label": "listings saved before newer columns existed hold nulls; must not 500."
     },
     {
@@ -7170,7 +7300,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_test_scan",
-      "community": 2,
+      "community": 52,
       "norm_label": "test_scan.py"
     },
     {
@@ -7180,7 +7310,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "tests_test_scan_db",
-      "community": 2,
+      "community": 52,
       "norm_label": "_db()"
     },
     {
@@ -7190,7 +7320,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "tests_test_scan_raw",
-      "community": 2,
+      "community": 52,
       "norm_label": "_raw()"
     },
     {
@@ -7200,7 +7330,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "tests_test_scan_patch",
-      "community": 2,
+      "community": 52,
       "norm_label": "_patch()"
     },
     {
@@ -7210,7 +7340,7 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "tests_test_scan_test_stops_paging_when_page_is_already_known",
-      "community": 2,
+      "community": 52,
       "norm_label": "test_stops_paging_when_page_is_already_known()"
     },
     {
@@ -7220,7 +7350,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "tests_test_scan_test_repost_is_linked_and_not_alerted_twice",
-      "community": 2,
+      "community": 52,
       "norm_label": "test_repost_is_linked_and_not_alerted_twice()"
     },
     {
@@ -7230,7 +7360,7 @@
       "source_location": "L76",
       "_origin": "ast",
       "id": "tests_test_scan_test_sold_and_broken_ads_skip_the_paid_lookup",
-      "community": 2,
+      "community": 52,
       "norm_label": "test_sold_and_broken_ads_skip_the_paid_lookup()"
     },
     {
@@ -7320,7 +7450,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_test_screen",
-      "community": 2,
+      "community": 49,
       "norm_label": "test_screen.py"
     },
     {
@@ -7330,7 +7460,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "tests_test_screen_l",
-      "community": 2,
+      "community": 49,
       "norm_label": "_l()"
     },
     {
@@ -7340,7 +7470,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "tests_test_screen_test_sold_pending_broken_and_accessories_are_skipped",
-      "community": 2,
+      "community": 49,
       "norm_label": "test_sold_pending_broken_and_accessories_are_skipped()"
     },
     {
@@ -7350,7 +7480,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "tests_test_screen_test_ship_signal_uses_leboncoin_fields_then_text",
-      "community": 2,
+      "community": 49,
       "norm_label": "test_ship_signal_uses_leboncoin_fields_then_text()"
     },
     {
@@ -7360,7 +7490,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "tests_test_screen_test_flags_and_price_drop_and_scam_price",
-      "community": 2,
+      "community": 49,
       "norm_label": "test_flags_and_price_drop_and_scam_price()"
     },
     {
@@ -7370,7 +7500,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_test_search_form",
-      "community": 3,
+      "community": 15,
       "norm_label": "test_search_form.py"
     },
     {
@@ -7380,7 +7510,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "tests_test_search_form_test_queries_come_only_from_inputs_and_fix_category",
-      "community": 3,
+      "community": 15,
       "norm_label": "test_queries_come_only_from_inputs_and_fix_category()"
     },
     {
@@ -7390,7 +7520,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "tests_test_search_form_test_empty_form_falls_back_to_pc_portable",
-      "community": 3,
+      "community": 15,
       "norm_label": "test_empty_form_falls_back_to_pc_portable()"
     },
     {
@@ -7400,7 +7530,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "tests_test_search_form_test_vendor_terms_and_matching",
-      "community": 3,
+      "community": 15,
       "norm_label": "test_vendor_terms_and_matching()"
     },
     {
@@ -7410,7 +7540,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "tests_test_search_form_test_snapdragon_extraction",
-      "community": 3,
+      "community": 15,
       "norm_label": "test_snapdragon_extraction()"
     },
     {
@@ -7420,7 +7550,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "tests_test_search_form_test_intervals",
-      "community": 3,
+      "community": 15,
       "norm_label": "test_intervals()"
     },
     {
@@ -7800,7 +7930,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_aipanel",
-      "community": 33,
+      "community": 44,
       "norm_label": "aipanel.tsx"
     },
     {
@@ -7810,7 +7940,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "components_aipanel_step_label",
-      "community": 33,
+      "community": 44,
       "norm_label": "step_label"
     },
     {
@@ -7820,7 +7950,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "components_aipanel_steps",
-      "community": 33,
+      "community": 44,
       "norm_label": "steps"
     },
     {
@@ -7830,7 +7960,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "components_aipanel_reasons",
-      "community": 33,
+      "community": 44,
       "norm_label": "reasons"
     },
     {
@@ -7840,7 +7970,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "components_aipanel_useenrich",
-      "community": 33,
+      "community": 42,
       "norm_label": "useenrich()"
     },
     {
@@ -7850,7 +7980,7 @@
       "source_location": "L65",
       "_origin": "ast",
       "id": "components_aipanel_stepchip",
-      "community": 33,
+      "community": 44,
       "norm_label": "stepchip()"
     },
     {
@@ -7860,7 +7990,7 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "components_aipanel_aipanel",
-      "community": 33,
+      "community": 44,
       "norm_label": "aipanel()"
     },
     {
@@ -8050,7 +8180,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "components_livepanel_runningscan",
-      "community": 42,
+      "community": 24,
       "norm_label": "runningscan()"
     },
     {
@@ -8090,7 +8220,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_setupchecklist",
-      "community": 21,
+      "community": 44,
       "norm_label": "setupchecklist.tsx"
     },
     {
@@ -8100,7 +8230,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "components_setupchecklist_setupchecklist",
-      "community": 21,
+      "community": 44,
       "norm_label": "setupchecklist()"
     },
     {
@@ -8110,7 +8240,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_ui",
-      "community": 21,
+      "community": 24,
       "norm_label": "ui.tsx"
     },
     {
@@ -8120,7 +8250,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "components_ui_buttonvariant",
-      "community": 21,
+      "community": 24,
       "norm_label": "buttonvariant"
     },
     {
@@ -8130,7 +8260,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "components_ui_buttonsize",
-      "community": 21,
+      "community": 24,
       "norm_label": "buttonsize"
     },
     {
@@ -8140,7 +8270,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "components_ui_button_variants",
-      "community": 21,
+      "community": 24,
       "norm_label": "button_variants"
     },
     {
@@ -8150,7 +8280,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "components_ui_button_sizes",
-      "community": 21,
+      "community": 24,
       "norm_label": "button_sizes"
     },
     {
@@ -8160,7 +8290,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "components_ui_button",
-      "community": 21,
+      "community": 44,
       "norm_label": "button()"
     },
     {
@@ -8170,7 +8300,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "components_ui_card",
-      "community": 21,
+      "community": 44,
       "norm_label": "card()"
     },
     {
@@ -8180,7 +8310,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "components_ui_cardheader",
-      "community": 21,
+      "community": 24,
       "norm_label": "cardheader()"
     },
     {
@@ -8190,7 +8320,7 @@
       "source_location": "L66",
       "_origin": "ast",
       "id": "components_ui_badge",
-      "community": 42,
+      "community": 24,
       "norm_label": "badge()"
     },
     {
@@ -8200,7 +8330,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "components_ui_dealbadge",
-      "community": 6,
+      "community": 0,
       "norm_label": "dealbadge()"
     },
     {
@@ -8260,7 +8390,7 @@
       "source_location": "L152",
       "_origin": "ast",
       "id": "components_ui_skeleton",
-      "community": 21,
+      "community": 24,
       "norm_label": "skeleton()"
     },
     {
@@ -8270,7 +8400,7 @@
       "source_location": "L156",
       "_origin": "ast",
       "id": "components_ui_emptystate",
-      "community": 21,
+      "community": 24,
       "norm_label": "emptystate()"
     },
     {
@@ -8280,7 +8410,7 @@
       "source_location": "L174",
       "_origin": "ast",
       "id": "components_ui_scorering",
-      "community": 21,
+      "community": 0,
       "norm_label": "scorering()"
     },
     {
@@ -8290,7 +8420,7 @@
       "source_location": "L209",
       "_origin": "ast",
       "id": "components_ui_toaster",
-      "community": 21,
+      "community": 24,
       "norm_label": "toaster()"
     },
     {
@@ -8310,7 +8440,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_api_sortkey",
-      "community": 33,
+      "community": 42,
       "norm_label": "sortkey"
     },
     {
@@ -8320,7 +8450,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "lib_api_search",
-      "community": 42,
+      "community": 24,
       "norm_label": "search"
     },
     {
@@ -8420,7 +8550,7 @@
       "source_location": "L214",
       "_origin": "ast",
       "id": "lib_api_negotiationout",
-      "community": 33,
+      "community": 42,
       "norm_label": "negotiationout"
     },
     {
@@ -8540,7 +8670,7 @@
       "source_location": "L376",
       "_origin": "ast",
       "id": "lib_api_pricebookrow",
-      "community": 21,
+      "community": 24,
       "norm_label": "pricebookrow"
     },
     {
@@ -8610,7 +8740,7 @@
       "source_location": "L450",
       "_origin": "ast",
       "id": "lib_api_api",
-      "community": 33,
+      "community": 6,
       "norm_label": "api"
     },
     {
@@ -8770,7 +8900,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "lib_toast_usetoasts",
-      "community": 21,
+      "community": 24,
       "norm_label": "usetoasts()"
     },
     {
@@ -8860,7 +8990,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "lib_utils_cn",
-      "community": 21,
+      "community": 44,
       "norm_label": "cn()"
     },
     {
@@ -9020,7 +9150,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "pages_bestdeals",
-      "community": 21,
+      "community": 24,
       "norm_label": "bestdeals.tsx"
     },
     {
@@ -9030,7 +9160,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "pages_bestdeals_bestdeals",
-      "community": 21,
+      "community": 24,
       "norm_label": "bestdeals()"
     },
     {
@@ -9080,7 +9210,7 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "pages_dashboard_dashboard",
-      "community": 6,
+      "community": 0,
       "norm_label": "dashboard()"
     },
     {
@@ -9230,7 +9360,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "pages_pricebook",
-      "community": 21,
+      "community": 24,
       "norm_label": "pricebook.tsx"
     },
     {
@@ -9240,7 +9370,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "pages_pricebook_row",
-      "community": 21,
+      "community": 24,
       "norm_label": "row()"
     },
     {
@@ -9250,7 +9380,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "pages_pricebook_pricebook",
-      "community": 21,
+      "community": 24,
       "norm_label": "pricebook()"
     },
     {
@@ -9260,7 +9390,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "pages_results",
-      "community": 33,
+      "community": 42,
       "norm_label": "results.tsx"
     },
     {
@@ -9270,7 +9400,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "pages_results_sorts",
-      "community": 33,
+      "community": 42,
       "norm_label": "sorts"
     },
     {
@@ -9280,7 +9410,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "pages_results_preset",
-      "community": 33,
+      "community": 42,
       "norm_label": "preset"
     },
     {
@@ -9290,7 +9420,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "pages_results_presets",
-      "community": 33,
+      "community": 42,
       "norm_label": "presets"
     },
     {
@@ -9300,7 +9430,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "pages_results_results",
-      "community": 33,
+      "community": 42,
       "norm_label": "results()"
     },
     {
@@ -9350,7 +9480,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "pages_searches",
-      "community": 42,
+      "community": 24,
       "norm_label": "searches.tsx"
     },
     {
@@ -9360,7 +9490,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "pages_searches_intervalbadge",
-      "community": 42,
+      "community": 24,
       "norm_label": "intervalbadge()"
     },
     {
@@ -9370,7 +9500,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "pages_searches_querypreview",
-      "community": 42,
+      "community": 24,
       "norm_label": "querypreview()"
     },
     {
@@ -9380,7 +9510,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "pages_searches_searches",
-      "community": 42,
+      "community": 24,
       "norm_label": "searches()"
     },
     {
@@ -14470,9 +14600,9 @@
       "source_file": "backend/app/api/settings.py",
       "source_location": "L77",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_settings_rationale_77",
-      "target": "api_settings_telegram_detect",
-      "confidence_score": 1.0
+      "target": "api_settings_telegram_detect"
     },
     {
       "relation": "rationale_for",
@@ -14480,9 +14610,9 @@
       "source_file": "backend/app/api/settings.py",
       "source_location": "L98",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_settings_rationale_98",
-      "target": "api_settings_test_openrouter",
-      "confidence_score": 1.0
+      "target": "api_settings_test_openrouter"
     },
     {
       "relation": "rationale_for",
@@ -14490,9 +14620,9 @@
       "source_file": "backend/app/api/settings.py",
       "source_location": "L112",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_settings_rationale_112",
-      "target": "api_settings_test_leboncoin",
-      "confidence_score": 1.0
+      "target": "api_settings_test_leboncoin"
     },
     {
       "relation": "contains",
@@ -16938,6 +17068,36 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/dz_market.py",
+      "source_location": "L217",
+      "weight": 1.0,
+      "source": "intelligence_dz_market",
+      "target": "intelligence_dz_market_explain_temporary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/dz_market.py",
+      "source_location": "L213",
+      "weight": 1.0,
+      "source": "intelligence_dz_market",
+      "target": "intelligence_dz_market_is_temporary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/dz_market.py",
+      "source_location": "L223",
+      "weight": 1.0,
+      "source": "intelligence_dz_market",
+      "target": "intelligence_dz_market_is_temporary_failure",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/dz_market.py",
       "source_location": "L246",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -17217,6 +17377,17 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/dz_market.py",
+      "source_location": "L224",
+      "weight": 1.0,
+      "source": "intelligence_dz_market_is_temporary_failure",
+      "target": "intelligence_dz_market_describe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/dz_market.py",
       "source_location": "L247",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -17238,11 +17409,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L53",
+      "source_location": "L54",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "intelligence_dz_market_rationale_53",
-      "target": "intelligence_dz_market_describe"
+      "source": "intelligence_dz_market_rationale_54",
+      "target": "intelligence_dz_market_describe",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -17254,6 +17425,17 @@
       "confidence_score": 1.0,
       "source": "intelligence_dz_market_ad_context",
       "target": "backend_app_intelligence_dz_market_py_listing"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/dz_market.py",
+      "source_location": "L223",
+      "weight": 1.0,
+      "source": "intelligence_dz_market_is_temporary_failure",
+      "target": "backend_app_intelligence_dz_market_py_listing",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -17303,11 +17485,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L59",
+      "source_location": "L60",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "intelligence_dz_market_rationale_59",
-      "target": "intelligence_dz_market_ad_context"
+      "source": "intelligence_dz_market_rationale_60",
+      "target": "intelligence_dz_market_ad_context",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -17401,11 +17583,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L117",
+      "source_location": "L118",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "intelligence_dz_market_rationale_117",
-      "target": "intelligence_dz_market_call_gemini"
+      "source": "intelligence_dz_market_rationale_118",
+      "target": "intelligence_dz_market_call_gemini",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -17533,6 +17715,28 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/dz_market.py",
+      "source_location": "L286",
+      "weight": 1.0,
+      "source": "intelligence_dz_market_lookup",
+      "target": "intelligence_dz_market_is_temporary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/dz_market.py",
+      "source_location": "L288",
+      "weight": 1.0,
+      "source": "intelligence_dz_market_lookup",
+      "target": "intelligence_dz_market_explain_temporary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/dz_market.py",
       "source_location": "L243",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -17543,41 +17747,31 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L213",
+      "source_location": "L228",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "intelligence_dz_market_rationale_213",
-      "target": "intelligence_dz_market_book_row"
+      "source": "intelligence_dz_market_rationale_228",
+      "target": "intelligence_dz_market_book_row",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L213",
+      "source_location": "L260",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "intelligence_dz_market_rationale_213",
-      "target": "intelligence_dz_market_lookup"
+      "source": "intelligence_dz_market_rationale_260",
+      "target": "intelligence_dz_market_lookup",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L233",
+      "source_location": "L298",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "intelligence_dz_market_rationale_233",
-      "target": "intelligence_dz_market_lookup"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L265",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "intelligence_dz_market_rationale_265",
-      "target": "intelligence_dz_market_set_manual"
+      "source": "intelligence_dz_market_rationale_298",
+      "target": "intelligence_dz_market_set_manual",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -18444,11 +18638,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/enrich.py",
-      "source_location": "L275",
+      "source_location": "L276",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "intelligence_enrich_rationale_275",
-      "target": "intelligence_enrich_start"
+      "source": "intelligence_enrich_rationale_276",
+      "target": "intelligence_enrich_start",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -19617,6 +19811,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/pricebook.py",
+      "source_location": "L153",
+      "weight": 1.0,
+      "source": "intelligence_pricebook",
+      "target": "intelligence_pricebook_is_estimate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/pricebook.py",
       "source_location": "L47",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -19642,6 +19846,26 @@
       "confidence_score": 1.0,
       "source": "intelligence_pricebook",
       "target": "intelligence_pricebook_kind_of"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/pricebook.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "intelligence_pricebook",
+      "target": "intelligence_pricebook_model_name",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/pricebook.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "intelligence_pricebook",
+      "target": "intelligence_pricebook_title_cpu",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -19680,6 +19904,48 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/pricebook.py",
+      "source_location": "L107",
+      "weight": 1.0,
+      "source": "intelligence_pricebook_canonical",
+      "target": "intelligence_pricebook_title_cpu",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/pricebook.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "intelligence_pricebook_rationale_30",
+      "target": "intelligence_pricebook_title_cpu",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/pricebook.py",
+      "source_location": "L109",
+      "weight": 1.0,
+      "source": "intelligence_pricebook_canonical",
+      "target": "intelligence_pricebook_model_name",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/pricebook.py",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "intelligence_pricebook_rationale_36",
+      "target": "intelligence_pricebook_model_name",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/pricebook.py",
       "source_location": "L74",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -19701,11 +19967,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/pricebook.py",
-      "source_location": "L31",
+      "source_location": "L55",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "intelligence_pricebook_rationale_31",
-      "target": "intelligence_pricebook_cpu_tier"
+      "source": "intelligence_pricebook_rationale_55",
+      "target": "intelligence_pricebook_cpu_tier",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -19744,11 +20010,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/pricebook.py",
-      "source_location": "L48",
+      "source_location": "L76",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "intelligence_pricebook_rationale_48",
-      "target": "intelligence_pricebook_is_gpu_ad"
+      "source": "intelligence_pricebook_rationale_76",
+      "target": "intelligence_pricebook_is_gpu_ad",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -19787,11 +20053,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/pricebook.py",
-      "source_location": "L63",
+      "source_location": "L91",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "intelligence_pricebook_rationale_63",
-      "target": "intelligence_pricebook_canonical"
+      "source": "intelligence_pricebook_rationale_91",
+      "target": "intelligence_pricebook_canonical",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -19808,11 +20074,21 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/pricebook.py",
-      "source_location": "L108",
+      "source_location": "L143",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "intelligence_pricebook_rationale_108",
-      "target": "intelligence_pricebook_is_specific"
+      "source": "intelligence_pricebook_rationale_143",
+      "target": "intelligence_pricebook_is_specific",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/pricebook.py",
+      "source_location": "L154",
+      "weight": 1.0,
+      "source": "intelligence_pricebook_rationale_154",
+      "target": "intelligence_pricebook_is_estimate",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -20629,9 +20905,9 @@
       "source_file": "backend/app/intelligence/verdict.py",
       "source_location": "L197",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_verdict_rationale_197",
-      "target": "intelligence_verdict_max_buy",
-      "confidence_score": 1.0
+      "target": "intelligence_verdict_max_buy"
     },
     {
       "relation": "calls",
@@ -20661,9 +20937,9 @@
       "source_file": "backend/app/intelligence/verdict.py",
       "source_location": "L268",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_verdict_rationale_268",
-      "target": "intelligence_verdict_generate",
-      "confidence_score": 1.0
+      "target": "intelligence_verdict_generate"
     },
     {
       "relation": "imports_from",
@@ -21845,6 +22121,17 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/tests/test_live.py",
+      "source_location": "L407",
+      "weight": 1.0,
+      "source": "tests_test_live_test_out_of_credit_never_wipes_a_price_or_blames_the_product",
+      "target": "app_models_settings"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/tests/test_live.py",
       "source_location": "L358",
       "weight": 1.0,
       "source": "tests_test_live_test_price_far_below_the_product_value_gets_no_verdict",
@@ -22432,6 +22719,28 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/tests/test_live.py",
+      "source_location": "L381",
+      "weight": 1.0,
+      "source": "tests_test_live_test_named_laptop_models_share_one_key",
+      "target": "app_models_listing"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L412",
+      "weight": 1.0,
+      "source": "tests_test_live_test_out_of_credit_never_wipes_a_price_or_blames_the_product",
+      "target": "app_models_listing"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/tests/test_live.py",
       "source_location": "L342",
       "weight": 1.0,
       "source": "tests_test_live_test_parts_and_wanted_ads_are_not_priced_as_the_product",
@@ -22704,9 +23013,9 @@
       "source_file": "backend/app/models.py",
       "source_location": "L311",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_models_rationale_311",
-      "target": "app_models_dzprice",
-      "confidence_score": 1.0
+      "target": "app_models_dzprice"
     },
     {
       "relation": "imports",
@@ -22738,6 +23047,28 @@
       "source_location": "L330",
       "weight": 1.0,
       "source": "tests_test_live_test_different_stated_vram_is_a_different_product",
+      "target": "app_models_dzprice"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L409",
+      "weight": 1.0,
+      "source": "tests_test_live_test_out_of_credit_never_wipes_a_price_or_blames_the_product",
+      "target": "app_models_dzprice"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L392",
+      "weight": 1.0,
+      "source": "tests_test_live_test_unknown_ram_uses_the_cheapest_config_of_that_cpu_at_low_confidence",
       "target": "app_models_dzprice"
     },
     {
@@ -27999,6 +28330,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/tests/test_live.py",
+      "source_location": "L364",
+      "weight": 1.0,
+      "source": "tests_test_live",
+      "target": "tests_test_live_test_cpu_generations_are_read_correctly",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_live.py",
       "source_location": "L325",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -28099,6 +28440,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/tests/test_live.py",
+      "source_location": "L373",
+      "weight": 1.0,
+      "source": "tests_test_live",
+      "target": "tests_test_live_test_named_laptop_models_share_one_key",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_live.py",
       "source_location": "L294",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -28114,6 +28465,16 @@
       "confidence_score": 1.0,
       "source": "tests_test_live",
       "target": "tests_test_live_test_only_specific_products_share_a_price"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L402",
+      "weight": 1.0,
+      "source": "tests_test_live",
+      "target": "tests_test_live_test_out_of_credit_never_wipes_a_price_or_blames_the_product",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -28164,6 +28525,16 @@
       "confidence_score": 1.0,
       "source": "tests_test_live",
       "target": "tests_test_live_test_scans_use_no_ai_and_read_only_the_price_cache"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L386",
+      "weight": 1.0,
+      "source": "tests_test_live",
+      "target": "tests_test_live_test_unknown_ram_uses_the_cheapest_config_of_that_cpu_at_low_confidence",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -28246,6 +28617,17 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "backend/tests/test_live.py",
+      "source_location": "L406",
+      "weight": 1.0,
+      "source": "tests_test_live_test_out_of_credit_never_wipes_a_price_or_blames_the_product",
+      "target": "tests_test_live_db",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_live.py",
       "source_location": "L175",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -28262,6 +28644,17 @@
       "confidence_score": 1.0,
       "source": "tests_test_live_test_scans_use_no_ai_and_read_only_the_price_cache",
       "target": "tests_test_live_db"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L390",
+      "weight": 1.0,
+      "source": "tests_test_live_test_unknown_ram_uses_the_cheapest_config_of_that_cpu_at_low_confidence",
+      "target": "tests_test_live_db",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -36083,5 +36476,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "e9c9c5e8ffd8e67e5f4de53cf9e5970212378cdc"
+  "built_at_commit": "a2f7b7d93b9d9d294f70482403b937099079f0ca"
 }
