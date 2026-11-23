@@ -208,11 +208,11 @@ def live(db: Session = Depends(get_db)) -> dict:
 # ---------------------------------------------------------------- act now
 @router.get("/deals/act-now")
 def act_now(limit: int = 6, db: Session = Depends(get_db)) -> dict:
-    """Fresh, still-online, profitable ads you have not acted on yet, best first."""
+    """Fresh, still-online, profitable ads you have not acted on yet, newest first."""
     from ..intelligence import freshness
 
     settings = get_settings(db)
-    max_age = float(settings.max_ad_age_hours or 48)
+    max_age = float(settings.max_ad_age_hours or freshness.FRESH_HOURS)
     query = (
         select(Listing)
         .where(Listing.gone_at.is_(None), Listing.is_active.is_not(False))
@@ -236,9 +236,8 @@ def act_now(limit: int = 6, db: Session = Depends(get_db)) -> dict:
             continue
         if profit <= 0:
             continue
-        rank = profit * (0.5 + (listing.freshness_score or 50) / 200)
-        scored.append((rank, listing))
-    scored.sort(key=lambda item: -item[0])
+        scored.append((age, listing))
+    scored.sort(key=lambda item: item[0])
     return {
         "items": [listing_card(listing) for _, listing in scored[: max(1, min(limit, 20))]],
         "unpriced_fresh": unpriced,

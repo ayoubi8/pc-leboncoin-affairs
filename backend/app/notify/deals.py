@@ -10,20 +10,21 @@ Pipeline per run (cheap checks first, paid calls last):
 from __future__ import annotations
 
 import html
+import time
 from datetime import datetime, timedelta, timezone
 from typing import Any, Optional
 
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from ..config import APP_URL
 from ..intelligence import freshness, match, negotiation, verdict
-from ..models import Listing, Search, Settings
+from ..models import Listing, Search, SearchListing, Settings
 from ..scraping import leboncoin
 from . import telegram
 
 ORDER = ["skip", "fair", "good", "great"]
 EMOJI = {"great": "🔥", "good": "✅", "fair": "🟡", "skip": "⛔"}
-MIN_FRESHNESS = 40.0
 PRICE_DROP_REALERT = 0.95  # re-alert when the price falls below 95 % of the last alerted price
 
 
@@ -144,10 +145,10 @@ def _gate(settings: Settings, listing: Listing, realert: bool, search: Optional[
     if listing.ship_ok == "no" and not settings.alert_pickup_only:
         return False
     info = freshness.compute(listing)
-    max_age = float(settings.max_ad_age_hours or 48)
+    max_age = float(settings.max_ad_age_hours or freshness.FRESH_HOURS)
     if info["age_hours"] is not None and info["age_hours"] > max_age:
         return False
-    if info["score"] < MIN_FRESHNESS:
+    if freshness.sold_flags(listing):
         return False
     if realert:
         return bool(listing.price_alerted_eur) and listing.price_eur <= listing.price_alerted_eur * PRICE_DROP_REALERT
@@ -261,3 +262,129 @@ def notify_run(
             buttons=[("See all", f"{APP_URL}/deals")],
         )
     return stats
+
+
+# --- /deals command and scan summaries: free, they only read what is already stored ---
+
+CLOSED_STATUSES = ("bought", "shipped", "sold", "skipped")
+AUTO_SUMMARY_GAP_S = 60 * 60  # automatic scans can run every 10 min: at most one summary per search per hour
+_last_summary: dict[int, float] = {}
+
+
+def top_fresh(
+    db: Session, settings: Settings, search: Optional[Search] = None, limit: int = 5, order: str = "newest"
+) -> list[Listing]:
+    """Actionable fresh ads, losing ones included. ``order``: "newest" first, or "profit" (priced ads first)."""
+    query = (
+        select(Listing, Search)
+        .join(SearchListing, SearchListing.listing_id == Listing.id)
+        .join(Search, Search.id == SearchListing.search_id)
+    )
+    if search is not None:
+        query = query.where(Search.id == search.id)
+    now = _now()
+    max_age = float(settings.max_ad_age_hours or freshness.FRESH_HOURS)
+    chosen: dict[int, Listing] = {}
+    for listing, owner in db.execute(query).all():
+        if listing.id in chosen or listing.gone_at is not None or listing.is_active is False or listing.screen_skip:
+            continue
+        if (listing.pipeline_status or "") in CLOSED_STATUSES or not listing.price_eur:
+            continue
+        if listing.ship_ok == "no" and not settings.alert_pickup_only:
+            continue
+        age = freshness.age_hours(listing, now)
+        if (age is not None and age > max_age) or match.hard_fail(owner, listing):
+            continue
+        chosen[listing.id] = listing
+
+    def rank(listing: Listing) -> tuple[int, float]:
+        age = freshness.age_hours(listing, now)
+        if order == "newest":
+            return (age is None, age or 0.0)
+        numbers = verdict.compute_numbers(settings, listing)
+        return (1, age or 0.0) if numbers is None else (0, -numbers["profit_ask_eur"])
+
+    return sorted(chosen.values(), key=rank)[:limit]
+
+
+def deal_card(settings: Settings, listing: Listing, position: int) -> str:
+    numbers = verdict.compute_numbers(settings, listing)
+    label = listing.ai_verdict_label if listing.ai_verdict_label in ORDER else ""
+    if not label and numbers:
+        label = verdict.label_for(numbers["margin_pct"], numbers["dz_confidence"])
+    age = freshness.age_label(freshness.age_hours(listing))
+    lines = [
+        f"{EMOJI.get(label, '⏳')} <b>{position}. {_esc(label.upper() or 'NOT PRICED YET')}</b> · {_esc(listing.subject)[:110]}",
+        _spec_line(listing),
+        f"🕒 {_esc(age)} · {_ship_line(listing)}",
+        f"💶 <b>Price:</b> {_eur(listing.price_eur)}",
+    ]
+    if numbers:
+        word = "Profit" if numbers["profit_ask_eur"] >= 0 else "Loss"
+        lines += [
+            f"🚚 <b>Landed:</b> {_eur(numbers['total_cost_ask_eur'])}",
+            f"🇩🇿 <b>Algeria:</b> {_dzd(numbers['dz_median_dzd'])} ({_esc(numbers['dz_confidence'] or '?')} confidence)",
+            f"📈 <b>{word} at asking price:</b> {_signed(numbers['profit_ask_eur'])} ({numbers['margin_ask_pct']}%)",
+            f"🎯 <b>Max to pay:</b> {_eur(numbers['max_buy_for_good_eur'])}",
+        ]
+    else:
+        lines.append("No Algerian price yet: open Fresh ads in the app to run the AI on it.")
+    stored = listing.ai_verdict or {}
+    if stored.get("source") == "ai" and stored.get("headline"):
+        lines.append(f"💬 {_esc(stored['headline'])}")
+    return "\n".join(lines)
+
+
+def send_top_deals(db: Session, settings: Settings, limit: int = 5) -> int:
+    """Answer /deals: one message per ad, each with its link. Returns how many ads were sent."""
+    listings = top_fresh(db, settings, limit=limit)
+    if not listings:
+        telegram.send_message(settings, "No fresh ad to show: everything is older than the max age, gone, pickup only, or off-search. Run a scan first.")
+        return 0
+    max_age = float(settings.max_ad_age_hours or freshness.FRESH_HOURS)
+    telegram.send_message(settings, f"📋 <b>{len(listings)} newest fresh ads</b> (under {max_age / 24:.0f} days). Losing ads are shown too, marked as such.")
+    for position, listing in enumerate(listings, start=1):
+        telegram.send_message(
+            settings,
+            deal_card(settings, listing, position),
+            buttons=[
+                ("Open ad", listing.url or ""),
+                ("Open in app", f"{APP_URL}/listings/{listing.id}"),
+                ("📨 Contacted", f"cb:p:c:{listing.id}"),
+                ("⏭ Skip", f"cb:p:s:{listing.id}"),
+            ],
+        )
+    return len(listings)
+
+
+def send_scan_summary(
+    db: Session,
+    settings: Settings,
+    search: Search,
+    trigger: str,
+    checked: int,
+    new: int,
+    stats: Optional[dict[str, Any]] = None,
+) -> bool:
+    """A short note after a scan so silence never looks like a broken bot.
+
+    Manual scans always report. Automatic ones only when they found new ads, at most hourly, never in quiet hours.
+    """
+    if trigger != "manual":
+        if not new or in_quiet_hours(settings) or time.time() - _last_summary.get(search.id, 0) < AUTO_SUMMARY_GAP_S:
+            return False
+    sent = int((stats or {}).get("sent") or 0)
+    lines = [f"📊 <b>{_esc(search.name)}</b>: {checked} ads checked, {new} new, {sent} good deal{'' if sent == 1 else 's'} sent."]
+    best = top_fresh(db, settings, search, limit=1, order="profit")
+    numbers = verdict.compute_numbers(settings, best[0]) if best else None
+    if numbers:
+        lines.append(f"Best fresh ad: {_esc(best[0].subject)[:60]} · {_eur(best[0].price_eur)} · {_signed(numbers['profit_ask_eur'])} at asking price")
+    elif best:
+        lines.append("Fresh ads are waiting for an Algerian price.")
+    else:
+        lines.append("No fresh ad you could buy right now.")
+    lines.append("Send /deals to see the 5 newest.")
+    result = telegram.send_message(settings, "\n".join(lines))
+    if result.get("ok"):
+        _last_summary[search.id] = time.time()
+    return bool(result.get("ok"))

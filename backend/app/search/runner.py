@@ -258,6 +258,7 @@ def run_search(
         # Ads new to this search count for alerts even if the database already knew them; the alert gate
         # still drops anything stale or already alerted.
         fresh_for_search = counts["new_listings"] + counts["linked_listings"]
+        stats = None
         if settings.telegram_enabled and search.notify_telegram and (fresh_for_search or counts["changed_listings"]):
             try:
                 from ..notify import deals
@@ -275,6 +276,14 @@ def run_search(
             run.status = "success"
         else:
             run.status = "failed"
+
+        if run.status == "success" and settings.telegram_enabled and search.notify_telegram:
+            try:
+                from ..notify import deals
+
+                deals.send_scan_summary(db, settings, search, trigger, len(unique), len(fresh_for_search), stats)
+            except Exception as exc:  # a summary must never break a run
+                print(f"[notify] summary for search {search.id}: {type(exc).__name__}: {exc}")
     except Exception as exc:  # keep the run row for the UI
         db.rollback()
         run = db.get(Run, run.id)

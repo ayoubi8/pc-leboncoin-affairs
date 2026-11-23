@@ -87,7 +87,7 @@ def test_only_profitable_fresh_deals_are_sent_once(monkeypatch):
 def test_stale_or_unshippable_or_rejected_ads_never_alert(monkeypatch):
     db = _db()
     settings, search = _setup(db)
-    old = _listing(db, "old", 150_000, hours_ago=24 * 10)
+    old = _listing(db, "old", 150_000, hours_ago=24 * 15)  # just past the 14-day fresh window
     pickup = _listing(db, "pickup", 150_000)
     pickup.ship_ok = "no"
     rejected = _listing(db, "rejected", 150_000)
@@ -248,7 +248,7 @@ def test_send_best_deals_now_alerts_fresh_ads_already_in_the_search(monkeypatch)
     db = _db()
     settings, search = _setup(db)
     good = _listing(db, "Good laptop already stored", 150_000)
-    old = _listing(db, "Old laptop", 150_000, hours_ago=200)
+    old = _listing(db, "Old laptop", 150_000, hours_ago=24 * 15)
     db.add_all([SearchListing(search_id=search.id, listing_id=good.id), SearchListing(search_id=search.id, listing_id=old.id)])
     db.commit()
     sink = Sink(monkeypatch)
@@ -258,6 +258,48 @@ def test_send_best_deals_now_alerts_fresh_ads_already_in_the_search(monkeypatch)
     client = TestClient(app)
 
     out = client.post(f"/api/searches/{search.id}/alert-now").json()
-    assert out["sent"] == 1 and out["fresh"] == 1  # the 200 h old ad is not even considered
+    assert out["sent"] == 1 and out["fresh"] == 1  # the 15-day-old ad is not even considered
     assert "Good laptop already stored" in sink.sent[0]["text"]
     assert client.post(f"/api/searches/{search.id}/alert-now").json()["sent"] == 0  # never twice
+
+
+def _linked(db, search, *listings):
+    db.add_all([SearchListing(search_id=search.id, listing_id=l.id) for l in listings])
+    db.commit()
+
+
+def test_deals_command_lists_fresh_ads_newest_first_with_links(monkeypatch):
+    from app.notify import poller
+
+    db = _db()
+    settings, search = _setup(db)
+    loss = _listing(db, "Losing laptop", 40_000, hours_ago=24 * 13)  # 13 days old is still fresh
+    win = _listing(db, "Winning laptop", 150_000, hours_ago=2)
+    old = _listing(db, "Old laptop", 150_000, hours_ago=24 * 15)
+    pickup = _listing(db, "Pickup laptop", 150_000)
+    pickup.ship_ok = "no"
+    _linked(db, search, loss, win, old, pickup)
+    sink = Sink(monkeypatch)
+
+    poller._handle_message(db, settings, {"chat": {"id": 1}, "text": "/deals"})
+    cards = sink.sent[1:]
+    assert len(cards) == 2 and "Winning laptop" in cards[0]["text"] and "Losing laptop" in cards[1]["text"]
+    assert "Loss at asking price" in cards[1]["text"]
+    assert "Open ad" in [b[0] for b in cards[0]["buttons"]]
+    assert win.notified_at is None  # showing a deal does not use up its alert
+
+
+def test_scan_summary_always_for_manual_and_rate_limited_for_auto(monkeypatch):
+    db = _db()
+    settings, search = _setup(db)
+    ad = _listing(db, "Laptop", 150_000)
+    _linked(db, search, ad)
+    sink = Sink(monkeypatch)
+    deals._last_summary.clear()
+
+    assert deals.send_scan_summary(db, settings, search, "auto", 35, 0) is False  # auto + nothing new: silent
+    assert deals.send_scan_summary(db, settings, search, "manual", 35, 0) is True
+    assert "35 ads checked, 0 new" in sink.sent[0]["text"] and "Best fresh ad" in sink.sent[0]["text"]
+    assert deals.send_scan_summary(db, settings, search, "auto", 35, 2) is False  # within the hour
+    deals._last_summary.clear()
+    assert deals.send_scan_summary(db, settings, search, "auto", 35, 2) is True

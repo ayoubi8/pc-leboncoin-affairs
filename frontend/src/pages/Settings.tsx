@@ -421,7 +421,7 @@ export default function Settings() {
             />
           </div>
           <NumberField
-            label="Alert only ads younger than"
+            label="Ads count as fresh under (336 h = 14 days)"
             suffix="hours"
             value={form.max_ad_age_hours}
             onChange={(value) => set("max_ad_age_hours", Math.max(1, Math.round(value)))}

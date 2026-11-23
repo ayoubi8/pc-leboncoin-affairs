@@ -180,7 +180,7 @@ def alert_now(search_id: int, db: Session = Depends(get_db)) -> dict:
         raise HTTPException(status_code=400, detail="Telegram is not set up: enable it and link a chat in Settings.")
 
     now = datetime.now(timezone.utc).replace(tzinfo=None)
-    max_age = float(settings.max_ad_age_hours or 48)
+    max_age = float(settings.max_ad_age_hours or freshness.FRESH_HOURS)
     rows = db.execute(
         select(Listing).join(SearchListing, SearchListing.listing_id == Listing.id).where(SearchListing.search_id == search.id)
     ).scalars().all()
@@ -320,7 +320,7 @@ def search_results(
         if sort == "profit_desc":
             return (card.ai_profit_eur is None, -(card.ai_profit_eur or 0))
         if sort == "newest":
-            return (card.found_at is None, -(card.found_at.timestamp() if card.found_at else 0))
+            return (card.age_hours is None, card.age_hours or 0)  # by publication date on Leboncoin
         if sort == "landed_asc":
             total = landed_totals.get(card.id)
             return (total is None, total or 0)

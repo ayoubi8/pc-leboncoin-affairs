@@ -8,11 +8,12 @@ from typing import Any
 from sqlalchemy.orm import Session
 
 from ..models import Listing, Settings
-from . import pipeline, system, telegram
+from . import deals, pipeline, system, telegram
 
 ACTIONS = {"c": "contacted", "b": "bought", "s": "skipped"}
 HELP = (
     "Commands:\n"
+    "/deals - 5 newest fresh ads with price, profit and link\n"
     "/paid ID PRICE_EUR  - record what you paid\n"
     "/sold ID PRICE_DZD  - record what you sold it for\n"
     "/status - system health"
@@ -51,6 +52,8 @@ def _handle_message(db: Session, settings: Settings, message: dict[str, Any]) ->
     text = (message.get("text") or "").strip()
     if text.startswith(("/start", "/help")):
         _reply(settings, HELP)
+    elif text.startswith("/deals"):
+        deals.send_top_deals(db, settings)
     elif text.startswith("/status"):
         health = system.compute_health(db, settings)
         lines = ["✅ All good" if health["ok"] else "🚨 Problems:"] + [f"• {p['message']}" for p in health["problems"]]

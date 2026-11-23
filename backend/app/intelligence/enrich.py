@@ -52,7 +52,7 @@ def needs(listing: Listing) -> list[str]:
 
 def _freshest_needing_ai(rows: list[Listing], search: Search, settings: Settings, limit: int) -> list[Listing]:
     now = datetime.now(timezone.utc).replace(tzinfo=None)
-    max_age = float(settings.max_ad_age_hours or 48)
+    max_age = float(settings.max_ad_age_hours or freshness.FRESH_HOURS)
     candidates = []
     for listing in rows:
         if listing.gone_at is not None or listing.is_active is False or listing.screen_skip:

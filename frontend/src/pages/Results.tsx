@@ -20,15 +20,15 @@ const SORTS: { value: SortKey; label: string }[] = [
 
 type Preset = "hot" | "fresh" | "all";
 const PRESETS: { id: Preset; label: string; hint: string }[] = [
-  { id: "hot", label: "Hot deals", hint: "Good verdict, under 48 h, still online. Opening it runs the AI on the first 5 unpriced ads" },
-  { id: "fresh", label: "Fresh ads", hint: "Under 48 h, still online, matching your search. Opening it runs the AI on the first 5 unpriced ads" },
+  { id: "hot", label: "Hot deals", hint: "Good verdict, under 14 days, still online, newest first. Opening it runs the AI on the first 5 unpriced ads" },
+  { id: "fresh", label: "Fresh ads", hint: "Under 14 days, still online, matching your search, newest first. Opening it runs the AI on the first 5 unpriced ads" },
   { id: "all", label: "Everything", hint: "Every stored ad, including old and sold" },
 ];
 
 export default function Results() {
   const { id } = useParams();
   const searchId = Number(id);
-  const [sort, setSort] = useState<SortKey>("opportunity");
+  const [sort, setSort] = useState<SortKey>("newest");
   const [preset, setPreset] = useState<Preset | null>("fresh");
   const [showFilters, setShowFilters] = useState(false);
   const queryClient = useQueryClient();
@@ -52,7 +52,7 @@ export default function Results() {
     good_only: false,
     relevant_only: true,
     show_gone: false,
-    max_age_hours: "48",
+    max_age_hours: "336",
   });
 
   const params = useMemo(
@@ -125,11 +125,11 @@ export default function Results() {
 
   function applyPreset(next: Preset) {
     setPreset(next);
-    setSort(next === "all" ? "newest" : "opportunity");
+    setSort("newest");
     setFilters((current) => ({
       ...current,
       good_only: next === "hot",
-      max_age_hours: next === "all" ? "" : "48",
+      max_age_hours: next === "all" ? "" : "336",
       relevant_only: next !== "all",
       show_gone: next === "all",
       new_only: false,
@@ -336,6 +336,7 @@ export default function Results() {
                 <option value="24">24 h</option>
                 <option value="48">48 h</option>
                 <option value="168">7 days</option>
+                <option value="336">14 days</option>
               </Select>
             </div>
             <div className="flex items-end gap-2">

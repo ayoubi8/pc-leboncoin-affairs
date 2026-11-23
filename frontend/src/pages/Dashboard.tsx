@@ -69,7 +69,7 @@ function ActNow() {
     <Card>
       <CardHeader
         title="Act now"
-        subtitle={`Fresh (under ${data?.max_age_hours ?? 48} h), still online, profitable at the asking price. Best first.`}
+        subtitle={`Fresh (under ${Math.round((data?.max_age_hours ?? 336) / 24)} days), still online, profitable at the asking price. Newest first.`}
         action={
           <Link to="/deals" className="flex items-center gap-1 text-xs text-ink-muted hover:text-ink">
             All deals <ArrowRight className="h-3 w-3" />

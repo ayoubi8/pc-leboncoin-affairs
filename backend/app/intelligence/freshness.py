@@ -14,6 +14,8 @@ from typing import Any, Optional
 
 from ..models import Listing
 
+FRESH_HOURS = 14 * 24  # an ad counts as fresh from 0 to 14 days old
+
 # (max age in hours, score)
 _CURVE = [(2, 100), (6, 92), (12, 85), (24, 75), (48, 60), (72, 45), (168, 30), (336, 18)]
 

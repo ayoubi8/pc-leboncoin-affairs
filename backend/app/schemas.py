@@ -28,7 +28,7 @@ class SettingsOut(ORMModel):
     telegram_token_set: bool = False
     notify_min_verdict: str = "good"
     notify_max_per_run: int = 5
-    max_ad_age_hours: int = 48
+    max_ad_age_hours: int = 336
     quiet_start_hour: Optional[int] = None
     quiet_end_hour: Optional[int] = None
     resale_haircut_pct: float = 10.0

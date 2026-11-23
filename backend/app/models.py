@@ -66,7 +66,7 @@ class Settings(Base):
     telegram_chat_id = Column(String(60), default="")
     notify_min_verdict = Column(String(20), default="good")  # good | great
     notify_max_per_run = Column(Integer, default=5)
-    max_ad_age_hours = Column(Integer, default=48)  # alert only on ads younger than this
+    max_ad_age_hours = Column(Integer, default=336)  # "fresh" = younger than this (14 days)
     quiet_start_hour = Column(Integer, nullable=True)  # Algeria time (UTC+1); no alerts in this window
     quiet_end_hour = Column(Integer, nullable=True)
     telegram_update_offset = Column(Integer, default=0)  # getUpdates cursor for button presses
