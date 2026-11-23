@@ -328,7 +328,7 @@ def deal_card(settings: Settings, listing: Listing, position: int) -> str:
             f"🎯 <b>Max to pay:</b> {_eur(numbers['max_buy_for_good_eur'])}",
         ]
     else:
-        lines.append("No Algerian price yet: open Fresh ads in the app to run the AI on it.")
+        lines.append("No Algerian price for this product yet.")
     stored = listing.ai_verdict or {}
     if stored.get("source") == "ai" and stored.get("headline"):
         lines.append(f"💬 {_esc(stored['headline'])}")

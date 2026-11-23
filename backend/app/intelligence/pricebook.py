@@ -104,5 +104,17 @@ def canonical(listing: Listing) -> tuple[str, str, str]:
     return key[:200], ("used laptop " + ", ".join(parts))[:300], "laptop"
 
 
+def is_specific(key: str) -> bool:
+    """Can this key's price be reused for other ads? A card model can. A laptop needs a real CPU and its RAM:
+    "32 GB, CPU unknown" also matches a pair of RAM sticks. Title keys belong to one ad."""
+    if key.startswith("gpu|"):
+        return True
+    if not key.startswith("laptop|"):
+        return False
+    parts = key.split("|")
+    tier, ram = parts[1], parts[2]
+    return ram != "?" and bool(re.fullmatch(r"i[3579]g\d+|r[3579]s\d|m[1-9].*", tier) or re.search(r"\d{4}", tier))
+
+
 def kind_of(listing: Listing) -> str:
     return "gpu" if is_gpu_ad(listing.specs or {}, listing.subject or "") else "laptop"

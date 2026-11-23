@@ -58,6 +58,14 @@ def compute(
             )
         )
 
+    # The tax is assessed on the value at the official rate and paid in dinars. Dinars cost the user the
+    # parallel rate, so 1 "official" euro of tax is only official/parallel of a real euro.
+    nominal = duty + solidarity + vat + flat
+    tax_dzd = nominal * official
+    parallel = float(settings.eur_dzd_parallel or 0) or official or 1.0
+    real = (official / parallel) if official else 1.0
+    duty, solidarity, vat, flat = duty * real, solidarity * real, vat * real, flat * real
+
     fixed = float(settings.customs_fixed_fee_eur or 0)
     total_eur = duty + solidarity + vat + flat + fixed
 
@@ -73,7 +81,8 @@ def compute(
         "flat_eur": round(flat, 2),
         "fixed_fee_eur": round(fixed, 2),
         "total_eur": round(total_eur, 2),
-        "total_dzd": round(total_eur * official, 2),
-        "effective_rate_pct": round(total_eur / cif_eur * 100, 1) if cif_eur else 0.0,
+        "tax_dzd": round(tax_dzd, 2),
+        "total_dzd": round(total_eur * parallel, 2),
+        "effective_rate_pct": round(nominal / cif_eur * 100, 1) if cif_eur else 0.0,
         "notes": notes,
     }

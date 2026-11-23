@@ -252,7 +252,7 @@ def test_enrich_runs_three_steps_on_the_freshest_ads_only(monkeypatch):
         yield db
 
     settings = db.get(Settings, 1)
-    out = enrich.start(db, db.get(Search, 1), settings, auto=True, inline=True, session_factory=same_db)
+    out = enrich.start(db, db.get(Search, 1), settings, auto=False, inline=True, session_factory=same_db)  # the Run AI button
     assert out["started"] and len(out["items"]) == 5  # only the 5 freshest of 7
     assert [i["subject"] for i in out["items"]] == [f"RTX 3080 #{n}" for n in range(5)]
     first = out["items"][0]
@@ -260,6 +260,7 @@ def test_enrich_runs_three_steps_on_the_freshest_ads_only(monkeypatch):
     ad = db.get(Listing, out["items"][0]["id"])
     assert ad.ai_description == "A used RTX 3080." and ad.spec_notes["evidence"]["brand"] == "title says Asus"
 
+    enrich.start(db, db.get(Search, 1), settings, auto=True, inline=True, session_factory=same_db)
     again = enrich.start(db, db.get(Search, 1), settings, auto=True, inline=True, session_factory=same_db)
     assert again["started"] is False and again["reason"] == "cooldown"  # opening the page again does not spend again
 
@@ -271,3 +272,92 @@ def test_card_search_needs_the_model_in_the_ad_even_when_the_gpu_spec_is_empty()
     assert match.hard_fail(search, Listing(list_id="1", subject="Carte graphique Asus gt640 GT640-DCSL-2GD3", specs={}))
     assert not match.hard_fail(search, Listing(list_id="2", subject="Asus TUF RTX3080 10Go", specs={}))
     assert not match.hard_fail(search, Listing(list_id="3", subject="Carte graphique", description="Vends ma RTX 3080 FE", specs={}))
+
+
+def test_landed_cost_of_a_300_eur_gpu_matches_a_hand_calculation():
+    from app.logistics import landed
+
+    settings = Settings(
+        eur_dzd_parallel=280, eur_dzd_official=151.2, customs_mode="personal", personal_exemption_dzd=50_000,
+        personal_flat_threshold_dzd=100_000, personal_flat_rate=0.30, customs_fixed_fee_eur=0, transfer_fee_eur=0,
+        porsay_handling_eur=0, porsay_per_kg_over=5.7, default_packaging_kg=0.3, gpu_weight_kg=1.8, gpu_box_cm=[35, 20, 10],
+        porsay_tariff=[{"max_kg": 2, "price_eur": 27.25}, {"max_kg": 5, "price_eur": 41.87}],
+    )
+    out = landed.compute(settings, 300, kind="gpu")
+    assert out["shipping"]["chargeable_kg"] == 2.1 and out["shipping"]["total_eur"] == 41.87
+    # (300 + 41.87) x 151.2 = 51,690.74 DA declared; 30% = 15,507.22 DA; / 280 = 55.38 EUR
+    assert round(out["customs"]["tax_dzd"], 2) == 15507.22 and out["customs"]["total_eur"] == 55.38
+    assert out["total_eur"] == 397.25
+    assert landed.compute(settings, 288, kind="gpu")["customs"]["total_eur"] == 0  # under 50,000 DA declared
+
+
+def test_one_price_request_per_product_then_maths_for_every_ad(monkeypatch):
+    from app.intelligence import dz_market, enrich
+    from app.models import SearchListing
+
+    enrich._failed.clear()
+    db = _db()
+    settings = Settings(id=1, llm_api_key="k")
+    search = Search(name="rtx 3070", kind="gpu", gpu="RTX 3070")
+    db.add_all([settings, search])
+    db.commit()
+    ads = [
+        _listing(lid=200 + i, subject=f"RTX 3070 ad {i}", price_eur=150 + i, specs={"gpu": "RTX 3070"}, profit_ask_eur=None, ai_profit_eur=None)
+        for i in range(4)
+    ]
+    ads.append(_listing(lid=210, subject="RTX 3070 8 Go", price_eur=160, specs={"gpu": "RTX 3070", "ram_gb": 8}, profit_ask_eur=None, ai_profit_eur=None))
+    db.add_all(ads)
+    db.commit()
+    db.add_all([SearchListing(search_id=search.id, listing_id=a.id) for a in ads])
+    db.commit()
+    calls = []
+    answer = {"ok": True, "data": {"median_dzd": 75000, "low_dzd": 70000, "high_dzd": 80000, "confidence": "high"}, "sources": []}
+    monkeypatch.setattr(dz_market, "_call_gemini", lambda *a, **k: calls.append(a[1]) or answer)
+    from app.intelligence import verdict
+
+    monkeypatch.setattr(verdict, "_ask_model", lambda *a, **k: (_ for _ in ()).throw(AssertionError("no verdict model")))
+
+    enrich.run_for(db, settings, search, ads)
+    assert len(calls) == 1  # five ads, one product, one request
+    assert all(a.dz_price_median_dzd == 75000 and a.profit_ask_eur is not None and a.ai_verdict_label for a in ads)
+
+
+def test_different_stated_vram_is_a_different_product():
+    from app.intelligence import dz_market
+    from app.models import DzPrice
+
+    db = _db()
+    db.add(DzPrice(cache_key="gpu|rtx 3060|12", ok=True, median_dzd=60000, fetched_at=datetime.utcnow()))
+    db.commit()
+    assert dz_market._book_row(db, "gpu|rtx 3060|") is not None
+    assert dz_market._book_row(db, "gpu|rtx 3060|8") is None
+
+
+def test_parts_and_wanted_ads_are_not_priced_as_the_product():
+    from app.intelligence import screen
+
+    for title in ("3 kits de pads thermiques Kritical pour Gigabyte", "Waterblock Corsair XG7 RGB pour RTX 3080",
+                  "Recherche boite rx6800xt fe", "ÉCHANGE RTX 3070 Ti", "✅ Ram Samsung, DDR4 2666V, 32 GO",
+                  "Processeur Intel Pentium G4400", "Bloc refroidissement / Radiateur complet EVGA RTX 3080"):
+        assert screen.screen(Listing(subject=title, specs={}))["skip"], title
+    for title in ("Rtx 3070 aorus master", "Carte graphique Asus tuf RTX 3070 gaming 8go", "PC portable Dell i5 16 Go"):
+        assert not screen.screen(Listing(subject=title, specs={}))["skip"], title
+
+
+def test_only_specific_products_share_a_price():
+    from app.intelligence import pricebook as p
+
+    assert p.is_specific("gpu|rtx 3070|") and p.is_specific("laptop|i5g13|16|512|igpu")
+    assert not p.is_specific("laptop|?|32|?|igpu")  # could be two RAM sticks
+    assert not p.is_specific("laptop|i5g13|?|512|igpu") and not p.is_specific("title|pc acer")
+
+
+def test_price_far_below_the_product_value_gets_no_verdict():
+    from app.intelligence import verdict
+
+    settings = Settings(id=1, eur_dzd_parallel=280, eur_dzd_official=151.2, personal_exemption_dzd=50000, personal_flat_threshold_dzd=100000,
+                        personal_flat_rate=0.3, customs_mode="personal", default_packaging_kg=0.3, gpu_weight_kg=1.8, laptop_weight_kg=2.5,
+                        gpu_box_cm=[35, 20, 10], laptop_box_cm=[40, 30, 8], porsay_tariff=[{"max_kg": 5, "price_eur": 41.87}])
+    ad = Listing(subject="Pc acer", price_eur=1, dz_price_median_dzd=86000, dz_confidence="high", specs={})
+    assert verdict.apply_math(settings, ad) is False
+    assert ad.profit_ask_eur is None and ad.dz_price_median_dzd is None and "suspiciously" in ad.risk_flags[0]

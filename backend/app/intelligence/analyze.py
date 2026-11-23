@@ -116,6 +116,9 @@ def analyze_listing(
         listing.dz_saving_pct = listing.dz_confidence = None
     else:
         apply_dz_comparison(db, settings, listing, allow_call=use_ai)  # without AI: price-book cache only
+        from . import verdict
+
+        verdict.apply_math(settings, listing)  # known product: profit and verdict by plain maths, free
 
     listing.last_analyzed_at = now
 

@@ -107,11 +107,11 @@ export default function AiPanel({ enrich }: { enrich: ReturnType<typeof useEnric
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2 text-sm font-medium">
             <Sparkles className="h-4 w-4 text-primary" aria-hidden="true" />
-            {running ? `AI is working on the first ${items.length} ads (${done}/${items.length})` : `AI finished ${done}/${items.length} ads`}
+            {running ? `Pricing ${items.length} products (${done}/${items.length})` : `Finished ${done}/${items.length}`}
           </div>
           {!running ? (
             <Button size="sm" variant="secondary" onClick={() => start.mutate(false)} disabled={start.isPending}>
-              Run AI on the next ads
+              Run full AI on the next ads
             </Button>
           ) : null}
         </div>

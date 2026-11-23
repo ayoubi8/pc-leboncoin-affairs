@@ -20,8 +20,8 @@ const SORTS: { value: SortKey; label: string }[] = [
 
 type Preset = "hot" | "fresh" | "all";
 const PRESETS: { id: Preset; label: string; hint: string }[] = [
-  { id: "hot", label: "Hot deals", hint: "Good verdict, under 14 days, still online, newest first. Opening it runs the AI on the first 5 unpriced ads" },
-  { id: "fresh", label: "Fresh ads", hint: "Under 14 days, still online, matching your search, newest first. Opening it runs the AI on the first 5 unpriced ads" },
+  { id: "hot", label: "Hot deals", hint: "Good verdict, under 14 days, still online, newest first. Opening it looks up the Algerian price of up to 5 new products" },
+  { id: "fresh", label: "Fresh ads", hint: "Under 14 days, still online, matching your search, newest first. Opening it looks up the Algerian price of up to 5 new products" },
   { id: "all", label: "Everything", hint: "Every stored ad, including old and sold" },
 ];
 

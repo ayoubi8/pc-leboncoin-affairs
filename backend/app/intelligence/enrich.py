@@ -1,7 +1,8 @@
 """On-demand AI for the top ads of the Hot deals / Fresh ads views.
 
-Scans never call a model. When a Results page is opened on "Hot deals" or "Fresh ads", the first
-``TOP_N`` ads that still need it go through three steps, one after the other:
+Automatic runs (page open, alerts) make ONE price request per product not yet in the price book; every
+ad of that product then gets its profit and verdict by plain maths. The "Run AI" button does the full
+three steps on the first ``TOP_N`` ads:
 
 1. specs    - a free model (``Settings.spec_model``) fills the missing specs, explains why, writes a product description
 2. price    - the Algerian price (``Settings.gemini_model``, with web search), cached per product in the price book
@@ -22,7 +23,7 @@ from sqlalchemy.orm import Session
 
 from ..extraction import cpu_db, llm
 from ..models import Listing, Search, SearchListing, Settings
-from . import analyze, dz_market, freshness, match, verdict
+from . import analyze, dz_market, freshness, match, pricebook, verdict
 
 TOP_N = 5
 COOLDOWN_S = 15 * 60  # automatic runs on page open: at most one batch per search every 15 minutes
@@ -38,19 +39,19 @@ def _iso() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
-def needs(listing: Listing) -> list[str]:
-    """Steps this ad still lacks (an AI verdict replaces a rule-based one)."""
+def needs(listing: Listing, full: bool = True) -> list[str]:
+    """Steps this ad still lacks. ``full=False``: only the Algerian price."""
     todo = []
-    if not (listing.spec_notes or {}).get("model"):
+    if full and not (listing.spec_notes or {}).get("model"):
         todo.append("specs")
     if not listing.dz_price_median_dzd:
         todo.append("price")
-    if (listing.ai_verdict or {}).get("source") != "ai":
+    if full and (listing.ai_verdict or {}).get("source") != "ai":
         todo.append("verdict")
     return [step for step in todo if (listing.id, step) not in _failed]
 
 
-def _freshest_needing_ai(rows: list[Listing], search: Search, settings: Settings, limit: int) -> list[Listing]:
+def _freshest_needing_ai(rows: list[Listing], search: Search, settings: Settings, limit: int, full: bool = True) -> list[Listing]:
     now = datetime.now(timezone.utc).replace(tzinfo=None)
     max_age = float(settings.max_ad_age_hours or freshness.FRESH_HOURS)
     candidates = []
@@ -62,29 +63,66 @@ def _freshest_needing_ai(rows: list[Listing], search: Search, settings: Settings
             continue
         if match.hard_fail(search, listing):
             continue
-        if not needs(listing):
+        if not needs(listing, full):
             continue
         candidates.append((age if age is not None else 1e9, listing))
     candidates.sort(key=lambda pair: pair[0])
-    return [listing for _, listing in candidates[:limit]]
+    picked: list[Listing] = []
+    products: set[str] = set()
+    for _, listing in candidates:
+        if not full:  # one request per product
+            key = dz_market.describe(listing)[0]
+            if not key or key in products or not pricebook.is_specific(key):  # never spend on a vague ad
+                continue
+            products.add(key)
+        picked.append(listing)
+        if len(picked) >= limit:
+            break
+    return picked
 
 
-def pick(db: Session, search: Search, settings: Settings, limit: int = TOP_N) -> list[Listing]:
-    """The freshest ads of the search (same ones the Fresh view lists) that still need AI."""
-    rows = db.execute(
-        select(Listing).join(SearchListing, SearchListing.listing_id == Listing.id).where(SearchListing.search_id == search.id)
-    ).scalars().all()
-    return _freshest_needing_ai(rows, search, settings, limit)
+def fill_from_book(db: Session, settings: Settings, listings: list[Listing], search: Optional[Search] = None) -> int:
+    """Give ads the stored price of their product and compute profit and verdict. Free. Returns ads priced."""
+    done = 0
+    for listing in listings:
+        if listing.screen_skip or not listing.price_eur:
+            continue
+        if search is not None and match.hard_fail(search, listing):
+            continue
+        if not listing.dz_price_median_dzd:
+            analyze.apply_dz_comparison(db, settings, listing, allow_call=False)
+        if verdict.apply_math(settings, listing):
+            done += 1
+    db.commit()
+    return done
+
+
+def _search_rows(db: Session, search: Search) -> list[Listing]:
+    return list(
+        db.execute(
+            select(Listing).join(SearchListing, SearchListing.listing_id == Listing.id).where(SearchListing.search_id == search.id)
+        ).scalars().all()
+    )
+
+
+def pick(db: Session, search: Search, settings: Settings, limit: int = TOP_N, full: bool = True) -> list[Listing]:
+    """The freshest ads of the search that still need AI (``full=False``: one per unpriced product)."""
+    rows = _search_rows(db, search)
+    if not full:
+        fill_from_book(db, settings, rows, search)  # products already known cost nothing
+    return _freshest_needing_ai(rows, search, settings, limit, full)
 
 
 def run_for(db: Session, settings: Settings, search: Search, listings: list[Listing], limit: int = TOP_N) -> int:
-    """Price and judge the freshest of ``listings`` right now (used before Telegram alerts). Returns how many ran."""
+    """Before Telegram alerts: one price request per new product, then maths for every ad. Returns requests made."""
     if not dz_market.api_key(settings):
         return 0
-    chosen = _freshest_needing_ai(listings, search, settings, limit)
+    fill_from_book(db, settings, listings, search)
+    chosen = _freshest_needing_ai(listings, search, settings, limit, full=False)
     for listing in chosen:
         item: dict[str, Any] = {"steps": {name: "pending" for name in STEPS}, "notes": {}, "verdict": None}
-        enrich_listing(db, settings, listing, search, item)
+        enrich_listing(db, settings, listing, search, item, full=False)
+    fill_from_book(db, settings, listings, search)
     return len(chosen)
 
 
@@ -118,9 +156,11 @@ def _merge_specs(listing: Listing, found: dict[str, Any]) -> list[str]:
     return filled
 
 
-def enrich_listing(db: Session, settings: Settings, listing: Listing, search: Optional[Search], item: dict[str, Any]) -> None:
+def enrich_listing(
+    db: Session, settings: Settings, listing: Listing, search: Optional[Search], item: dict[str, Any], full: bool = True
+) -> None:
     """Run the missing steps for one ad, recording each step's outcome in ``item`` (never raises)."""
-    todo = needs(listing)
+    todo = needs(listing, full)
 
     def step(name: str, state: str, message: str = "") -> None:
         item["steps"][name] = state
@@ -147,7 +187,7 @@ def enrich_listing(db: Session, settings: Settings, listing: Listing, search: Op
             _failed.add((listing.id, "specs"))
             step("specs", "error", res["error"])
     else:
-        step("specs", "skipped", "already done")
+        step("specs", "skipped", "already done" if full else "not needed for the price")
 
     # 2. Algerian price
     if not listing.dz_price_median_dzd:
@@ -168,6 +208,15 @@ def enrich_listing(db: Session, settings: Settings, listing: Listing, search: Op
                 step("price", "error", dz_market.last_error(db, listing) or "no Algerian price found")
     else:
         step("price", "skipped", "price already known")
+
+    if not full:  # the verdict comes from the numbers, with no model call
+        if verdict.apply_math(settings, listing):
+            db.commit()
+            item["verdict"] = listing.ai_verdict_label
+            step("verdict", "done", f"by maths: {listing.ai_verdict_label}")
+        else:
+            step("verdict", "skipped", "needs an Algerian price first")
+        return
 
     # 3. verdict, by Haiku
     if (listing.ai_verdict or {}).get("source") != "ai":
@@ -203,8 +252,10 @@ def _run(job: dict[str, Any], session_factory: Any = None) -> None:
             for item in job["items"]:
                 listing = db.get(Listing, item["id"])
                 if listing is not None:
-                    enrich_listing(db, settings, listing, search, item)
+                    enrich_listing(db, settings, listing, search, item, full=job["full"])
                 item["finished"] = True
+            if search is not None:
+                fill_from_book(db, settings, _search_rows(db, search), search)  # the new prices reach every ad
     except Exception as exc:  # the page shows the error instead of a silent stall
         job["error"] = f"{type(exc).__name__}: {exc}"
     finally:
@@ -233,7 +284,8 @@ def start(
 
         if not auto:
             _failed.clear()  # the "Run AI now" button retries what failed before
-        listings = pick(db, search, settings, limit)
+        full = not auto  # page open: one price per product; "Run AI" button: all three steps
+        listings = pick(db, search, settings, limit, full)
         if not listings:
             return {"started": False, "reason": "nothing_to_do", **summary(search.id)}
         if auto:
@@ -241,6 +293,7 @@ def start(
         job = {
             "search_id": search.id,
             "running": True,
+            "full": full,
             "started_at": _iso(),
             "finished_at": None,
             "error": "",

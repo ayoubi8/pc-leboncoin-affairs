@@ -355,7 +355,7 @@ export default function Settings() {
       <Card>
         <CardHeader
           title="Which model does what"
-          subtitle="AI never runs during scans. It runs when you open Hot deals or Fresh ads, on the first 5 ads that still need it"
+          subtitle="One Algerian price request per product, then plain maths for every ad of that product. Specs and written verdicts only run when you press Run AI"
         />
         <div className="grid gap-4 p-4 sm:grid-cols-2">
           <div className="sm:col-span-2">

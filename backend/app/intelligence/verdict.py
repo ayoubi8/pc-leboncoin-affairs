@@ -26,6 +26,7 @@ TIMEOUT = 60.0
 GREAT_PCT = 30.0
 GOOD_PCT = 15.0
 FAIR_PCT = 5.0
+TOO_CHEAP_RATIO = 0.30  # under 30 % of the Algerian value: a part, a fake price or a scam, not a bargain
 
 SYSTEM = f"""You are a blunt, honest advisor for a reseller who buys used laptops/PC parts on Leboncoin (France) and sells them in Algeria.
 You receive pre-computed numbers. NEVER recompute or invent figures; quote only the numbers given.
@@ -65,6 +66,52 @@ def apply(db, settings: Settings, listing: Listing, buy_price_eur: Optional[floa
     listing.profit_ask_eur = result["numbers"]["profit_ask_eur"]
     db.commit()
     return result
+
+
+def apply_math(settings: Settings, listing: Listing) -> bool:
+    """Profit and verdict from the stored Algerian price: no model call. Returns False without a price.
+
+    A written AI verdict is kept while its numbers are still right; if the costs changed, its text would
+    quote wrong figures, so the rule-based verdict replaces it.
+    """
+    if listing.screen_skip:
+        clear_price(listing)
+        return False
+    numbers = compute_numbers(settings, listing)
+    if numbers is None:
+        return False
+    if listing.price_eur < TOO_CHEAP_RATIO * numbers["dz_median_eur"]:
+        clear_price(listing)
+        flag = "suspiciously cheap for this product: check it is the real item"
+        listing.risk_flags = list(listing.risk_flags or []) + ([] if flag in (listing.risk_flags or []) else [flag])
+        return False
+    stored = listing.ai_verdict or {}
+    previous = (stored.get("numbers") or {}).get("profit_ask_eur")
+    if stored.get("source") == "ai" and previous is not None and abs(previous - numbers["profit_ask_eur"]) < 1:
+        listing.ai_profit_eur, listing.profit_ask_eur = numbers["profit_eur"], numbers["profit_ask_eur"]
+        return True
+    result = generate(settings, listing, use_ai=False)
+    listing.ai_verdict = result
+    listing.ai_verdict_label = result["verdict"]
+    listing.ai_profit_eur = numbers["profit_eur"]
+    listing.profit_ask_eur = numbers["profit_ask_eur"]
+    return True
+
+
+def clear_price(listing: Listing) -> None:
+    """Remove a price and verdict that do not apply to this ad."""
+    listing.dz_price_low_dzd = listing.dz_price_median_dzd = listing.dz_price_high_dzd = None
+    listing.dz_saving_pct = listing.dz_confidence = None
+    listing.ai_verdict = listing.ai_verdict_label = None
+    listing.ai_profit_eur = listing.profit_ask_eur = None
+
+
+def reprice_all(db, settings: Settings) -> int:
+    """Recompute every priced ad after a cost setting changed. Free."""
+    rows = db.query(Listing).filter(Listing.dz_price_median_dzd.isnot(None), Listing.price_eur.isnot(None)).all()
+    done = sum(1 for listing in rows if apply_math(settings, listing))
+    db.commit()
+    return done
 
 
 def _utcnow() -> datetime:

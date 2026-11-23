@@ -20,10 +20,14 @@ BROKEN = re.compile(
     re.I,
 )
 ACCESSORY = re.compile(
-    r"^\s*(chargeur|sacoche|housse|sac |batterie|clavier|souris|[ée]cran seul|dock|station d.accueil|"
-    r"adaptateur|c[aâ]ble|ventilateur|coque|support|refroidisseur|ram |barrette|ssd |disque dur)\b",
+    r"^\W*(chargeur|sacoche|housse|sac |batterie|clavier|souris|[ée]cran seul|dock|station d.accueil|"
+    r"adaptateur|c[aâ]ble|ventilateur|coque|support|refroidisseur|ram |barrette|ssd |disque dur|"
+    r"processeur|m[ée]moire|alimentation|carte m[eè]re|bo[iî]te|kit )\b",
     re.I,
 )
+# parts that name a GPU ("waterblock pour RTX 3080") and people looking to buy or swap
+GPU_PART = re.compile(r"water ?bloc?k?\b|backplate|pads? thermiques?|thermal pads?|bloc (de )?refroidissement|radiateur|\blot carte m[eè]re", re.I)
+WANTED = re.compile(r"^\W*(je\s+)?(recherche|cherche[rz]?|ach[eè]te|[ée]change)\b", re.I)
 # soft risk wording (kept, shown to the buyer)
 SOFT_FLAGS = [
     (re.compile(r"sans (chargeur|alim)", re.I), "no charger"),
@@ -31,6 +35,7 @@ SOFT_FLAGS = [
     (re.compile(r"touche[s]? (manquante|cass)|charni[eè]re|pixel|rayure|fissure|batterie (hs|us[ée]e|faible)", re.I), "cosmetic/battery wear"),
     (re.compile(r"qwerty|clavier (us|anglais)", re.I), "non-AZERTY keyboard (harder to resell)"),
     (re.compile(r"mining|minage|\bminer\b|ex[- ]?mining|rig\b", re.I), "possibly ex-mining GPU"),
+    (re.compile(r"non test[ée]", re.I), "untested"),
     (re.compile(r"facture|garantie", re.I), "has invoice/warranty (positive)"),
 ]
 PICKUP_ONLY = re.compile(r"main propre uniquement|remise en main propre|retrait (sur place|uniquement)|sur place uniquement|pas d.envoi|pas d.exp[ée]dition|non exp[ée]di", re.I)
@@ -85,6 +90,10 @@ def screen(listing: Listing) -> dict[str, Any]:
         reasons.append("broken / for parts")
     if ACCESSORY.search(title) and not (listing.specs or {}).get("cpu"):
         reasons.append("accessory, not a computer")
+    if GPU_PART.search(title):
+        reasons.append("GPU part, not a graphics card")
+    if WANTED.search(title):
+        reasons.append("wanted or exchange ad, nothing for sale")
     ctype = attrs.get("computer_type", "")
     if ctype in ("desktop", "centralunit", "all_in_one"):
         flags.append(f"listed as {ctype} (not a laptop)")

@@ -10,6 +10,13 @@ from .helpers import get_settings, mask_key
 
 router = APIRouter(prefix="/api/settings", tags=["settings"])
 
+COST_FIELDS = {
+    "eur_dzd_parallel", "eur_dzd_official", "resale_haircut_pct", "avg_discount_pct", "customs_mode", "duty_rate",
+    "solidarity_rate", "vat_rate", "personal_exemption_dzd", "personal_flat_threshold_dzd", "personal_flat_rate",
+    "customs_fixed_fee_eur", "transfer_fee_eur", "porsay_tariff", "porsay_per_kg_over", "porsay_handling_eur",
+    "default_packaging_kg", "laptop_weight_kg", "gpu_weight_kg", "laptop_box_cm", "gpu_box_cm",
+}
+
 
 def _out(settings) -> SettingsOut:
     data = SettingsOut.model_validate(settings)
@@ -60,6 +67,10 @@ def update_settings(payload: SettingsUpdate, db: Session = Depends(get_db)) -> S
 
     db.commit()
     db.refresh(settings)
+    if COST_FIELDS & set(updates):
+        from ..intelligence import verdict
+
+        verdict.reprice_all(db, settings)
     return _out(settings)
 
 

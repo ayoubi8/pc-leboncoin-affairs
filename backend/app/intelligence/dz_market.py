@@ -209,6 +209,26 @@ def _store(db: Session, key: str, query: str, result: dict[str, Any]) -> DzPrice
     return row
 
 
+def _book_row(db: Session, key: str) -> Optional[DzPrice]:
+    """The price-book row for a product. A card ad with no stated VRAM shares the price of the same model
+    (and the reverse); two different stated VRAM sizes, like RTX 3060 8 GB and 12 GB, stay separate."""
+    row = db.query(DzPrice).filter(DzPrice.cache_key == key).first()
+    if (row is not None and row.ok) or not key.startswith("gpu|"):
+        return row
+    _, name, vram = (key.split("|") + ["", ""])[:3]
+    family = (
+        db.query(DzPrice)
+        .filter(DzPrice.cache_key.like(f"gpu|{name}|%"), DzPrice.ok.is_(True))
+        .order_by(DzPrice.manual.desc(), DzPrice.fetched_at.desc())
+        .all()
+    )
+    for candidate in family:
+        other = (candidate.cache_key.split("|") + [""])[2]
+        if not vram or not other or other == vram:
+            return candidate
+    return row
+
+
 def lookup(db: Session, settings: Settings, listing: Listing, force: bool = False, allow_call: bool = True) -> Optional[DzPrice]:
     """Cached Algerian price row for the listing's configuration, or None.
 
@@ -220,16 +240,18 @@ def lookup(db: Session, settings: Settings, listing: Listing, force: bool = Fals
     if not key:
         return None
 
-    row = db.query(DzPrice).filter(DzPrice.cache_key == key).first()
+    row = _book_row(db, key)
     if row is not None and row.manual and row.ok:
         return row  # the user's own price always wins
+    if not allow_call and key.startswith("laptop|") and not pricebook.is_specific(key):
+        return None  # too vague to reuse another ad's price
     if row is not None and not force:
         age = _utcnow() - (row.fetched_at or _utcnow())
         if age < (SUCCESS_TTL if row.ok else FAILURE_TTL):
             return row if row.ok else None
 
     if not allow_call:
-        return None  # cache only: scans never spend
+        return row if row is not None and row.ok else None  # book only: an older price beats no price
 
     # Coarse keys are shared by many ads, so only title-keyed (vague) lookups get this ad's own text.
     context = ad_context(listing) if key.startswith("title|") else ""

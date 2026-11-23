@@ -82,13 +82,15 @@ def test_customs_flat_rate(settings):
     result = customs.compute(settings, goods_eur=400, shipping_eur=50, mode="personal")
     assert result["mode"] == "personal"
     assert result["flat_eur"] > 0
-    assert result["total_eur"] == pytest.approx(450 * 0.30, rel=1e-3)
+    # 450 EUR x 151.2 = 68,040 DA declared; 30% = 20,412 DA to pay; bought at 280 DA/EUR = 72.90 EUR
+    assert result["tax_dzd"] == pytest.approx(20412, rel=1e-3)
+    assert result["total_eur"] == pytest.approx(72.9, rel=1e-3)
 
 
 def test_customs_standard(settings):
     result = customs.compute(settings, goods_eur=1000, shipping_eur=100, mode="standard")
     assert result["mode"] == "standard"
-    assert result["duty_eur"] == pytest.approx(55, rel=1e-3)
+    assert result["duty_eur"] == pytest.approx(55 * 151.2 / 280, rel=1e-3)  # assessed officially, paid in dinars
     assert result["total_eur"] > result["duty_eur"]
 
 
