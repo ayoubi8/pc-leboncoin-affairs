@@ -90,7 +90,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "api_dashboard_dashboard",
-      "community": 32,
+      "community": 15,
       "norm_label": "dashboard()"
     },
     {
@@ -100,7 +100,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "backend_app_api_dashboard_py_session",
-      "community": 32,
+      "community": 15,
       "norm_label": "session"
     },
     {
@@ -110,7 +110,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "dashboardout",
-      "community": 32,
+      "community": 15,
       "norm_label": "dashboardout"
     },
     {
@@ -130,7 +130,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "api_helpers_get_settings",
-      "community": 32,
+      "community": 13,
       "norm_label": "get_settings()"
     },
     {
@@ -140,7 +140,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "backend_app_api_helpers_py_session",
-      "community": 1,
+      "community": 15,
       "norm_label": "session"
     },
     {
@@ -150,7 +150,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "backend_app_api_helpers_py_settings",
-      "community": 32,
+      "community": 13,
       "norm_label": "settings"
     },
     {
@@ -160,7 +160,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "api_helpers_search_result_count",
-      "community": 1,
+      "community": 15,
       "norm_label": "search_result_count()"
     },
     {
@@ -200,7 +200,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "api_helpers_run_out",
-      "community": 1,
+      "community": 15,
       "norm_label": "run_out()"
     },
     {
@@ -210,7 +210,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "backend_app_api_helpers_py_run",
-      "community": 1,
+      "community": 15,
       "norm_label": "run"
     },
     {
@@ -220,7 +220,7 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "api_helpers_listing_card",
-      "community": 13,
+      "community": 15,
       "norm_label": "listing_card()"
     },
     {
@@ -230,7 +230,7 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "backend_app_api_helpers_py_listing",
-      "community": 13,
+      "community": 15,
       "norm_label": "listing"
     },
     {
@@ -240,7 +240,7 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "backend_app_api_helpers_py_datetime",
-      "community": 13,
+      "community": 15,
       "norm_label": "datetime"
     },
     {
@@ -250,7 +250,7 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "backend_app_api_helpers_py_listingcard",
-      "community": 13,
+      "community": 15,
       "norm_label": "listingcard"
     },
     {
@@ -270,7 +270,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "api_imports",
-      "community": 15,
+      "community": 41,
       "norm_label": "imports.py"
     },
     {
@@ -320,7 +320,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "api_listings",
-      "community": 47,
+      "community": 25,
       "norm_label": "listings.py"
     },
     {
@@ -400,7 +400,7 @@
       "source_location": "L89",
       "_origin": "ast",
       "id": "api_listings_verdictrequest",
-      "community": 47,
+      "community": 25,
       "norm_label": "verdictrequest"
     },
     {
@@ -430,7 +430,7 @@
       "source_location": "L112",
       "_origin": "ast",
       "id": "api_listings_best_deals",
-      "community": 47,
+      "community": 15,
       "norm_label": "best_deals()"
     },
     {
@@ -440,7 +440,7 @@
       "source_location": "L112",
       "_origin": "ast",
       "id": "backend_app_api_listings_py_listingcard",
-      "community": 47,
+      "community": 15,
       "norm_label": "listingcard"
     },
     {
@@ -550,7 +550,7 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "api_listings_rationale_113",
-      "community": 47,
+      "community": 15,
       "norm_label": "listings with an ai verdict that are still online, ranked by profit weighted by"
     },
     {
@@ -1370,7 +1370,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_db",
-      "community": 15,
+      "community": 41,
       "norm_label": "db.py"
     },
     {
@@ -1380,7 +1380,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "app_db_base",
-      "community": 15,
+      "community": 41,
       "norm_label": "base"
     },
     {
@@ -1390,7 +1390,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "declarativebase",
-      "community": 15,
+      "community": 41,
       "norm_label": "declarativebase"
     },
     {
@@ -1400,7 +1400,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "app_db_get_db",
-      "community": 15,
+      "community": 41,
       "norm_label": "get_db()"
     },
     {
@@ -1980,7 +1980,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "intelligence_deal",
-      "community": 19,
+      "community": 4,
       "norm_label": "deal.py"
     },
     {
@@ -1990,7 +1990,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "intelligence_deal_classify",
-      "community": 19,
+      "community": 4,
       "norm_label": "classify()"
     },
     {
@@ -2000,7 +2000,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "intelligence_deal_score_from_ratio",
-      "community": 19,
+      "community": 4,
       "norm_label": "score_from_ratio()"
     },
     {
@@ -2010,7 +2010,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "intelligence_deal_acquisition_score",
-      "community": 19,
+      "community": 4,
       "norm_label": "acquisition_score()"
     },
     {
@@ -2020,7 +2020,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "intelligence_deal_savings",
-      "community": 19,
+      "community": 4,
       "norm_label": "savings()"
     },
     {
@@ -2030,7 +2030,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "intelligence_deal_savings_pct",
-      "community": 19,
+      "community": 4,
       "norm_label": "savings_pct()"
     },
     {
@@ -2040,7 +2040,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "intelligence_deal_payload",
-      "community": 19,
+      "community": 4,
       "norm_label": "payload()"
     },
     {
@@ -2050,7 +2050,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "backend_app_intelligence_deal_py_any",
-      "community": 19,
+      "community": 4,
       "norm_label": "any"
     },
     {
@@ -2067,7 +2067,7 @@
       "label": "api_key()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L40",
+      "source_location": "L43",
       "_origin": "ast",
       "id": "intelligence_dz_market_api_key",
       "community": 9,
@@ -2077,7 +2077,7 @@
       "label": "Settings",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L40",
+      "source_location": "L43",
       "_origin": "ast",
       "id": "backend_app_intelligence_dz_market_py_settings",
       "community": 9,
@@ -2087,7 +2087,7 @@
       "label": "available()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L45",
+      "source_location": "L48",
       "_origin": "ast",
       "id": "intelligence_dz_market_available",
       "community": 9,
@@ -2097,7 +2097,7 @@
       "label": "_utcnow()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L49",
+      "source_location": "L52",
       "_origin": "ast",
       "id": "intelligence_dz_market_utcnow",
       "community": 9,
@@ -2107,7 +2107,7 @@
       "label": "datetime",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L49",
+      "source_location": "L52",
       "_origin": "ast",
       "id": "backend_app_intelligence_dz_market_py_datetime",
       "community": 9,
@@ -2117,7 +2117,7 @@
       "label": "describe()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L53",
+      "source_location": "L56",
       "_origin": "ast",
       "id": "intelligence_dz_market_describe",
       "community": 9,
@@ -2127,7 +2127,7 @@
       "label": "Listing",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L53",
+      "source_location": "L56",
       "_origin": "ast",
       "id": "backend_app_intelligence_dz_market_py_listing",
       "community": 9,
@@ -2137,7 +2137,7 @@
       "label": "ad_context()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L59",
+      "source_location": "L62",
       "_origin": "ast",
       "id": "intelligence_dz_market_ad_context",
       "community": 9,
@@ -2147,7 +2147,7 @@
       "label": "_parse_json()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L95",
+      "source_location": "L98",
       "_origin": "ast",
       "id": "intelligence_dz_market_parse_json",
       "community": 9,
@@ -2157,7 +2157,7 @@
       "label": "Any",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L95",
+      "source_location": "L98",
       "_origin": "ast",
       "id": "backend_app_intelligence_dz_market_py_any",
       "community": 9,
@@ -2167,7 +2167,7 @@
       "label": "_num()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L105",
+      "source_location": "L108",
       "_origin": "ast",
       "id": "intelligence_dz_market_num",
       "community": 9,
@@ -2177,7 +2177,7 @@
       "label": "_call_gemini()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L117",
+      "source_location": "L120",
       "_origin": "ast",
       "id": "intelligence_dz_market_call_gemini",
       "community": 9,
@@ -2187,7 +2187,7 @@
       "label": "_store()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L173",
+      "source_location": "L176",
       "_origin": "ast",
       "id": "intelligence_dz_market_store",
       "community": 9,
@@ -2197,7 +2197,7 @@
       "label": "Session",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L173",
+      "source_location": "L176",
       "_origin": "ast",
       "id": "backend_app_intelligence_dz_market_py_session",
       "community": 9,
@@ -2207,7 +2207,7 @@
       "label": "DzPrice",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L173",
+      "source_location": "L176",
       "_origin": "ast",
       "id": "backend_app_intelligence_dz_market_py_dzprice",
       "community": 9,
@@ -2217,7 +2217,7 @@
       "label": "_is_temporary()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L213",
+      "source_location": "L216",
       "_origin": "ast",
       "id": "intelligence_dz_market_is_temporary",
       "community": 9,
@@ -2227,17 +2227,37 @@
       "label": "_explain_temporary()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L217",
+      "source_location": "L220",
       "_origin": "ast",
       "id": "intelligence_dz_market_explain_temporary",
       "community": 9,
       "norm_label": "_explain_temporary()"
     },
     {
+      "label": "out_of_credit()",
+      "file_type": "code",
+      "source_file": "backend/app/intelligence/dz_market.py",
+      "source_location": "L226",
+      "_origin": "ast",
+      "id": "intelligence_dz_market_out_of_credit",
+      "community": 9,
+      "norm_label": "out_of_credit()"
+    },
+    {
+      "label": "lookups_today()",
+      "file_type": "code",
+      "source_file": "backend/app/intelligence/dz_market.py",
+      "source_location": "L230",
+      "_origin": "ast",
+      "id": "intelligence_dz_market_lookups_today",
+      "community": 9,
+      "norm_label": "lookups_today()"
+    },
+    {
       "label": "is_temporary_failure()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L223",
+      "source_location": "L235",
       "_origin": "ast",
       "id": "intelligence_dz_market_is_temporary_failure",
       "community": 9,
@@ -2247,7 +2267,7 @@
       "label": "_book_row()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L227",
+      "source_location": "L239",
       "_origin": "ast",
       "id": "intelligence_dz_market_book_row",
       "community": 9,
@@ -2257,7 +2277,7 @@
       "label": "lookup()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L259",
+      "source_location": "L271",
       "_origin": "ast",
       "id": "intelligence_dz_market_lookup",
       "community": 9,
@@ -2267,7 +2287,7 @@
       "label": "set_manual()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L297",
+      "source_location": "L318",
       "_origin": "ast",
       "id": "intelligence_dz_market_set_manual",
       "community": 9,
@@ -2277,7 +2297,7 @@
       "label": "last_error()",
       "file_type": "code",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L317",
+      "source_location": "L338",
       "_origin": "ast",
       "id": "intelligence_dz_market_last_error",
       "community": 9,
@@ -2297,9 +2317,9 @@
       "label": "Return (cache_key, human description) for a listing, or (\"\", \"\") if too vague.",
       "file_type": "rationale",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L54",
+      "source_location": "L57",
       "_origin": "ast",
-      "id": "intelligence_dz_market_rationale_54",
+      "id": "intelligence_dz_market_rationale_57",
       "community": 9,
       "norm_label": "return (cache_key, human description) for a listing, or (\"\", \"\") if too vague."
     },
@@ -2307,9 +2327,9 @@
       "label": "Extra facts from the ad itself (title, condition, all extracted specs, descripti",
       "file_type": "rationale",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L60",
+      "source_location": "L63",
       "_origin": "ast",
-      "id": "intelligence_dz_market_rationale_60",
+      "id": "intelligence_dz_market_rationale_63",
       "community": 9,
       "norm_label": "extra facts from the ad itself (title, condition, all extracted specs, descripti"
     },
@@ -2317,9 +2337,9 @@
       "label": "Return {\"ok\": bool, \"data\": {...}, \"sources\": [...], \"error\": str}.",
       "file_type": "rationale",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L118",
+      "source_location": "L121",
       "_origin": "ast",
-      "id": "intelligence_dz_market_rationale_118",
+      "id": "intelligence_dz_market_rationale_121",
       "community": 9,
       "norm_label": "return {\"ok\": bool, \"data\": {...}, \"sources\": [...], \"error\": str}."
     },
@@ -2327,9 +2347,9 @@
       "label": "The price-book row for a product. A card ad with no stated VRAM shares the price",
       "file_type": "rationale",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L228",
+      "source_location": "L240",
       "_origin": "ast",
-      "id": "intelligence_dz_market_rationale_228",
+      "id": "intelligence_dz_market_rationale_240",
       "community": 9,
       "norm_label": "the price-book row for a product. a card ad with no stated vram shares the price"
     },
@@ -2337,9 +2357,9 @@
       "label": "Cached Algerian price row for the listing's configuration, or None.      ``all",
       "file_type": "rationale",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L260",
+      "source_location": "L272",
       "_origin": "ast",
-      "id": "intelligence_dz_market_rationale_260",
+      "id": "intelligence_dz_market_rationale_272",
       "community": 9,
       "norm_label": "cached algerian price row for the listing's configuration, or none.      ``all"
     },
@@ -2347,9 +2367,9 @@
       "label": "Store the user's own Algerian price for this listing's product key (overrides Ge",
       "file_type": "rationale",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L298",
+      "source_location": "L319",
       "_origin": "ast",
-      "id": "intelligence_dz_market_rationale_298",
+      "id": "intelligence_dz_market_rationale_319",
       "community": 9,
       "norm_label": "store the user's own algerian price for this listing's product key (overrides ge"
     },
@@ -2870,7 +2890,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "intelligence_market",
-      "community": 46,
+      "community": 4,
       "norm_label": "market.py"
     },
     {
@@ -2880,7 +2900,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "intelligence_market_percentile",
-      "community": 46,
+      "community": 4,
       "norm_label": "_percentile()"
     },
     {
@@ -2890,7 +2910,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "intelligence_market_prices_for",
-      "community": 46,
+      "community": 4,
       "norm_label": "_prices_for()"
     },
     {
@@ -2900,7 +2920,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "backend_app_intelligence_market_py_session",
-      "community": 46,
+      "community": 4,
       "norm_label": "session"
     },
     {
@@ -2910,7 +2930,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "backend_app_intelligence_market_py_listing",
-      "community": 46,
+      "community": 4,
       "norm_label": "listing"
     },
     {
@@ -2920,7 +2940,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "intelligence_market_compute_market",
-      "community": 46,
+      "community": 4,
       "norm_label": "compute_market()"
     },
     {
@@ -2930,7 +2950,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "backend_app_intelligence_market_py_any",
-      "community": 46,
+      "community": 4,
       "norm_label": "any"
     },
     {
@@ -2940,7 +2960,7 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "intelligence_market_market_payload",
-      "community": 46,
+      "community": 4,
       "norm_label": "market_payload()"
     },
     {
@@ -3710,7 +3730,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "logistics_init",
-      "community": 4,
+      "community": 19,
       "norm_label": "__init__.py"
     },
     {
@@ -3780,7 +3800,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "logistics_landed",
-      "community": 4,
+      "community": 19,
       "norm_label": "landed.py"
     },
     {
@@ -3790,7 +3810,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "logistics_landed_estimate_package",
-      "community": 4,
+      "community": 19,
       "norm_label": "estimate_package()"
     },
     {
@@ -3800,7 +3820,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "backend_app_logistics_landed_py_settings",
-      "community": 4,
+      "community": 19,
       "norm_label": "settings"
     },
     {
@@ -3810,7 +3830,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "backend_app_logistics_landed_py_any",
-      "community": 4,
+      "community": 19,
       "norm_label": "any"
     },
     {
@@ -3820,7 +3840,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "logistics_landed_compute",
-      "community": 4,
+      "community": 19,
       "norm_label": "compute()"
     },
     {
@@ -3830,7 +3850,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "logistics_landed_rationale_10",
-      "community": 4,
+      "community": 19,
       "norm_label": "parcel weight/box from the item: the settings values are for a ~15.6\" laptop; sc"
     },
     {
@@ -3840,7 +3860,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "logistics_porsay",
-      "community": 4,
+      "community": 19,
       "norm_label": "porsay.py"
     },
     {
@@ -3850,7 +3870,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "logistics_porsay_volumetric_kg",
-      "community": 4,
+      "community": 19,
       "norm_label": "volumetric_kg()"
     },
     {
@@ -3860,7 +3880,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "logistics_porsay_tariff",
-      "community": 4,
+      "community": 19,
       "norm_label": "_tariff()"
     },
     {
@@ -3870,7 +3890,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "backend_app_logistics_porsay_py_settings",
-      "community": 4,
+      "community": 19,
       "norm_label": "settings"
     },
     {
@@ -3880,7 +3900,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "backend_app_logistics_porsay_py_any",
-      "community": 4,
+      "community": 19,
       "norm_label": "any"
     },
     {
@@ -3890,7 +3910,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "logistics_porsay_quote",
-      "community": 4,
+      "community": 19,
       "norm_label": "quote()"
     },
     {
@@ -3950,7 +3970,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_models",
-      "community": 15,
+      "community": 41,
       "norm_label": "models.py"
     },
     {
@@ -3960,7 +3980,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "app_models_utcnow",
-      "community": 15,
+      "community": 41,
       "norm_label": "utcnow()"
     },
     {
@@ -3970,7 +3990,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "backend_app_models_py_datetime",
-      "community": 15,
+      "community": 41,
       "norm_label": "datetime"
     },
     {
@@ -3987,27 +4007,27 @@
       "label": "Search",
       "file_type": "code",
       "source_file": "backend/app/models.py",
-      "source_location": "L95",
+      "source_location": "L96",
       "_origin": "ast",
       "id": "app_models_search",
-      "community": 15,
+      "community": 2,
       "norm_label": "search"
     },
     {
       "label": "Run",
       "file_type": "code",
       "source_file": "backend/app/models.py",
-      "source_location": "L135",
+      "source_location": "L136",
       "_origin": "ast",
       "id": "app_models_run",
-      "community": 15,
+      "community": 3,
       "norm_label": "run"
     },
     {
       "label": "Listing",
       "file_type": "code",
       "source_file": "backend/app/models.py",
-      "source_location": "L155",
+      "source_location": "L156",
       "_origin": "ast",
       "id": "app_models_listing",
       "community": 2,
@@ -4017,7 +4037,7 @@
       "label": "SearchListing",
       "file_type": "code",
       "source_file": "backend/app/models.py",
-      "source_location": "L242",
+      "source_location": "L243",
       "_origin": "ast",
       "id": "app_models_searchlisting",
       "community": 18,
@@ -4027,27 +4047,27 @@
       "label": "PriceSnapshot",
       "file_type": "code",
       "source_file": "backend/app/models.py",
-      "source_location": "L256",
+      "source_location": "L257",
       "_origin": "ast",
       "id": "app_models_pricesnapshot",
-      "community": 15,
+      "community": 3,
       "norm_label": "pricesnapshot"
     },
     {
       "label": "Negotiation",
       "file_type": "code",
       "source_file": "backend/app/models.py",
-      "source_location": "L268",
+      "source_location": "L269",
       "_origin": "ast",
       "id": "app_models_negotiation",
-      "community": 15,
+      "community": 41,
       "norm_label": "negotiation"
     },
     {
       "label": "ImportBatch",
       "file_type": "code",
       "source_file": "backend/app/models.py",
-      "source_location": "L286",
+      "source_location": "L287",
       "_origin": "ast",
       "id": "app_models_importbatch",
       "community": 41,
@@ -4057,7 +4077,7 @@
       "label": "LlmCache",
       "file_type": "code",
       "source_file": "backend/app/models.py",
-      "source_location": "L300",
+      "source_location": "L301",
       "_origin": "ast",
       "id": "app_models_llmcache",
       "community": 12,
@@ -4067,20 +4087,20 @@
       "label": "DzPrice",
       "file_type": "code",
       "source_file": "backend/app/models.py",
-      "source_location": "L310",
+      "source_location": "L311",
       "_origin": "ast",
       "id": "app_models_dzprice",
-      "community": 9,
+      "community": 2,
       "norm_label": "dzprice"
     },
     {
       "label": "Cached Algerian market price per laptop configuration (one Gemini lookup each).",
       "file_type": "rationale",
       "source_file": "backend/app/models.py",
-      "source_location": "L311",
+      "source_location": "L312",
       "_origin": "ast",
-      "id": "app_models_rationale_311",
-      "community": 9,
+      "id": "app_models_rationale_312",
+      "community": 2,
       "norm_label": "cached algerian market price per laptop configuration (one gemini lookup each)."
     },
     {
@@ -4090,7 +4110,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "notify_init",
-      "community": 11,
+      "community": 5,
       "norm_label": "__init__.py"
     },
     {
@@ -4107,7 +4127,7 @@
       "label": "_esc()",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L31",
+      "source_location": "L30",
       "_origin": "ast",
       "id": "notify_deals_esc",
       "community": 11,
@@ -4117,7 +4137,7 @@
       "label": "Any",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L31",
+      "source_location": "L30",
       "_origin": "ast",
       "id": "backend_app_notify_deals_py_any",
       "community": 11,
@@ -4127,7 +4147,7 @@
       "label": "_eur()",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L35",
+      "source_location": "L34",
       "_origin": "ast",
       "id": "notify_deals_eur",
       "community": 11,
@@ -4137,7 +4157,7 @@
       "label": "_signed()",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L39",
+      "source_location": "L38",
       "_origin": "ast",
       "id": "notify_deals_signed",
       "community": 11,
@@ -4147,7 +4167,7 @@
       "label": "_dzd()",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L43",
+      "source_location": "L42",
       "_origin": "ast",
       "id": "notify_deals_dzd",
       "community": 11,
@@ -4157,7 +4177,7 @@
       "label": "_now()",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L47",
+      "source_location": "L46",
       "_origin": "ast",
       "id": "notify_deals_now",
       "community": 11,
@@ -4167,7 +4187,7 @@
       "label": "datetime",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L47",
+      "source_location": "L46",
       "_origin": "ast",
       "id": "backend_app_notify_deals_py_datetime",
       "community": 11,
@@ -4177,7 +4197,7 @@
       "label": "in_quiet_hours()",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L51",
+      "source_location": "L50",
       "_origin": "ast",
       "id": "notify_deals_in_quiet_hours",
       "community": 11,
@@ -4187,7 +4207,7 @@
       "label": "Settings",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L51",
+      "source_location": "L50",
       "_origin": "ast",
       "id": "backend_app_notify_deals_py_settings",
       "community": 11,
@@ -4197,7 +4217,7 @@
       "label": "_spec_line()",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L59",
+      "source_location": "L58",
       "_origin": "ast",
       "id": "notify_deals_spec_line",
       "community": 11,
@@ -4207,7 +4227,7 @@
       "label": "Listing",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L59",
+      "source_location": "L58",
       "_origin": "ast",
       "id": "backend_app_notify_deals_py_listing",
       "community": 11,
@@ -4217,7 +4237,7 @@
       "label": "_ship_line()",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L74",
+      "source_location": "L73",
       "_origin": "ast",
       "id": "notify_deals_ship_line",
       "community": 11,
@@ -4227,7 +4247,7 @@
       "label": "format_message()",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L78",
+      "source_location": "L77",
       "_origin": "ast",
       "id": "notify_deals_format_message",
       "community": 11,
@@ -4237,7 +4257,7 @@
       "label": "negotiation_text()",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L114",
+      "source_location": "L113",
       "_origin": "ast",
       "id": "notify_deals_negotiation_text",
       "community": 11,
@@ -4247,7 +4267,7 @@
       "label": "Session",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L114",
+      "source_location": "L113",
       "_origin": "ast",
       "id": "backend_app_notify_deals_py_session",
       "community": 11,
@@ -4257,7 +4277,7 @@
       "label": "_check_online()",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L127",
+      "source_location": "L126",
       "_origin": "ast",
       "id": "notify_deals_check_online",
       "community": 11,
@@ -4267,7 +4287,7 @@
       "label": "_gate()",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L135",
+      "source_location": "L134",
       "_origin": "ast",
       "id": "notify_deals_gate",
       "community": 11,
@@ -4277,7 +4297,7 @@
       "label": "Search",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L135",
+      "source_location": "L134",
       "_origin": "ast",
       "id": "backend_app_notify_deals_py_search",
       "community": 11,
@@ -4287,7 +4307,7 @@
       "label": "notify_run()",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L158",
+      "source_location": "L157",
       "_origin": "ast",
       "id": "notify_deals_notify_run",
       "community": 11,
@@ -4297,7 +4317,7 @@
       "label": "top_fresh()",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L274",
+      "source_location": "L271",
       "_origin": "ast",
       "id": "notify_deals_top_fresh",
       "community": 11,
@@ -4307,7 +4327,7 @@
       "label": "deal_card()",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L310",
+      "source_location": "L307",
       "_origin": "ast",
       "id": "notify_deals_deal_card",
       "community": 11,
@@ -4317,7 +4337,7 @@
       "label": "send_top_deals()",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L338",
+      "source_location": "L335",
       "_origin": "ast",
       "id": "notify_deals_send_top_deals",
       "community": 11,
@@ -4327,11 +4347,21 @@
       "label": "send_scan_summary()",
       "file_type": "code",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L360",
+      "source_location": "L357",
       "_origin": "ast",
       "id": "notify_deals_send_scan_summary",
       "community": 11,
       "norm_label": "send_scan_summary()"
+    },
+    {
+      "label": "send_round_digest()",
+      "file_type": "code",
+      "source_file": "backend/app/notify/deals.py",
+      "source_location": "L380",
+      "_origin": "ast",
+      "id": "notify_deals_send_round_digest",
+      "community": 11,
+      "norm_label": "send_round_digest()"
     },
     {
       "label": "Telegram deal desk: only fresh, verified, profitable ads reach the phone.  Pip",
@@ -4347,9 +4377,9 @@
       "label": "French opening message, copy-paste ready; the offer sits below the price we expe",
       "file_type": "rationale",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L115",
+      "source_location": "L114",
       "_origin": "ast",
-      "id": "notify_deals_rationale_115",
+      "id": "notify_deals_rationale_114",
       "community": 11,
       "norm_label": "french opening message, copy-paste ready; the offer sits below the price we expe"
     },
@@ -4357,9 +4387,9 @@
       "label": "active' | 'gone' | 'unknown' from the live ad page (one request, never raises).",
       "file_type": "rationale",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L128",
+      "source_location": "L127",
       "_origin": "ast",
-      "id": "notify_deals_rationale_128",
+      "id": "notify_deals_rationale_127",
       "community": 11,
       "norm_label": "active' | 'gone' | 'unknown' from the live ad page (one request, never raises)."
     },
@@ -4367,9 +4397,9 @@
       "label": "Free checks. True when the ad may be considered for an alert.",
       "file_type": "rationale",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L136",
+      "source_location": "L135",
       "_origin": "ast",
-      "id": "notify_deals_rationale_136",
+      "id": "notify_deals_rationale_135",
       "community": 11,
       "norm_label": "free checks. true when the ad may be considered for an alert."
     },
@@ -4377,9 +4407,9 @@
       "label": "Send the best fresh deals of a run. A listing is alerted once, plus once more if",
       "file_type": "rationale",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L165",
+      "source_location": "L164",
       "_origin": "ast",
-      "id": "notify_deals_rationale_165",
+      "id": "notify_deals_rationale_164",
       "community": 11,
       "norm_label": "send the best fresh deals of a run. a listing is alerted once, plus once more if"
     },
@@ -4387,9 +4417,9 @@
       "label": "Actionable fresh ads, losing ones included. ``order``: \"newest\" first, or \"profi",
       "file_type": "rationale",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L277",
+      "source_location": "L274",
       "_origin": "ast",
-      "id": "notify_deals_rationale_277",
+      "id": "notify_deals_rationale_274",
       "community": 11,
       "norm_label": "actionable fresh ads, losing ones included. ``order``: \"newest\" first, or \"profi"
     },
@@ -4397,21 +4427,31 @@
       "label": "Answer /deals: one message per ad, each with its link. Returns how many ads were",
       "file_type": "rationale",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L339",
+      "source_location": "L336",
       "_origin": "ast",
-      "id": "notify_deals_rationale_339",
+      "id": "notify_deals_rationale_336",
       "community": 11,
       "norm_label": "answer /deals: one message per ad, each with its link. returns how many ads were"
     },
     {
-      "label": "A short note after a scan so silence never looks like a broken bot.      Manua",
+      "label": "A short note after a scan you started yourself.",
       "file_type": "rationale",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L369",
+      "source_location": "L365",
       "_origin": "ast",
-      "id": "notify_deals_rationale_369",
+      "id": "notify_deals_rationale_365",
       "community": 11,
-      "norm_label": "a short note after a scan so silence never looks like a broken bot.      manua"
+      "norm_label": "a short note after a scan you started yourself."
+    },
+    {
+      "label": "One message for a whole automatic round. Silent when nothing new happened, so ho",
+      "file_type": "rationale",
+      "source_file": "backend/app/notify/deals.py",
+      "source_location": "L381",
+      "_origin": "ast",
+      "id": "notify_deals_rationale_381",
+      "community": 11,
+      "norm_label": "one message for a whole automatic round. silent when nothing new happened, so ho"
     },
     {
       "label": "pipeline.py",
@@ -4420,7 +4460,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "notify_pipeline",
-      "community": 22,
+      "community": 19,
       "norm_label": "pipeline.py"
     },
     {
@@ -4430,7 +4470,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "notify_pipeline_now",
-      "community": 22,
+      "community": 19,
       "norm_label": "_now()"
     },
     {
@@ -4440,7 +4480,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "backend_app_notify_pipeline_py_datetime",
-      "community": 22,
+      "community": 19,
       "norm_label": "datetime"
     },
     {
@@ -4450,7 +4490,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "notify_pipeline_set_status",
-      "community": 22,
+      "community": 19,
       "norm_label": "set_status()"
     },
     {
@@ -4460,7 +4500,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "backend_app_notify_pipeline_py_session",
-      "community": 22,
+      "community": 19,
       "norm_label": "session"
     },
     {
@@ -4470,7 +4510,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "backend_app_notify_pipeline_py_settings",
-      "community": 22,
+      "community": 19,
       "norm_label": "settings"
     },
     {
@@ -4480,7 +4520,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "backend_app_notify_pipeline_py_listing",
-      "community": 22,
+      "community": 19,
       "norm_label": "listing"
     },
     {
@@ -4490,7 +4530,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "notify_pipeline_realised_profit",
-      "community": 22,
+      "community": 19,
       "norm_label": "realised_profit()"
     },
     {
@@ -4500,7 +4540,7 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "notify_pipeline_calibrate",
-      "community": 22,
+      "community": 19,
       "norm_label": "calibrate()"
     },
     {
@@ -4510,7 +4550,7 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "backend_app_notify_pipeline_py_any",
-      "community": 22,
+      "community": 19,
       "norm_label": "any"
     },
     {
@@ -4520,7 +4560,7 @@
       "source_location": "L79",
       "_origin": "ast",
       "id": "notify_pipeline_summary",
-      "community": 22,
+      "community": 19,
       "norm_label": "summary()"
     },
     {
@@ -4530,7 +4570,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "notify_pipeline_rationale_1",
-      "community": 22,
+      "community": 19,
       "norm_label": "deal pipeline (contacted -> bought -> shipped -> sold) and learning from the out"
     },
     {
@@ -4540,7 +4580,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "notify_pipeline_rationale_48",
-      "community": 22,
+      "community": 19,
       "norm_label": "real profit of a sold deal: sale price (eur at the parallel rate) minus the land"
     },
     {
@@ -4550,7 +4590,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "notify_pipeline_rationale_59",
-      "community": 22,
+      "community": 19,
       "norm_label": "learn from real outcomes: the discount sellers accept and how far resale falls b"
     },
     {
@@ -4560,7 +4600,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "notify_poller",
-      "community": 11,
+      "community": 5,
       "norm_label": "poller.py"
     },
     {
@@ -4570,7 +4610,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "notify_poller_chat_ok",
-      "community": 11,
+      "community": 5,
       "norm_label": "_chat_ok()"
     },
     {
@@ -4580,7 +4620,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "backend_app_notify_poller_py_settings",
-      "community": 11,
+      "community": 5,
       "norm_label": "settings"
     },
     {
@@ -4590,7 +4630,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "backend_app_notify_poller_py_any",
-      "community": 11,
+      "community": 5,
       "norm_label": "any"
     },
     {
@@ -4600,7 +4640,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "notify_poller_reply",
-      "community": 11,
+      "community": 5,
       "norm_label": "_reply()"
     },
     {
@@ -4610,7 +4650,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "notify_poller_handle_callback",
-      "community": 11,
+      "community": 5,
       "norm_label": "_handle_callback()"
     },
     {
@@ -4620,7 +4660,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "backend_app_notify_poller_py_session",
-      "community": 11,
+      "community": 5,
       "norm_label": "session"
     },
     {
@@ -4630,7 +4670,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "notify_poller_handle_message",
-      "community": 11,
+      "community": 5,
       "norm_label": "_handle_message()"
     },
     {
@@ -4640,7 +4680,7 @@
       "source_location": "L83",
       "_origin": "ast",
       "id": "notify_poller_process_updates",
-      "community": 11,
+      "community": 5,
       "norm_label": "process_updates()"
     },
     {
@@ -4650,7 +4690,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "notify_poller_rationale_1",
-      "community": 11,
+      "community": 5,
       "norm_label": "handle telegram button presses and commands (contacted / bought / skip, /paid, /"
     },
     {
@@ -4660,7 +4700,7 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "notify_poller_rationale_84",
-      "community": 11,
+      "community": 5,
       "norm_label": "fetch and handle pending updates once. returns how many were handled."
     },
     {
@@ -4677,7 +4717,7 @@
       "label": "_now()",
       "file_type": "code",
       "source_file": "backend/app/notify/system.py",
-      "source_location": "L19",
+      "source_location": "L21",
       "_origin": "ast",
       "id": "notify_system_now",
       "community": 5,
@@ -4687,7 +4727,7 @@
       "label": "datetime",
       "file_type": "code",
       "source_file": "backend/app/notify/system.py",
-      "source_location": "L19",
+      "source_location": "L21",
       "_origin": "ast",
       "id": "backend_app_notify_system_py_datetime",
       "community": 5,
@@ -4697,7 +4737,7 @@
       "label": "_interval_minutes()",
       "file_type": "code",
       "source_file": "backend/app/notify/system.py",
-      "source_location": "L23",
+      "source_location": "L25",
       "_origin": "ast",
       "id": "notify_system_interval_minutes",
       "community": 5,
@@ -4707,7 +4747,7 @@
       "label": "_key_state()",
       "file_type": "code",
       "source_file": "backend/app/notify/system.py",
-      "source_location": "L29",
+      "source_location": "L31",
       "_origin": "ast",
       "id": "notify_system_key_state",
       "community": 5,
@@ -4717,7 +4757,7 @@
       "label": "Session",
       "file_type": "code",
       "source_file": "backend/app/notify/system.py",
-      "source_location": "L29",
+      "source_location": "L31",
       "_origin": "ast",
       "id": "backend_app_notify_system_py_session",
       "community": 5,
@@ -4727,7 +4767,7 @@
       "label": "Settings",
       "file_type": "code",
       "source_file": "backend/app/notify/system.py",
-      "source_location": "L29",
+      "source_location": "L31",
       "_origin": "ast",
       "id": "backend_app_notify_system_py_settings",
       "community": 5,
@@ -4737,7 +4777,7 @@
       "label": "compute_health()",
       "file_type": "code",
       "source_file": "backend/app/notify/system.py",
-      "source_location": "L47",
+      "source_location": "L49",
       "_origin": "ast",
       "id": "notify_system_compute_health",
       "community": 5,
@@ -4747,7 +4787,7 @@
       "label": "Any",
       "file_type": "code",
       "source_file": "backend/app/notify/system.py",
-      "source_location": "L47",
+      "source_location": "L49",
       "_origin": "ast",
       "id": "backend_app_notify_system_py_any",
       "community": 5,
@@ -4757,7 +4797,7 @@
       "label": "check_and_alert()",
       "file_type": "code",
       "source_file": "backend/app/notify/system.py",
-      "source_location": "L97",
+      "source_location": "L106",
       "_origin": "ast",
       "id": "notify_system_check_and_alert",
       "community": 5,
@@ -4777,9 +4817,9 @@
       "label": "missing' | 'rejected' | 'ok' | 'unknown'.",
       "file_type": "rationale",
       "source_file": "backend/app/notify/system.py",
-      "source_location": "L30",
+      "source_location": "L32",
       "_origin": "ast",
-      "id": "notify_system_rationale_30",
+      "id": "notify_system_rationale_32",
       "community": 5,
       "norm_label": "missing' | 'rejected' | 'ok' | 'unknown'."
     },
@@ -4787,9 +4827,9 @@
       "label": "Send one Telegram alert per new problem (reminder after 24 h); clear state when",
       "file_type": "rationale",
       "source_file": "backend/app/notify/system.py",
-      "source_location": "L98",
+      "source_location": "L107",
       "_origin": "ast",
-      "id": "notify_system_rationale_98",
+      "id": "notify_system_rationale_107",
       "community": 5,
       "norm_label": "send one telegram alert per new problem (reminder after 24 h); clear state when"
     },
@@ -5207,7 +5247,7 @@
       "label": "recheck_watchlist()",
       "file_type": "code",
       "source_file": "backend/app/scheduler.py",
-      "source_location": "L27",
+      "source_location": "L29",
       "_origin": "ast",
       "id": "app_scheduler_recheck_watchlist",
       "community": 26,
@@ -5217,7 +5257,7 @@
       "label": "datetime",
       "file_type": "code",
       "source_file": "backend/app/scheduler.py",
-      "source_location": "L27",
+      "source_location": "L29",
       "_origin": "ast",
       "id": "backend_app_scheduler_py_datetime",
       "community": 26,
@@ -5227,7 +5267,7 @@
       "label": "housekeeping()",
       "file_type": "code",
       "source_file": "backend/app/scheduler.py",
-      "source_location": "L51",
+      "source_location": "L53",
       "_origin": "ast",
       "id": "app_scheduler_housekeeping",
       "community": 26,
@@ -5237,7 +5277,7 @@
       "label": "poll_telegram()",
       "file_type": "code",
       "source_file": "backend/app/scheduler.py",
-      "source_location": "L65",
+      "source_location": "L67",
       "_origin": "ast",
       "id": "app_scheduler_poll_telegram",
       "community": 26,
@@ -5247,7 +5287,7 @@
       "label": "check_due_searches()",
       "file_type": "code",
       "source_file": "backend/app/scheduler.py",
-      "source_location": "L77",
+      "source_location": "L79",
       "_origin": "ast",
       "id": "app_scheduler_check_due_searches",
       "community": 26,
@@ -5257,7 +5297,7 @@
       "label": "start_scheduler()",
       "file_type": "code",
       "source_file": "backend/app/scheduler.py",
-      "source_location": "L122",
+      "source_location": "L137",
       "_origin": "ast",
       "id": "app_scheduler_start_scheduler",
       "community": 26,
@@ -5267,7 +5307,7 @@
       "label": "stop_scheduler()",
       "file_type": "code",
       "source_file": "backend/app/scheduler.py",
-      "source_location": "L144",
+      "source_location": "L159",
       "_origin": "ast",
       "id": "app_scheduler_stop_scheduler",
       "community": 26,
@@ -5277,9 +5317,9 @@
       "label": "Re-verify ads we already alerted about (or you acted on) so dead ads drop out of",
       "file_type": "rationale",
       "source_file": "backend/app/scheduler.py",
-      "source_location": "L28",
+      "source_location": "L30",
       "_origin": "ast",
-      "id": "app_scheduler_rationale_28",
+      "id": "app_scheduler_rationale_30",
       "community": 26,
       "norm_label": "re-verify ads we already alerted about (or you acted on) so dead ads drop out of"
     },
@@ -5287,9 +5327,9 @@
       "label": "Cheap upkeep done on every tick; never raises.",
       "file_type": "rationale",
       "source_file": "backend/app/scheduler.py",
-      "source_location": "L52",
+      "source_location": "L54",
       "_origin": "ast",
-      "id": "app_scheduler_rationale_52",
+      "id": "app_scheduler_rationale_54",
       "community": 26,
       "norm_label": "cheap upkeep done on every tick; never raises."
     },
@@ -5297,9 +5337,9 @@
       "label": "Button presses and commands, polled often (a few seconds) so taps feel instant.",
       "file_type": "rationale",
       "source_file": "backend/app/scheduler.py",
-      "source_location": "L66",
+      "source_location": "L68",
       "_origin": "ast",
-      "id": "app_scheduler_rationale_66",
+      "id": "app_scheduler_rationale_68",
       "community": 26,
       "norm_label": "button presses and commands, polled often (a few seconds) so taps feel instant."
     },
@@ -5307,9 +5347,9 @@
       "label": "Run every search that is due. With a budget, stop starting new ones once it is s",
       "file_type": "rationale",
       "source_file": "backend/app/scheduler.py",
-      "source_location": "L78",
+      "source_location": "L80",
       "_origin": "ast",
-      "id": "app_scheduler_rationale_78",
+      "id": "app_scheduler_rationale_80",
       "community": 26,
       "norm_label": "run every search that is due. with a budget, stop starting new ones once it is s"
     },
@@ -5347,7 +5387,7 @@
       "label": "SettingsUpdate",
       "file_type": "code",
       "source_file": "backend/app/schemas.py",
-      "source_location": "L51",
+      "source_location": "L52",
       "_origin": "ast",
       "id": "app_schemas_settingsupdate",
       "community": 25,
@@ -5357,7 +5397,7 @@
       "label": "SearchCreate",
       "file_type": "code",
       "source_file": "backend/app/schemas.py",
-      "source_location": "L89",
+      "source_location": "L91",
       "_origin": "ast",
       "id": "app_schemas_searchcreate",
       "community": 25,
@@ -5367,7 +5407,7 @@
       "label": "SearchUpdate",
       "file_type": "code",
       "source_file": "backend/app/schemas.py",
-      "source_location": "L113",
+      "source_location": "L115",
       "_origin": "ast",
       "id": "app_schemas_searchupdate",
       "community": 25,
@@ -5377,7 +5417,7 @@
       "label": "SearchOut",
       "file_type": "code",
       "source_file": "backend/app/schemas.py",
-      "source_location": "L138",
+      "source_location": "L140",
       "_origin": "ast",
       "id": "app_schemas_searchout",
       "community": 25,
@@ -5387,7 +5427,7 @@
       "label": "QueryPreview",
       "file_type": "code",
       "source_file": "backend/app/schemas.py",
-      "source_location": "L168",
+      "source_location": "L170",
       "_origin": "ast",
       "id": "app_schemas_querypreview",
       "community": 25,
@@ -5397,7 +5437,7 @@
       "label": "RunOut",
       "file_type": "code",
       "source_file": "backend/app/schemas.py",
-      "source_location": "L174",
+      "source_location": "L176",
       "_origin": "ast",
       "id": "app_schemas_runout",
       "community": 25,
@@ -5407,7 +5447,7 @@
       "label": "ListingOut",
       "file_type": "code",
       "source_file": "backend/app/schemas.py",
-      "source_location": "L192",
+      "source_location": "L194",
       "_origin": "ast",
       "id": "app_schemas_listingout",
       "community": 25,
@@ -5417,7 +5457,7 @@
       "label": "._null_to_default()",
       "file_type": "code",
       "source_file": "backend/app/schemas.py",
-      "source_location": "L197",
+      "source_location": "L199",
       "_origin": "ast",
       "id": "app_schemas_listingout_null_to_default",
       "community": 25,
@@ -5427,7 +5467,7 @@
       "label": "ListingCard",
       "file_type": "code",
       "source_file": "backend/app/schemas.py",
-      "source_location": "L268",
+      "source_location": "L270",
       "_origin": "ast",
       "id": "app_schemas_listingcard",
       "community": 25,
@@ -5437,7 +5477,7 @@
       "label": "ResultsResponse",
       "file_type": "code",
       "source_file": "backend/app/schemas.py",
-      "source_location": "L303",
+      "source_location": "L305",
       "_origin": "ast",
       "id": "app_schemas_resultsresponse",
       "community": 25,
@@ -5447,7 +5487,7 @@
       "label": "PricePoint",
       "file_type": "code",
       "source_file": "backend/app/schemas.py",
-      "source_location": "L312",
+      "source_location": "L314",
       "_origin": "ast",
       "id": "app_schemas_pricepoint",
       "community": 25,
@@ -5457,7 +5497,7 @@
       "label": "ListingDetail",
       "file_type": "code",
       "source_file": "backend/app/schemas.py",
-      "source_location": "L317",
+      "source_location": "L319",
       "_origin": "ast",
       "id": "app_schemas_listingdetail",
       "community": 25,
@@ -5467,7 +5507,7 @@
       "label": "QuoteRequest",
       "file_type": "code",
       "source_file": "backend/app/schemas.py",
-      "source_location": "L325",
+      "source_location": "L327",
       "_origin": "ast",
       "id": "app_schemas_quoterequest",
       "community": 25,
@@ -5477,7 +5517,7 @@
       "label": "QuoteResponse",
       "file_type": "code",
       "source_file": "backend/app/schemas.py",
-      "source_location": "L333",
+      "source_location": "L335",
       "_origin": "ast",
       "id": "app_schemas_quoteresponse",
       "community": 25,
@@ -5487,7 +5527,7 @@
       "label": "NegotiationRequest",
       "file_type": "code",
       "source_file": "backend/app/schemas.py",
-      "source_location": "L344",
+      "source_location": "L346",
       "_origin": "ast",
       "id": "app_schemas_negotiationrequest",
       "community": 25,
@@ -5497,7 +5537,7 @@
       "label": "BulkNegotiationRequest",
       "file_type": "code",
       "source_file": "backend/app/schemas.py",
-      "source_location": "L350",
+      "source_location": "L352",
       "_origin": "ast",
       "id": "app_schemas_bulknegotiationrequest",
       "community": 25,
@@ -5507,7 +5547,7 @@
       "label": "NegotiationOut",
       "file_type": "code",
       "source_file": "backend/app/schemas.py",
-      "source_location": "L355",
+      "source_location": "L357",
       "_origin": "ast",
       "id": "app_schemas_negotiationout",
       "community": 25,
@@ -5517,17 +5557,17 @@
       "label": "DashboardKPIs",
       "file_type": "code",
       "source_file": "backend/app/schemas.py",
-      "source_location": "L370",
+      "source_location": "L372",
       "_origin": "ast",
       "id": "app_schemas_dashboardkpis",
-      "community": 25,
+      "community": 15,
       "norm_label": "dashboardkpis"
     },
     {
       "label": "DashboardOut",
       "file_type": "code",
       "source_file": "backend/app/schemas.py",
-      "source_location": "L377",
+      "source_location": "L379",
       "_origin": "ast",
       "id": "app_schemas_dashboardout",
       "community": 25,
@@ -5537,10 +5577,10 @@
       "label": "ImportResult",
       "file_type": "code",
       "source_file": "backend/app/schemas.py",
-      "source_location": "L385",
+      "source_location": "L387",
       "_origin": "ast",
       "id": "app_schemas_importresult",
-      "community": 25,
+      "community": 41,
       "norm_label": "importresult"
     },
     {
@@ -6250,7 +6290,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scripts_migrate_to_postgres",
-      "community": 15,
+      "community": 41,
       "norm_label": "migrate_to_postgres.py"
     },
     {
@@ -6260,7 +6300,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "scripts_migrate_to_postgres_main",
-      "community": 15,
+      "community": 41,
       "norm_label": "main()"
     },
     {
@@ -6270,8 +6310,38 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scripts_migrate_to_postgres_rationale_1",
-      "community": 15,
+      "community": 41,
       "norm_label": "copy the local sqlite database into postgres (supabase).  usage (from backend/):"
+    },
+    {
+      "label": "conftest.py",
+      "file_type": "code",
+      "source_file": "backend/tests/conftest.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_conftest",
+      "community": 46,
+      "norm_label": "conftest.py"
+    },
+    {
+      "label": "_no_waiting()",
+      "file_type": "code",
+      "source_file": "backend/tests/conftest.py",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "tests_conftest_no_waiting",
+      "community": 46,
+      "norm_label": "_no_waiting()"
+    },
+    {
+      "label": "Tests do not wait between searches, and behave like a backend that has been up f",
+      "file_type": "rationale",
+      "source_file": "backend/tests/conftest.py",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "tests_conftest_rationale_6",
+      "community": 46,
+      "norm_label": "tests do not wait between searches, and behave like a backend that has been up f"
     },
     {
       "label": "test_core.py",
@@ -6580,7 +6650,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "tests_test_freshness_test_paris_conversion_winter_and_summer",
-      "community": 15,
+      "community": 49,
       "norm_label": "test_paris_conversion_winter_and_summer()"
     },
     {
@@ -6944,6 +7014,46 @@
       "norm_label": "test_out_of_credit_never_wipes_a_price_or_blames_the_product()"
     },
     {
+      "label": "test_daily_lookup_cap_stops_spending_but_not_the_price_button()",
+      "file_type": "code",
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L419",
+      "_origin": "ast",
+      "id": "tests_test_live_test_daily_lookup_cap_stops_spending_but_not_the_price_button",
+      "community": 2,
+      "norm_label": "test_daily_lookup_cap_stops_spending_but_not_the_price_button()"
+    },
+    {
+      "label": "test_out_of_credit_raises_a_system_alert()",
+      "file_type": "code",
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L437",
+      "_origin": "ast",
+      "id": "tests_test_live_test_out_of_credit_raises_a_system_alert",
+      "community": 2,
+      "norm_label": "test_out_of_credit_raises_a_system_alert()"
+    },
+    {
+      "label": "test_no_stale_alert_right_after_a_restart()",
+      "file_type": "code",
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L453",
+      "_origin": "ast",
+      "id": "tests_test_live_test_no_stale_alert_right_after_a_restart",
+      "community": 2,
+      "norm_label": "test_no_stale_alert_right_after_a_restart()"
+    },
+    {
+      "label": "test_scheduler_skips_a_search_that_is_already_scanning()",
+      "file_type": "code",
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L467",
+      "_origin": "ast",
+      "id": "tests_test_live_test_scheduler_skips_a_search_that_is_already_scanning",
+      "community": 2,
+      "norm_label": "test_scheduler_skips_a_search_that_is_already_scanning()"
+    },
+    {
       "label": "test_notify.py",
       "file_type": "code",
       "source_file": "backend/tests/test_notify.py",
@@ -7100,7 +7210,7 @@
       "source_location": "L168",
       "_origin": "ast",
       "id": "tests_test_notify_test_quiet_hours_window_wraps_midnight",
-      "community": 15,
+      "community": 41,
       "norm_label": "test_quiet_hours_window_wraps_midnight()"
     },
     {
@@ -7164,14 +7274,14 @@
       "norm_label": "test_deals_command_lists_fresh_ads_newest_first_with_links()"
     },
     {
-      "label": "test_scan_summary_always_for_manual_and_rate_limited_for_auto()",
+      "label": "test_manual_scan_summary_and_one_digest_per_auto_round()",
       "file_type": "code",
       "source_file": "backend/tests/test_notify.py",
       "source_location": "L292",
       "_origin": "ast",
-      "id": "tests_test_notify_test_scan_summary_always_for_manual_and_rate_limited_for_auto",
+      "id": "tests_test_notify_test_manual_scan_summary_and_one_digest_per_auto_round",
       "community": 18,
-      "norm_label": "test_scan_summary_always_for_manual_and_rate_limited_for_auto()"
+      "norm_label": "test_manual_scan_summary_and_one_digest_per_auto_round()"
     },
     {
       "label": "Leboncoin-style timestamp (Paris time, UTC+1 in winter) for an ad published `hou",
@@ -7450,7 +7560,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_test_screen",
-      "community": 49,
+      "community": 44,
       "norm_label": "test_screen.py"
     },
     {
@@ -7460,7 +7570,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "tests_test_screen_l",
-      "community": 49,
+      "community": 44,
       "norm_label": "_l()"
     },
     {
@@ -7470,7 +7580,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "tests_test_screen_test_sold_pending_broken_and_accessories_are_skipped",
-      "community": 49,
+      "community": 44,
       "norm_label": "test_sold_pending_broken_and_accessories_are_skipped()"
     },
     {
@@ -7480,7 +7590,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "tests_test_screen_test_ship_signal_uses_leboncoin_fields_then_text",
-      "community": 49,
+      "community": 44,
       "norm_label": "test_ship_signal_uses_leboncoin_fields_then_text()"
     },
     {
@@ -7490,7 +7600,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "tests_test_screen_test_flags_and_price_drop_and_scam_price",
-      "community": 49,
+      "community": 44,
       "norm_label": "test_flags_and_price_drop_and_scam_price()"
     },
     {
@@ -7500,7 +7610,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_test_search_form",
-      "community": 15,
+      "community": 3,
       "norm_label": "test_search_form.py"
     },
     {
@@ -7510,7 +7620,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "tests_test_search_form_test_queries_come_only_from_inputs_and_fix_category",
-      "community": 15,
+      "community": 3,
       "norm_label": "test_queries_come_only_from_inputs_and_fix_category()"
     },
     {
@@ -7520,7 +7630,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "tests_test_search_form_test_empty_form_falls_back_to_pc_portable",
-      "community": 15,
+      "community": 3,
       "norm_label": "test_empty_form_falls_back_to_pc_portable()"
     },
     {
@@ -7530,7 +7640,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "tests_test_search_form_test_vendor_terms_and_matching",
-      "community": 15,
+      "community": 3,
       "norm_label": "test_vendor_terms_and_matching()"
     },
     {
@@ -7540,7 +7650,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "tests_test_search_form_test_snapdragon_extraction",
-      "community": 15,
+      "community": 3,
       "norm_label": "test_snapdragon_extraction()"
     },
     {
@@ -7550,7 +7660,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "tests_test_search_form_test_intervals",
-      "community": 15,
+      "community": 3,
       "norm_label": "test_intervals()"
     },
     {
@@ -7910,7 +8020,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app",
-      "community": 21,
+      "community": 24,
       "norm_label": "app.tsx"
     },
     {
@@ -7920,7 +8030,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_app_app",
-      "community": 21,
+      "community": 24,
       "norm_label": "app()"
     },
     {
@@ -7930,7 +8040,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_aipanel",
-      "community": 44,
+      "community": 21,
       "norm_label": "aipanel.tsx"
     },
     {
@@ -7940,7 +8050,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "components_aipanel_step_label",
-      "community": 44,
+      "community": 21,
       "norm_label": "step_label"
     },
     {
@@ -7950,7 +8060,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "components_aipanel_steps",
-      "community": 44,
+      "community": 21,
       "norm_label": "steps"
     },
     {
@@ -7960,7 +8070,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "components_aipanel_reasons",
-      "community": 44,
+      "community": 21,
       "norm_label": "reasons"
     },
     {
@@ -7980,7 +8090,7 @@
       "source_location": "L65",
       "_origin": "ast",
       "id": "components_aipanel_stepchip",
-      "community": 44,
+      "community": 21,
       "norm_label": "stepchip()"
     },
     {
@@ -7990,7 +8100,7 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "components_aipanel_aipanel",
-      "community": 44,
+      "community": 21,
       "norm_label": "aipanel()"
     },
     {
@@ -8010,7 +8120,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "components_authgate_authgate",
-      "community": 21,
+      "community": 24,
       "norm_label": "authgate()"
     },
     {
@@ -8220,7 +8330,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_setupchecklist",
-      "community": 44,
+      "community": 21,
       "norm_label": "setupchecklist.tsx"
     },
     {
@@ -8230,7 +8340,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "components_setupchecklist_setupchecklist",
-      "community": 44,
+      "community": 21,
       "norm_label": "setupchecklist()"
     },
     {
@@ -8240,7 +8350,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_ui",
-      "community": 24,
+      "community": 21,
       "norm_label": "ui.tsx"
     },
     {
@@ -8250,7 +8360,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "components_ui_buttonvariant",
-      "community": 24,
+      "community": 21,
       "norm_label": "buttonvariant"
     },
     {
@@ -8260,7 +8370,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "components_ui_buttonsize",
-      "community": 24,
+      "community": 21,
       "norm_label": "buttonsize"
     },
     {
@@ -8270,7 +8380,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "components_ui_button_variants",
-      "community": 24,
+      "community": 21,
       "norm_label": "button_variants"
     },
     {
@@ -8280,7 +8390,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "components_ui_button_sizes",
-      "community": 24,
+      "community": 21,
       "norm_label": "button_sizes"
     },
     {
@@ -8290,7 +8400,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "components_ui_button",
-      "community": 44,
+      "community": 21,
       "norm_label": "button()"
     },
     {
@@ -8300,7 +8410,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "components_ui_card",
-      "community": 44,
+      "community": 21,
       "norm_label": "card()"
     },
     {
@@ -8310,7 +8420,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "components_ui_cardheader",
-      "community": 24,
+      "community": 21,
       "norm_label": "cardheader()"
     },
     {
@@ -8330,7 +8440,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "components_ui_dealbadge",
-      "community": 0,
+      "community": 6,
       "norm_label": "dealbadge()"
     },
     {
@@ -8360,7 +8470,7 @@
       "source_location": "L105",
       "_origin": "ast",
       "id": "components_ui_textarea",
-      "community": 0,
+      "community": 21,
       "norm_label": "textarea()"
     },
     {
@@ -8420,7 +8530,7 @@
       "source_location": "L209",
       "_origin": "ast",
       "id": "components_ui_toaster",
-      "community": 24,
+      "community": 21,
       "norm_label": "toaster()"
     },
     {
@@ -8597,7 +8707,7 @@
       "label": "Dashboard",
       "file_type": "code",
       "source_file": "frontend/src/lib/api.ts",
-      "source_location": "L284",
+      "source_location": "L285",
       "_origin": "ast",
       "id": "lib_api_dashboard",
       "community": 33,
@@ -8607,7 +8717,7 @@
       "label": "SystemHealth",
       "file_type": "code",
       "source_file": "frontend/src/lib/api.ts",
-      "source_location": "L308",
+      "source_location": "L309",
       "_origin": "ast",
       "id": "lib_api_systemhealth",
       "community": 33,
@@ -8617,7 +8727,7 @@
       "label": "LiveRun",
       "file_type": "code",
       "source_file": "frontend/src/lib/api.ts",
-      "source_location": "L322",
+      "source_location": "L323",
       "_origin": "ast",
       "id": "lib_api_liverun",
       "community": 6,
@@ -8627,7 +8737,7 @@
       "label": "LiveEvent",
       "file_type": "code",
       "source_file": "frontend/src/lib/api.ts",
-      "source_location": "L337",
+      "source_location": "L338",
       "_origin": "ast",
       "id": "lib_api_liveevent",
       "community": 33,
@@ -8637,7 +8747,7 @@
       "label": "LiveStatus",
       "file_type": "code",
       "source_file": "frontend/src/lib/api.ts",
-      "source_location": "L345",
+      "source_location": "L346",
       "_origin": "ast",
       "id": "lib_api_livestatus",
       "community": 6,
@@ -8647,7 +8757,7 @@
       "label": "ActNow",
       "file_type": "code",
       "source_file": "frontend/src/lib/api.ts",
-      "source_location": "L363",
+      "source_location": "L364",
       "_origin": "ast",
       "id": "lib_api_actnow",
       "community": 33,
@@ -8657,7 +8767,7 @@
       "label": "ConnectionTest",
       "file_type": "code",
       "source_file": "frontend/src/lib/api.ts",
-      "source_location": "L369",
+      "source_location": "L370",
       "_origin": "ast",
       "id": "lib_api_connectiontest",
       "community": 21,
@@ -8667,7 +8777,7 @@
       "label": "PriceBookRow",
       "file_type": "code",
       "source_file": "frontend/src/lib/api.ts",
-      "source_location": "L376",
+      "source_location": "L377",
       "_origin": "ast",
       "id": "lib_api_pricebookrow",
       "community": 24,
@@ -8677,7 +8787,7 @@
       "label": "PipelineRow",
       "file_type": "code",
       "source_file": "frontend/src/lib/api.ts",
-      "source_location": "L392",
+      "source_location": "L393",
       "_origin": "ast",
       "id": "lib_api_pipelinerow",
       "community": 33,
@@ -8687,7 +8797,7 @@
       "label": "PipelineBoard",
       "file_type": "code",
       "source_file": "frontend/src/lib/api.ts",
-      "source_location": "L398",
+      "source_location": "L399",
       "_origin": "ast",
       "id": "lib_api_pipelineboard",
       "community": 33,
@@ -8697,7 +8807,7 @@
       "label": "ApiError",
       "file_type": "code",
       "source_file": "frontend/src/lib/api.ts",
-      "source_location": "L406",
+      "source_location": "L407",
       "_origin": "ast",
       "id": "lib_api_apierror",
       "community": 33,
@@ -8707,7 +8817,7 @@
       "label": ".constructor()",
       "file_type": "code",
       "source_file": "frontend/src/lib/api.ts",
-      "source_location": "L408",
+      "source_location": "L409",
       "_origin": "ast",
       "id": "lib_api_apierror_constructor",
       "community": 33,
@@ -8717,7 +8827,7 @@
       "label": "request()",
       "file_type": "code",
       "source_file": "frontend/src/lib/api.ts",
-      "source_location": "L414",
+      "source_location": "L415",
       "_origin": "ast",
       "id": "lib_api_request",
       "community": 33,
@@ -8727,7 +8837,7 @@
       "label": "qs()",
       "file_type": "code",
       "source_file": "frontend/src/lib/api.ts",
-      "source_location": "L440",
+      "source_location": "L441",
       "_origin": "ast",
       "id": "lib_api_qs",
       "community": 33,
@@ -8737,17 +8847,17 @@
       "label": "api",
       "file_type": "code",
       "source_file": "frontend/src/lib/api.ts",
-      "source_location": "L450",
+      "source_location": "L451",
       "_origin": "ast",
       "id": "lib_api_api",
-      "community": 6,
+      "community": 24,
       "norm_label": "api"
     },
     {
       "label": "Verdict",
       "file_type": "code",
       "source_file": "frontend/src/lib/api.ts",
-      "source_location": "L569",
+      "source_location": "L570",
       "_origin": "ast",
       "id": "lib_api_verdict",
       "community": 33,
@@ -8900,7 +9010,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "lib_toast_usetoasts",
-      "community": 24,
+      "community": 21,
       "norm_label": "usetoasts()"
     },
     {
@@ -8990,7 +9100,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "lib_utils_cn",
-      "community": 44,
+      "community": 21,
       "norm_label": "cn()"
     },
     {
@@ -9130,7 +9240,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_main",
-      "community": 21,
+      "community": 24,
       "norm_label": "main.tsx"
     },
     {
@@ -9140,7 +9250,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "src_main_queryclient",
-      "community": 21,
+      "community": 24,
       "norm_label": "queryclient"
     },
     {
@@ -9210,7 +9320,7 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "pages_dashboard_dashboard",
-      "community": 0,
+      "community": 6,
       "norm_label": "dashboard()"
     },
     {
@@ -9484,10 +9594,30 @@
       "norm_label": "searches.tsx"
     },
     {
-      "label": "IntervalBadge()",
+      "label": "INTERVAL_MIN",
       "file_type": "code",
       "source_file": "frontend/src/pages/Searches.tsx",
       "source_location": "L22",
+      "_origin": "ast",
+      "id": "pages_searches_interval_min",
+      "community": 24,
+      "norm_label": "interval_min"
+    },
+    {
+      "label": "nextScan()",
+      "file_type": "code",
+      "source_file": "frontend/src/pages/Searches.tsx",
+      "source_location": "L24",
+      "_origin": "ast",
+      "id": "pages_searches_nextscan",
+      "community": 24,
+      "norm_label": "nextscan()"
+    },
+    {
+      "label": "IntervalBadge()",
+      "file_type": "code",
+      "source_file": "frontend/src/pages/Searches.tsx",
+      "source_location": "L32",
       "_origin": "ast",
       "id": "pages_searches_intervalbadge",
       "community": 24,
@@ -9497,7 +9627,7 @@
       "label": "QueryPreview()",
       "file_type": "code",
       "source_file": "frontend/src/pages/Searches.tsx",
-      "source_location": "L31",
+      "source_location": "L41",
       "_origin": "ast",
       "id": "pages_searches_querypreview",
       "community": 24,
@@ -9507,7 +9637,7 @@
       "label": "Searches()",
       "file_type": "code",
       "source_file": "frontend/src/pages/Searches.tsx",
-      "source_location": "L62",
+      "source_location": "L72",
       "_origin": "ast",
       "id": "pages_searches_searches",
       "community": 24,
@@ -10270,6 +10400,17 @@
       "confidence_score": 1.0,
       "source": "app_scheduler",
       "target": "app_init"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/notify/system.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "notify_system",
+      "target": "app_init",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -17070,9 +17211,9 @@
       "source_file": "backend/app/intelligence/dz_market.py",
       "source_location": "L217",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_dz_market",
-      "target": "intelligence_dz_market_explain_temporary",
-      "confidence_score": 1.0
+      "target": "intelligence_dz_market_explain_temporary"
     },
     {
       "relation": "contains",
@@ -17080,9 +17221,9 @@
       "source_file": "backend/app/intelligence/dz_market.py",
       "source_location": "L213",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_dz_market",
-      "target": "intelligence_dz_market_is_temporary",
-      "confidence_score": 1.0
+      "target": "intelligence_dz_market_is_temporary"
     },
     {
       "relation": "contains",
@@ -17090,9 +17231,9 @@
       "source_file": "backend/app/intelligence/dz_market.py",
       "source_location": "L223",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_dz_market",
-      "target": "intelligence_dz_market_is_temporary_failure",
-      "confidence_score": 1.0
+      "target": "intelligence_dz_market_is_temporary_failure"
     },
     {
       "relation": "contains",
@@ -17118,11 +17259,31 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/dz_market.py",
+      "source_location": "L230",
+      "weight": 1.0,
+      "source": "intelligence_dz_market",
+      "target": "intelligence_dz_market_lookups_today",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/dz_market.py",
       "source_location": "L99",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "intelligence_dz_market",
       "target": "intelligence_dz_market_num"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/dz_market.py",
+      "source_location": "L226",
+      "weight": 1.0,
+      "source": "intelligence_dz_market",
+      "target": "intelligence_dz_market_out_of_credit",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17333,6 +17494,28 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/dz_market.py",
+      "source_location": "L231",
+      "weight": 1.0,
+      "source": "intelligence_dz_market_lookups_today",
+      "target": "intelligence_dz_market_utcnow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/dz_market.py",
+      "source_location": "L227",
+      "weight": 1.0,
+      "source": "intelligence_dz_market_out_of_credit",
+      "target": "intelligence_dz_market_utcnow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/dz_market.py",
       "source_location": "L241",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -17379,9 +17562,9 @@
       "source_file": "backend/app/intelligence/dz_market.py",
       "source_location": "L224",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_dz_market_is_temporary_failure",
-      "target": "intelligence_dz_market_describe",
-      "confidence_score": 1.0
+      "target": "intelligence_dz_market_describe"
     },
     {
       "relation": "calls",
@@ -17409,9 +17592,9 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L54",
+      "source_location": "L57",
       "weight": 1.0,
-      "source": "intelligence_dz_market_rationale_54",
+      "source": "intelligence_dz_market_rationale_57",
       "target": "intelligence_dz_market_describe",
       "confidence_score": 1.0
     },
@@ -17433,9 +17616,9 @@
       "source_file": "backend/app/intelligence/dz_market.py",
       "source_location": "L223",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_dz_market_is_temporary_failure",
-      "target": "backend_app_intelligence_dz_market_py_listing",
-      "confidence_score": 1.0
+      "target": "backend_app_intelligence_dz_market_py_listing"
     },
     {
       "relation": "references",
@@ -17485,9 +17668,9 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L60",
+      "source_location": "L63",
       "weight": 1.0,
-      "source": "intelligence_dz_market_rationale_60",
+      "source": "intelligence_dz_market_rationale_63",
       "target": "intelligence_dz_market_ad_context",
       "confidence_score": 1.0
     },
@@ -17583,9 +17766,9 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L118",
+      "source_location": "L121",
       "weight": 1.0,
-      "source": "intelligence_dz_market_rationale_118",
+      "source": "intelligence_dz_market_rationale_121",
       "target": "intelligence_dz_market_call_gemini",
       "confidence_score": 1.0
     },
@@ -17671,6 +17854,17 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/dz_market.py",
+      "source_location": "L230",
+      "weight": 1.0,
+      "source": "intelligence_dz_market_lookups_today",
+      "target": "backend_app_intelligence_dz_market_py_session",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/dz_market.py",
       "source_location": "L226",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -17717,9 +17911,9 @@
       "source_file": "backend/app/intelligence/dz_market.py",
       "source_location": "L286",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_dz_market_lookup",
-      "target": "intelligence_dz_market_is_temporary",
-      "confidence_score": 1.0
+      "target": "intelligence_dz_market_is_temporary"
     },
     {
       "relation": "calls",
@@ -17728,8 +17922,19 @@
       "source_file": "backend/app/intelligence/dz_market.py",
       "source_location": "L288",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_dz_market_lookup",
-      "target": "intelligence_dz_market_explain_temporary",
+      "target": "intelligence_dz_market_explain_temporary"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/intelligence/dz_market.py",
+      "source_location": "L298",
+      "weight": 1.0,
+      "source": "intelligence_dz_market_lookup",
+      "target": "intelligence_dz_market_lookups_today",
       "confidence_score": 1.0
     },
     {
@@ -17747,9 +17952,9 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L228",
+      "source_location": "L240",
       "weight": 1.0,
-      "source": "intelligence_dz_market_rationale_228",
+      "source": "intelligence_dz_market_rationale_240",
       "target": "intelligence_dz_market_book_row",
       "confidence_score": 1.0
     },
@@ -17757,9 +17962,9 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L260",
+      "source_location": "L272",
       "weight": 1.0,
-      "source": "intelligence_dz_market_rationale_260",
+      "source": "intelligence_dz_market_rationale_272",
       "target": "intelligence_dz_market_lookup",
       "confidence_score": 1.0
     },
@@ -17767,9 +17972,9 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/intelligence/dz_market.py",
-      "source_location": "L298",
+      "source_location": "L319",
       "weight": 1.0,
-      "source": "intelligence_dz_market_rationale_298",
+      "source": "intelligence_dz_market_rationale_319",
       "target": "intelligence_dz_market_set_manual",
       "confidence_score": 1.0
     },
@@ -18640,9 +18845,9 @@
       "source_file": "backend/app/intelligence/enrich.py",
       "source_location": "L276",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_enrich_rationale_276",
-      "target": "intelligence_enrich_start",
-      "confidence_score": 1.0
+      "target": "intelligence_enrich_start"
     },
     {
       "relation": "calls",
@@ -19813,9 +20018,9 @@
       "source_file": "backend/app/intelligence/pricebook.py",
       "source_location": "L153",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_pricebook",
-      "target": "intelligence_pricebook_is_estimate",
-      "confidence_score": 1.0
+      "target": "intelligence_pricebook_is_estimate"
     },
     {
       "relation": "contains",
@@ -19853,9 +20058,9 @@
       "source_file": "backend/app/intelligence/pricebook.py",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_pricebook",
-      "target": "intelligence_pricebook_model_name",
-      "confidence_score": 1.0
+      "target": "intelligence_pricebook_model_name"
     },
     {
       "relation": "contains",
@@ -19863,9 +20068,9 @@
       "source_file": "backend/app/intelligence/pricebook.py",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_pricebook",
-      "target": "intelligence_pricebook_title_cpu",
-      "confidence_score": 1.0
+      "target": "intelligence_pricebook_title_cpu"
     },
     {
       "relation": "rationale_for",
@@ -19906,9 +20111,9 @@
       "source_file": "backend/app/intelligence/pricebook.py",
       "source_location": "L107",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_pricebook_canonical",
-      "target": "intelligence_pricebook_title_cpu",
-      "confidence_score": 1.0
+      "target": "intelligence_pricebook_title_cpu"
     },
     {
       "relation": "rationale_for",
@@ -19916,9 +20121,9 @@
       "source_file": "backend/app/intelligence/pricebook.py",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_pricebook_rationale_30",
-      "target": "intelligence_pricebook_title_cpu",
-      "confidence_score": 1.0
+      "target": "intelligence_pricebook_title_cpu"
     },
     {
       "relation": "calls",
@@ -19927,9 +20132,9 @@
       "source_file": "backend/app/intelligence/pricebook.py",
       "source_location": "L109",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_pricebook_canonical",
-      "target": "intelligence_pricebook_model_name",
-      "confidence_score": 1.0
+      "target": "intelligence_pricebook_model_name"
     },
     {
       "relation": "rationale_for",
@@ -19937,9 +20142,9 @@
       "source_file": "backend/app/intelligence/pricebook.py",
       "source_location": "L36",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_pricebook_rationale_36",
-      "target": "intelligence_pricebook_model_name",
-      "confidence_score": 1.0
+      "target": "intelligence_pricebook_model_name"
     },
     {
       "relation": "calls",
@@ -19969,9 +20174,9 @@
       "source_file": "backend/app/intelligence/pricebook.py",
       "source_location": "L55",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_pricebook_rationale_55",
-      "target": "intelligence_pricebook_cpu_tier",
-      "confidence_score": 1.0
+      "target": "intelligence_pricebook_cpu_tier"
     },
     {
       "relation": "calls",
@@ -20012,9 +20217,9 @@
       "source_file": "backend/app/intelligence/pricebook.py",
       "source_location": "L76",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_pricebook_rationale_76",
-      "target": "intelligence_pricebook_is_gpu_ad",
-      "confidence_score": 1.0
+      "target": "intelligence_pricebook_is_gpu_ad"
     },
     {
       "relation": "references",
@@ -20055,9 +20260,9 @@
       "source_file": "backend/app/intelligence/pricebook.py",
       "source_location": "L91",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_pricebook_rationale_91",
-      "target": "intelligence_pricebook_canonical",
-      "confidence_score": 1.0
+      "target": "intelligence_pricebook_canonical"
     },
     {
       "relation": "references",
@@ -20076,9 +20281,9 @@
       "source_file": "backend/app/intelligence/pricebook.py",
       "source_location": "L143",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_pricebook_rationale_143",
-      "target": "intelligence_pricebook_is_specific",
-      "confidence_score": 1.0
+      "target": "intelligence_pricebook_is_specific"
     },
     {
       "relation": "rationale_for",
@@ -20086,9 +20291,9 @@
       "source_file": "backend/app/intelligence/pricebook.py",
       "source_location": "L154",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "intelligence_pricebook_rationale_154",
-      "target": "intelligence_pricebook_is_estimate",
-      "confidence_score": 1.0
+      "target": "intelligence_pricebook_is_estimate"
     },
     {
       "relation": "imports_from",
@@ -22066,6 +22271,17 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/tests/test_live.py",
+      "source_location": "L424",
+      "weight": 1.0,
+      "source": "tests_test_live_test_daily_lookup_cap_stops_spending_but_not_the_price_button",
+      "target": "app_models_settings"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/tests/test_live.py",
       "source_location": "L229",
       "weight": 1.0,
       "source": "tests_test_live_test_enrich_runs_three_steps_on_the_freshest_ads_only",
@@ -22110,6 +22326,17 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/tests/test_live.py",
+      "source_location": "L457",
+      "weight": 1.0,
+      "source": "tests_test_live_test_no_stale_alert_right_after_a_restart",
+      "target": "app_models_settings"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/tests/test_live.py",
       "source_location": "L300",
       "weight": 1.0,
       "source": "tests_test_live_test_one_price_request_per_product_then_maths_for_every_ad",
@@ -22124,6 +22351,17 @@
       "source_location": "L407",
       "weight": 1.0,
       "source": "tests_test_live_test_out_of_credit_never_wipes_a_price_or_blames_the_product",
+      "target": "app_models_settings"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L442",
+      "weight": 1.0,
+      "source": "tests_test_live_test_out_of_credit_raises_a_system_alert",
       "target": "app_models_settings"
     },
     {
@@ -22157,6 +22395,17 @@
       "source_location": "L209",
       "weight": 1.0,
       "source": "tests_test_live_test_scans_use_no_ai_and_read_only_the_price_cache",
+      "target": "app_models_settings"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L472",
+      "weight": 1.0,
+      "source": "tests_test_live_test_scheduler_skips_a_search_that_is_already_scanning",
       "target": "app_models_settings"
     },
     {
@@ -22393,9 +22642,31 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/tests/test_live.py",
+      "source_location": "L458",
+      "weight": 1.0,
+      "source": "tests_test_live_test_no_stale_alert_right_after_a_restart",
+      "target": "app_models_search"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/tests/test_live.py",
       "source_location": "L301",
       "weight": 1.0,
       "source": "tests_test_live_test_one_price_request_per_product_then_maths_for_every_ad",
+      "target": "app_models_search"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L472",
+      "weight": 1.0,
+      "source": "tests_test_live_test_scheduler_skips_a_search_that_is_already_scanning",
       "target": "app_models_search"
     },
     {
@@ -22548,6 +22819,28 @@
       "weight": 0.8,
       "confidence_score": 0.5,
       "source": "tests_test_live_resp",
+      "target": "app_models_run"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L459",
+      "weight": 1.0,
+      "source": "tests_test_live_test_no_stale_alert_right_after_a_restart",
+      "target": "app_models_run"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/tests/test_notify.py",
+      "source_location": "L304",
+      "weight": 1.0,
+      "source": "tests_test_notify_test_manual_scan_summary_and_one_digest_per_auto_round",
       "target": "app_models_run"
     },
     {
@@ -22708,6 +23001,17 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/tests/test_live.py",
+      "source_location": "L429",
+      "weight": 1.0,
+      "source": "tests_test_live_test_daily_lookup_cap_stops_spending_but_not_the_price_button",
+      "target": "app_models_listing"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/tests/test_live.py",
       "source_location": "L201",
       "weight": 1.0,
       "source": "tests_test_live_test_gpu_search_rejects_other_cards",
@@ -22733,6 +23037,17 @@
       "source_location": "L412",
       "weight": 1.0,
       "source": "tests_test_live_test_out_of_credit_never_wipes_a_price_or_blames_the_product",
+      "target": "app_models_listing"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L446",
+      "weight": 1.0,
+      "source": "tests_test_live_test_out_of_credit_raises_a_system_alert",
       "target": "app_models_listing"
     },
     {
@@ -23011,11 +23326,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/models.py",
-      "source_location": "L311",
+      "source_location": "L312",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "app_models_rationale_311",
-      "target": "app_models_dzprice"
+      "source": "app_models_rationale_312",
+      "target": "app_models_dzprice",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -23036,6 +23351,17 @@
       "weight": 0.8,
       "confidence_score": 0.5,
       "source": "tests_test_live_resp",
+      "target": "app_models_dzprice"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L425",
+      "weight": 1.0,
+      "source": "tests_test_live_test_daily_lookup_cap_stops_spending_but_not_the_price_button",
       "target": "app_models_dzprice"
     },
     {
@@ -23114,6 +23440,17 @@
       "confidence_score": 1.0,
       "source": "notify_system",
       "target": "notify_init"
+    },
+    {
+      "relation": "imports_from",
+      "context": "submodule_import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/scheduler.py",
+      "source_location": "L127",
+      "weight": 1.0,
+      "source": "app_scheduler",
+      "target": "notify_deals",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -23235,6 +23572,16 @@
       "confidence_score": 1.0,
       "source": "notify_deals",
       "target": "notify_deals_now"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/notify/deals.py",
+      "source_location": "L380",
+      "weight": 1.0,
+      "source": "notify_deals",
+      "target": "notify_deals_send_round_digest",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -23399,6 +23746,17 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/notify/deals.py",
+      "source_location": "L396",
+      "weight": 1.0,
+      "source": "notify_deals_send_round_digest",
+      "target": "notify_deals_esc",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/notify/deals.py",
       "source_location": "L377",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -23443,6 +23801,17 @@
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/notify/deals.py",
+      "source_location": "L380",
+      "weight": 1.0,
+      "source": "notify_deals_send_round_digest",
+      "target": "backend_app_notify_deals_py_any",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/notify/deals.py",
       "source_location": "L360",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -23476,6 +23845,17 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/notify/deals.py",
+      "source_location": "L396",
+      "weight": 1.0,
+      "source": "notify_deals_send_round_digest",
+      "target": "notify_deals_eur",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/notify/deals.py",
       "source_location": "L381",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -23503,6 +23883,17 @@
       "confidence_score": 1.0,
       "source": "notify_deals_format_message",
       "target": "notify_deals_signed"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/notify/deals.py",
+      "source_location": "L396",
+      "weight": 1.0,
+      "source": "notify_deals_send_round_digest",
+      "target": "notify_deals_signed",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -23619,6 +24010,17 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/notify/deals.py",
+      "source_location": "L382",
+      "weight": 1.0,
+      "source": "notify_deals_send_round_digest",
+      "target": "notify_deals_in_quiet_hours",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/notify/deals.py",
       "source_location": "L374",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -23668,6 +24070,17 @@
       "confidence_score": 1.0,
       "source": "notify_deals_notify_run",
       "target": "backend_app_notify_deals_py_settings"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/notify/deals.py",
+      "source_location": "L380",
+      "weight": 1.0,
+      "source": "notify_deals_send_round_digest",
+      "target": "backend_app_notify_deals_py_settings",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -23882,11 +24295,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L115",
+      "source_location": "L114",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "notify_deals_rationale_115",
-      "target": "notify_deals_negotiation_text"
+      "source": "notify_deals_rationale_114",
+      "target": "notify_deals_negotiation_text",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -23898,6 +24311,17 @@
       "confidence_score": 1.0,
       "source": "notify_deals_notify_run",
       "target": "backend_app_notify_deals_py_session"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/notify/deals.py",
+      "source_location": "L380",
+      "weight": 1.0,
+      "source": "notify_deals_send_round_digest",
+      "target": "backend_app_notify_deals_py_session",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -23947,11 +24371,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L128",
+      "source_location": "L127",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "notify_deals_rationale_128",
-      "target": "notify_deals_check_online"
+      "source": "notify_deals_rationale_127",
+      "target": "notify_deals_check_online",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -23979,11 +24403,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L136",
+      "source_location": "L135",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "notify_deals_rationale_136",
-      "target": "notify_deals_gate"
+      "source": "notify_deals_rationale_135",
+      "target": "notify_deals_gate",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -24022,21 +24446,32 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L165",
+      "source_location": "L164",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "notify_deals_rationale_165",
-      "target": "notify_deals_notify_run"
+      "source": "notify_deals_rationale_164",
+      "target": "notify_deals_notify_run",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L277",
+      "source_location": "L274",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "notify_deals_rationale_277",
-      "target": "notify_deals_top_fresh"
+      "source": "notify_deals_rationale_274",
+      "target": "notify_deals_top_fresh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/notify/deals.py",
+      "source_location": "L393",
+      "weight": 1.0,
+      "source": "notify_deals_send_round_digest",
+      "target": "notify_deals_top_fresh",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -24075,21 +24510,31 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L339",
+      "source_location": "L336",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "notify_deals_rationale_339",
-      "target": "notify_deals_send_top_deals"
+      "source": "notify_deals_rationale_336",
+      "target": "notify_deals_send_top_deals",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/notify/deals.py",
-      "source_location": "L369",
+      "source_location": "L365",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "notify_deals_rationale_369",
-      "target": "notify_deals_send_scan_summary"
+      "source": "notify_deals_rationale_365",
+      "target": "notify_deals_send_scan_summary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/notify/deals.py",
+      "source_location": "L381",
+      "weight": 1.0,
+      "source": "notify_deals_rationale_381",
+      "target": "notify_deals_send_round_digest",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -24650,6 +25095,17 @@
     },
     {
       "relation": "imports_from",
+      "context": "submodule_import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/notify/system.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "notify_system",
+      "target": "app_progress",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/notify/system.py",
@@ -24811,11 +25267,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/notify/system.py",
-      "source_location": "L30",
+      "source_location": "L32",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "notify_system_rationale_30",
-      "target": "notify_system_key_state"
+      "source": "notify_system_rationale_32",
+      "target": "notify_system_key_state",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -24887,11 +25343,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/notify/system.py",
-      "source_location": "L98",
+      "source_location": "L107",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "notify_system_rationale_98",
-      "target": "notify_system_check_and_alert"
+      "source": "notify_system_rationale_107",
+      "target": "notify_system_check_and_alert",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -25838,11 +26294,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/scheduler.py",
-      "source_location": "L28",
+      "source_location": "L30",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "app_scheduler_rationale_28",
-      "target": "app_scheduler_recheck_watchlist"
+      "source": "app_scheduler_rationale_30",
+      "target": "app_scheduler_recheck_watchlist",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -25881,21 +26337,21 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/scheduler.py",
-      "source_location": "L52",
+      "source_location": "L54",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "app_scheduler_rationale_52",
-      "target": "app_scheduler_housekeeping"
+      "source": "app_scheduler_rationale_54",
+      "target": "app_scheduler_housekeeping",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/scheduler.py",
-      "source_location": "L66",
+      "source_location": "L68",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "app_scheduler_rationale_66",
-      "target": "app_scheduler_poll_telegram"
+      "source": "app_scheduler_rationale_68",
+      "target": "app_scheduler_poll_telegram",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -25912,11 +26368,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/scheduler.py",
-      "source_location": "L78",
+      "source_location": "L80",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "app_scheduler_rationale_78",
-      "target": "app_scheduler_check_due_searches"
+      "source": "app_scheduler_rationale_80",
+      "target": "app_scheduler_check_due_searches",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -27806,6 +28262,26 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "backend/tests/conftest.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "tests_conftest",
+      "target": "tests_conftest_no_waiting",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/conftest.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "tests_conftest_rationale_6",
+      "target": "tests_conftest_no_waiting",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "backend/tests/test_core.py",
       "source_location": "L19",
       "weight": 1.0,
@@ -28332,8 +28808,18 @@
       "source_file": "backend/tests/test_live.py",
       "source_location": "L364",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_live",
-      "target": "tests_test_live_test_cpu_generations_are_read_correctly",
+      "target": "tests_test_live_test_cpu_generations_are_read_correctly"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L419",
+      "weight": 1.0,
+      "source": "tests_test_live",
+      "target": "tests_test_live_test_daily_lookup_cap_stops_spending_but_not_the_price_button",
       "confidence_score": 1.0
     },
     {
@@ -28442,8 +28928,18 @@
       "source_file": "backend/tests/test_live.py",
       "source_location": "L373",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_live",
-      "target": "tests_test_live_test_named_laptop_models_share_one_key",
+      "target": "tests_test_live_test_named_laptop_models_share_one_key"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L453",
+      "weight": 1.0,
+      "source": "tests_test_live",
+      "target": "tests_test_live_test_no_stale_alert_right_after_a_restart",
       "confidence_score": 1.0
     },
     {
@@ -28472,8 +28968,18 @@
       "source_file": "backend/tests/test_live.py",
       "source_location": "L402",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_live",
-      "target": "tests_test_live_test_out_of_credit_never_wipes_a_price_or_blames_the_product",
+      "target": "tests_test_live_test_out_of_credit_never_wipes_a_price_or_blames_the_product"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L437",
+      "weight": 1.0,
+      "source": "tests_test_live",
+      "target": "tests_test_live_test_out_of_credit_raises_a_system_alert",
       "confidence_score": 1.0
     },
     {
@@ -28530,11 +29036,21 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/tests/test_live.py",
-      "source_location": "L386",
+      "source_location": "L467",
       "weight": 1.0,
       "source": "tests_test_live",
-      "target": "tests_test_live_test_unknown_ram_uses_the_cheapest_config_of_that_cpu_at_low_confidence",
+      "target": "tests_test_live_test_scheduler_skips_a_search_that_is_already_scanning",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L386",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_live",
+      "target": "tests_test_live_test_unknown_ram_uses_the_cheapest_config_of_that_cpu_at_low_confidence"
     },
     {
       "relation": "contains",
@@ -28556,6 +29072,17 @@
       "confidence_score": 1.0,
       "source": "tests_test_live_test_act_now_only_lists_fresh_profitable_actionable_ads",
       "target": "tests_test_live_db"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L423",
+      "weight": 1.0,
+      "source": "tests_test_live_test_daily_lookup_cap_stops_spending_but_not_the_price_button",
+      "target": "tests_test_live_db",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -28606,6 +29133,17 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "backend/tests/test_live.py",
+      "source_location": "L456",
+      "weight": 1.0,
+      "source": "tests_test_live_test_no_stale_alert_right_after_a_restart",
+      "target": "tests_test_live_db",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_live.py",
       "source_location": "L299",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -28619,7 +29157,18 @@
       "source_file": "backend/tests/test_live.py",
       "source_location": "L406",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_live_test_out_of_credit_never_wipes_a_price_or_blames_the_product",
+      "target": "tests_test_live_db"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L441",
+      "weight": 1.0,
+      "source": "tests_test_live_test_out_of_credit_raises_a_system_alert",
       "target": "tests_test_live_db",
       "confidence_score": 1.0
     },
@@ -28650,11 +29199,22 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "backend/tests/test_live.py",
-      "source_location": "L390",
+      "source_location": "L471",
       "weight": 1.0,
-      "source": "tests_test_live_test_unknown_ram_uses_the_cheapest_config_of_that_cpu_at_low_confidence",
+      "source": "tests_test_live_test_scheduler_skips_a_search_that_is_already_scanning",
       "target": "tests_test_live_db",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L390",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_live_test_unknown_ram_uses_the_cheapest_config_of_that_cpu_at_low_confidence",
+      "target": "tests_test_live_db"
     },
     {
       "relation": "calls",
@@ -28721,6 +29281,17 @@
       "confidence_score": 1.0,
       "source": "tests_test_live_test_progress_bar_moves_through_stages_and_logs_events",
       "target": "tests_test_live_reset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_live.py",
+      "source_location": "L470",
+      "weight": 1.0,
+      "source": "tests_test_live_test_scheduler_skips_a_search_that_is_already_scanning",
+      "target": "tests_test_live_reset",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -28944,6 +29515,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/tests/test_notify.py",
+      "source_location": "L292",
+      "weight": 1.0,
+      "source": "tests_test_notify",
+      "target": "tests_test_notify_test_manual_scan_summary_and_one_digest_per_auto_round",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_notify.py",
       "source_location": "L66",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -28979,16 +29560,6 @@
       "confidence_score": 1.0,
       "source": "tests_test_notify",
       "target": "tests_test_notify_test_results_filters_new_only_and_good_only"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/tests/test_notify.py",
-      "source_location": "L292",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tests_test_notify",
-      "target": "tests_test_notify_test_scan_summary_always_for_manual_and_rate_limited_for_auto"
     },
     {
       "relation": "contains",
@@ -29090,6 +29661,17 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "backend/tests/test_notify.py",
+      "source_location": "L295",
+      "weight": 1.0,
+      "source": "tests_test_notify_test_manual_scan_summary_and_one_digest_per_auto_round",
+      "target": "tests_test_notify_db",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_notify.py",
       "source_location": "L67",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -29116,17 +29698,6 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "tests_test_notify_test_results_filters_new_only_and_good_only",
-      "target": "tests_test_notify_db"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/tests/test_notify.py",
-      "source_location": "L293",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tests_test_notify_test_scan_summary_always_for_manual_and_rate_limited_for_auto",
       "target": "tests_test_notify_db"
     },
     {
@@ -29233,6 +29804,17 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "backend/tests/test_notify.py",
+      "source_location": "L296",
+      "weight": 1.0,
+      "source": "tests_test_notify_test_manual_scan_summary_and_one_digest_per_auto_round",
+      "target": "tests_test_notify_setup",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_notify.py",
       "source_location": "L68",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -29248,17 +29830,6 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "tests_test_notify_test_price_drop_realerts_a_known_ad",
-      "target": "tests_test_notify_setup"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/tests/test_notify.py",
-      "source_location": "L294",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tests_test_notify_test_scan_summary_always_for_manual_and_rate_limited_for_auto",
       "target": "tests_test_notify_setup"
     },
     {
@@ -29386,6 +29957,17 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "backend/tests/test_notify.py",
+      "source_location": "L297",
+      "weight": 1.0,
+      "source": "tests_test_notify_test_manual_scan_summary_and_one_digest_per_auto_round",
+      "target": "tests_test_notify_listing",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_notify.py",
       "source_location": "L69",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -29412,17 +29994,6 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "tests_test_notify_test_results_filters_new_only_and_good_only",
-      "target": "tests_test_notify_listing"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/tests/test_notify.py",
-      "source_location": "L295",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tests_test_notify_test_scan_summary_always_for_manual_and_rate_limited_for_auto",
       "target": "tests_test_notify_listing"
     },
     {
@@ -29549,6 +30120,17 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "backend/tests/test_notify.py",
+      "source_location": "L298",
+      "weight": 1.0,
+      "source": "tests_test_notify_test_manual_scan_summary_and_one_digest_per_auto_round",
+      "target": "tests_test_notify_sink",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_notify.py",
       "source_location": "L71",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -29564,17 +30146,6 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "tests_test_notify_test_price_drop_realerts_a_known_ad",
-      "target": "tests_test_notify_sink"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/tests/test_notify.py",
-      "source_location": "L297",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tests_test_notify_test_scan_summary_always_for_manual_and_rate_limited_for_auto",
       "target": "tests_test_notify_sink"
     },
     {
@@ -29647,11 +30218,11 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "backend/tests/test_notify.py",
-      "source_location": "L296",
+      "source_location": "L297",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tests_test_notify_test_scan_summary_always_for_manual_and_rate_limited_for_auto",
-      "target": "tests_test_notify_linked"
+      "source": "tests_test_notify_test_manual_scan_summary_and_one_digest_per_auto_round",
+      "target": "tests_test_notify_linked",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -35838,11 +36409,31 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/pages/Searches.tsx",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "pages_searches",
+      "target": "pages_searches_interval_min",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Searches.tsx",
       "source_location": "L20",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "pages_searches",
       "target": "pages_searches_intervalbadge"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Searches.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "pages_searches",
+      "target": "pages_searches_nextscan",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -35863,6 +36454,17 @@
       "confidence_score": 1.0,
       "source": "pages_searches",
       "target": "pages_searches_searches"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pages/Searches.tsx",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "pages_searches_intervalbadge",
+      "target": "pages_searches_nextscan",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -36476,5 +37078,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "a2f7b7d93b9d9d294f70482403b937099079f0ca"
+  "built_at_commit": "eec0bb74bc5a8f27f06899bfd04658c61908ddfc"
 }

@@ -256,6 +256,7 @@ export interface Settings {
   dz_price_enabled: boolean;
   gemini_model: string;
   verdict_model: string;
+  dz_lookups_per_day: number;
   telegram_enabled: boolean;
   telegram_bot_token: string;
   telegram_chat_id: string;

@@ -265,6 +265,7 @@ def run_search(
 
                 progress.update_run(run_id, stage="alerting", detail="")
                 stats = deals.notify_run(db, settings, search, fresh_for_search, counts["changed_listings"])
+                run.alerts_sent = int((stats or {}).get("sent") or 0)  # read by the scheduler's digest
                 if stats and stats.get("sent"):
                     progress.log("alert", f"{stats['sent']} Telegram alert(s) sent for {search.name}", level="success")
             except Exception as exc:  # alerts must never break a run
@@ -277,11 +278,11 @@ def run_search(
         else:
             run.status = "failed"
 
-        if run.status == "success" and settings.telegram_enabled and search.notify_telegram:
+        if trigger == "manual" and run.status == "success" and settings.telegram_enabled and search.notify_telegram:
             try:
                 from ..notify import deals
 
-                deals.send_scan_summary(db, settings, search, trigger, len(unique), len(fresh_for_search), stats)
+                deals.send_scan_summary(db, settings, search, len(unique), len(fresh_for_search), stats)
             except Exception as exc:  # a summary must never break a run
                 print(f"[notify] summary for search {search.id}: {type(exc).__name__}: {exc}")
     except Exception as exc:  # keep the run row for the UI

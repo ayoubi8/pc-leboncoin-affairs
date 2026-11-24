@@ -31,6 +31,8 @@ DATABASE_URL = _normalize_db_url(os.getenv("DATABASE_URL") or f"sqlite:///{(DATA
 STATIC_DIR = Path(os.getenv("STATIC_DIR") or PROJECT_ROOT / "frontend" / "dist")
 # Shared password protecting the UI/API once it is public. Empty = no login (local use).
 APP_PASSWORD = os.getenv("APP_PASSWORD", "").strip()
+# false on any second copy (e.g. a dev PC): two schedulers would fight over Telegram and alert twice
+SCHEDULER_ENABLED = os.getenv("SCHEDULER_ENABLED", "true").strip().lower() not in ("0", "false", "no", "off")
 # Secret for the /api/cron/tick endpoint (sent as "Authorization: Bearer <secret>").
 CRON_SECRET = os.getenv("CRON_SECRET", "").strip()
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "").strip()

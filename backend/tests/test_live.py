@@ -414,3 +414,72 @@ def test_out_of_credit_never_wipes_a_price_or_blames_the_product(monkeypatch):
     assert db.query(DzPrice).filter_by(cache_key="gpu|rtx 3070|").one().ok is True
     assert "out of credit" in dz_market.last_error(db, ad)
     dz_market._temporary.clear()
+
+
+def test_daily_lookup_cap_stops_spending_but_not_the_price_button(monkeypatch):
+    from app.intelligence import dz_market
+    from app.models import DzPrice
+
+    db = _db()
+    settings = Settings(id=1, llm_api_key="k", dz_lookups_per_day=2)
+    db.add_all([settings] + [DzPrice(cache_key=f"gpu|x{i}|", ok=True, median_dzd=1, fetched_at=datetime.utcnow()) for i in range(2)])
+    db.commit()
+    calls = []
+    monkeypatch.setattr(dz_market, "_call_gemini", lambda *a, **k: calls.append(1) or {"ok": False, "error": "no price"})
+    ad = Listing(list_id="1", subject="RTX 3070", specs={"gpu": "RTX 3070"})
+    assert dz_market.lookup(db, settings, ad) is None and calls == []
+    assert "Daily limit" in dz_market.last_error(db, ad)
+    dz_market.lookup(db, settings, ad, force=True)
+    assert calls == [1]
+    dz_market._temporary.clear()
+
+
+def test_out_of_credit_raises_a_system_alert(monkeypatch):
+    from app.intelligence import dz_market
+    from app.notify import system
+
+    db = _db()
+    settings = Settings(id=1, llm_api_key="k")
+    db.add(settings)
+    db.commit()
+    monkeypatch.setattr(dz_market, "_call_gemini", lambda *a, **k: {"ok": False, "error": "OpenRouter HTTP 402: limit"})
+    dz_market.lookup(db, settings, Listing(list_id="1", subject="RTX 3070", specs={"gpu": "RTX 3070"}))
+    kinds = [p["kind"] for p in system.compute_health(db, settings)["problems"]]
+    assert "openrouter_no_credit" in kinds
+    dz_market._no_credit_at = None
+    dz_market._temporary.clear()
+
+
+def test_no_stale_alert_right_after_a_restart(monkeypatch):
+    from app.notify import system
+
+    db = _db()
+    settings = Settings(id=1, auto_check_enabled=True, llm_api_key="k")
+    db.add_all([settings, Search(name="pc", auto_check_enabled=True, interval="1h"),
+                Run(search_id=1, status="success", finished_at=datetime.utcnow() - timedelta(hours=12))])
+    db.commit()
+    monkeypatch.setattr(system.progress, "uptime_seconds", lambda: 60)
+    assert "scan_stale" not in [p["kind"] for p in system.compute_health(db, settings)["problems"]]
+    monkeypatch.setattr(system.progress, "uptime_seconds", lambda: 3600)
+    assert "scan_stale" in [p["kind"] for p in system.compute_health(db, settings)["problems"]]
+
+
+def test_scheduler_skips_a_search_that_is_already_scanning(monkeypatch):
+    from app import scheduler
+
+    _reset()
+    db = _db()
+    db.add_all([Settings(id=1, auto_check_enabled=True), Search(name="busy", auto_check_enabled=True, interval="1h")])
+    db.commit()
+    from contextlib import contextmanager
+
+    @contextmanager
+    def same_db():
+        yield db
+
+    monkeypatch.setattr(scheduler, "SessionLocal", same_db)
+    monkeypatch.setattr(scheduler, "housekeeping", lambda *a: None)
+    monkeypatch.setattr(scheduler, "run_search", lambda *a, **k: (_ for _ in ()).throw(AssertionError("must not run")))
+    progress.start_run(1, 1, "busy", 1, "manual")
+    assert scheduler.check_due_searches()["ran"] == []
+    progress.end_run(1, "success")

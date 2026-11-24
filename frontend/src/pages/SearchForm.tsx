@@ -253,13 +253,20 @@ export default function SearchForm() {
       </Card>
 
       <Card>
-        <CardHeader title="Automation" subtitle="Runs this search again on the chosen schedule (checked every 5 minutes)" />
+        <CardHeader title="Automation" subtitle="Scans Leboncoin again by itself and sends good new deals to Telegram" />
         <div className="flex flex-wrap items-center gap-6 p-4">
-          <Switch checked={form.auto_check_enabled} onChange={(value) => set("auto_check_enabled", value)} label="Auto-check enabled" />
-          <Switch checked={form.notify_telegram} onChange={(value) => set("notify_telegram", value)} label="Send best new deals to Telegram" />
-          <div className="w-40">
-            <Label htmlFor="interval">Interval</Label>
-            <Select id="interval" value={form.interval} onChange={(event) => set("interval", event.target.value)}>
+          <div className="w-48">
+            <Label htmlFor="interval">Auto re-search</Label>
+            <Select
+              id="interval"
+              value={form.auto_check_enabled ? form.interval : "off"}
+              onChange={(event) => {
+                const value = event.target.value;
+                set("auto_check_enabled", value !== "off");
+                if (value !== "off") set("interval", value);
+              }}
+            >
+              <option value="off">Off (manual only)</option>
               <option value="10m">Every 10 minutes</option>
               <option value="15m">Every 15 minutes</option>
               <option value="30m">Every 30 minutes</option>
@@ -269,6 +276,7 @@ export default function SearchForm() {
               <option value="daily">Once a day</option>
             </Select>
           </div>
+          <Switch checked={form.notify_telegram} onChange={(value) => set("notify_telegram", value)} label="Send best new deals to Telegram" />
         </div>
       </Card>
 

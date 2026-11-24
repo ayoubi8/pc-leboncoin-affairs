@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from . import auth
 from .api import cron, dashboard, imports, listings, ops, searches
 from .api import settings as settings_api
-from .config import FRONTEND_ORIGINS, SERVERLESS, STATIC_DIR
+from .config import FRONTEND_ORIGINS, SCHEDULER_ENABLED, SERVERLESS, STATIC_DIR
 from .db import init_db
 from .scheduler import start_scheduler, stop_scheduler
 
@@ -17,7 +17,7 @@ from .scheduler import start_scheduler, stop_scheduler
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db()
-    if not SERVERLESS:  # on Vercel the cron endpoint drives the schedule instead
+    if not SERVERLESS and SCHEDULER_ENABLED:  # on Vercel the cron endpoint drives the schedule instead
         start_scheduler()
     try:
         yield

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import random
 import threading
 import time
 from datetime import datetime, timedelta, timezone
@@ -20,6 +21,7 @@ INTERVAL_MINUTES = {"10m": 10, "15m": 15, "30m": 30, **{k: v * 60 for k, v in IN
 TICK_MINUTES = 2  # how often due searches are looked for (short, so a 10-minute interval stays ~10 minutes)
 
 
+SEARCH_GAP_SECONDS = (20, 40)  # pause between searches due together, so the reader does not rate limit us
 RECHECK_EVERY = timedelta(hours=6)
 RECHECK_PER_TICK = 5
 
@@ -95,25 +97,38 @@ def check_due_searches(budget_seconds: float | None = None) -> dict:
             searches = db.execute(
                 select(Search).where(Search.auto_check_enabled.is_(True))
             ).scalars().all()
+            busy = {run["search_id"] for run in progress.running()}
+            finished = []
             for search in searches:
                 minutes = INTERVAL_MINUTES.get(search.interval, 24 * 60)
+                if search.id in busy:  # a manual scan of it is already running
+                    continue
                 if search.last_run_at and now - search.last_run_at < timedelta(minutes=minutes - TICK_MINUTES):
                     continue
                 if budget_seconds is not None and time.monotonic() - started > budget_seconds:
                     result["skipped_for_budget"] += 1
                     continue
+                if result["ran"] and budget_seconds is None:
+                    time.sleep(random.uniform(*SEARCH_GAP_SECONDS))
                 result["ran"].append(search.id)
                 # Claim the slot first: if a serverless timeout kills this run, the search is
                 # not retried on every tick, only when its interval comes round again.
                 search.last_run_at = now
                 db.commit()
                 try:
-                    run_search(db, search.id, trigger="auto")
+                    finished.append(run_search(db, search.id, trigger="auto"))
                 except Exception as exc:  # keep the scheduler alive
                     search.last_run_status = "failed"
                     search.last_run_at = now
                     db.commit()
                     print(f"[scheduler] search {search.id} failed: {exc}")
+            if result["ran"]:
+                try:
+                    from .notify import deals
+
+                    deals.send_round_digest(db, settings, len(result["ran"]), finished)
+                except Exception as exc:  # a digest must never stop the scheduler
+                    print(f"[scheduler] digest failed: {type(exc).__name__}: {exc}")
     finally:
         _lock.release()
     return result

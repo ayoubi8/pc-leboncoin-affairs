@@ -8,11 +8,13 @@ from typing import Any, Optional
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from .. import progress
 from ..models import DzPrice, Run, Search, Settings
 from . import telegram
 
 BLOCKED_STREAK = 3
 MIN_STALE_MINUTES = 120
+STARTUP_GRACE_SECONDS = 20 * 60  # after a restart, give the first scan round time to finish
 REMIND_AFTER = timedelta(hours=24)
 
 
@@ -70,9 +72,16 @@ def compute_health(db: Session, settings: Settings) -> dict[str, Any]:
             "kind": f"key_{key}", "severity": "error",
             "message": "No OpenRouter key saved." if key == "missing" else "OpenRouter rejected the API key (HTTP 401): no Algerian prices or verdicts until it is fixed. Often this means a management key was pasted: create a normal key at openrouter.ai/keys.",
         })
+    from ..intelligence import dz_market
+
+    if dz_market.out_of_credit():
+        problems.append({
+            "kind": "openrouter_no_credit", "severity": "error",
+            "message": "OpenRouter is out of credit: new products cannot be priced, so no new deal alerts. Raise the key limit at openrouter.ai/keys.",
+        })
     if streak >= BLOCKED_STREAK:
         problems.append({"kind": "scanner_blocked", "severity": "error", "message": f"The last {streak} scans were blocked or failed. Leboncoin may be blocking this IP."})
-    if auto and settings.auto_check_enabled:
+    if auto and settings.auto_check_enabled and progress.uptime_seconds() >= STARTUP_GRACE_SECONDS:
         stale_limit = max(MIN_STALE_MINUTES, 3 * (expected or 60))
         if age_min is None or age_min > stale_limit:
             problems.append({"kind": "scan_stale", "severity": "error", "message": "No successful scan for " + (f"{age_min / 60:.1f} h." if age_min is not None else "a long time.")})

@@ -22,6 +22,7 @@ class SettingsOut(ORMModel):
     dz_price_enabled: bool = True
     gemini_model: str = "nvidia/nemotron-3-ultra-550b-a55b:free"
     verdict_model: str = "anthropic/claude-haiku-5.5"
+    dz_lookups_per_day: int = 30
     telegram_enabled: bool = False
     telegram_bot_token: str = ""
     telegram_chat_id: str = ""
@@ -62,6 +63,7 @@ class SettingsUpdate(BaseModel):
     dz_price_enabled: Optional[bool] = None
     gemini_model: Optional[str] = None
     verdict_model: Optional[str] = None
+    dz_lookups_per_day: Optional[int] = None
     telegram_enabled: Optional[bool] = None
     telegram_bot_token: Optional[str] = None
     telegram_chat_id: Optional[str] = None

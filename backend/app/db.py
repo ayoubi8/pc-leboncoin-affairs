@@ -80,6 +80,7 @@ def _add_missing_columns() -> None:
             conn.execute(text("UPDATE settings SET telegram_chat_id = '' WHERE telegram_chat_id IS NULL"))
             conn.execute(text("UPDATE settings SET notify_min_verdict = 'good' WHERE notify_min_verdict IS NULL OR notify_min_verdict = ''"))
             conn.execute(text("UPDATE settings SET notify_max_per_run = 5 WHERE notify_max_per_run IS NULL"))
+            conn.execute(text("UPDATE settings SET dz_lookups_per_day = 30 WHERE dz_lookups_per_day IS NULL"))
             conn.execute(text("UPDATE settings SET max_ad_age_hours = 336 WHERE max_ad_age_hours IS NULL"))
             conn.execute(text("UPDATE settings SET telegram_update_offset = 0 WHERE telegram_update_offset IS NULL"))
             conn.execute(text("UPDATE settings SET resale_haircut_pct = 10 WHERE resale_haircut_pct IS NULL"))

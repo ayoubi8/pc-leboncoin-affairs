@@ -19,11 +19,21 @@ import { Badge, Button, Card, EmptyState, Skeleton } from "../components/ui";
 import { RunningScan } from "../components/LivePanel";
 import { useLive } from "../lib/useLive";
 
+const INTERVAL_MIN: Record<string, number> = { "10m": 10, "15m": 15, "30m": 30, "1h": 60, "6h": 360, "12h": 720, daily: 1440, weekly: 10080 };
+
+function nextScan(search: Search): string {
+  if (!search.last_run_at) return "due now";
+  const stamp = search.last_run_at.endsWith("Z") ? search.last_run_at : `${search.last_run_at}Z`;
+  const left = Math.round((new Date(stamp).getTime() + (INTERVAL_MIN[search.interval] ?? 1440) * 60000 - Date.now()) / 60000);
+  if (left <= 0) return "due now";
+  return left < 60 ? `next in ${left} min` : `next in ${Math.floor(left / 60)} h ${left % 60} min`;
+}
+
 function IntervalBadge({ search }: { search: Search }) {
-  if (!search.auto_check_enabled) return <Badge>manual</Badge>;
+  if (!search.auto_check_enabled) return <Badge>Manual only</Badge>;
   return (
     <Badge className="border-success-border bg-success-bg text-success-ink">
-      auto · {search.interval}
+      Auto · every {search.interval} · {nextScan(search)}
     </Badge>
   );
 }

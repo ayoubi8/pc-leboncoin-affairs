@@ -35,6 +35,9 @@ MAX_DZD = 1_500_000
 # so lookups only happen on demand (see enrich.py) and the price book makes repeats free.
 WEB_RESULTS = 3  # 3 results are enough for a median
 _temporary: dict[str, str] = {}  # product key -> why the last call failed for a reason that is not about the product
+DEFAULT_DAILY_LOOKUPS = 30
+CREDIT_FLAG_FOR = timedelta(hours=2)  # scans are hourly, so a real shortage keeps renewing this
+_no_credit_at: Optional[datetime] = None
 
 
 def api_key(settings: Settings) -> str:
@@ -220,6 +223,15 @@ def _explain_temporary(error: str) -> str:
     return error[:200]
 
 
+def out_of_credit() -> bool:
+    return _no_credit_at is not None and _utcnow() - _no_credit_at < CREDIT_FLAG_FOR
+
+
+def lookups_today(db: Session) -> int:
+    since = _utcnow() - timedelta(hours=24)
+    return db.query(DzPrice).filter(DzPrice.manual.is_(False), DzPrice.fetched_at >= since).count()
+
+
 def is_temporary_failure(listing: Listing) -> bool:
     return describe(listing)[0] in _temporary
 
@@ -282,11 +294,20 @@ def lookup(db: Session, settings: Settings, listing: Listing, force: bool = Fals
 
     # Coarse keys are shared by many ads, so only title-keyed (vague) lookups get this ad's own text.
     context = ad_context(listing) if key.startswith("title|") else ""
+    cap = int(getattr(settings, "dz_lookups_per_day", None) or DEFAULT_DAILY_LOOKUPS)
+    if not force and lookups_today(db) >= cap:  # the Search price button (force) is your own decision
+        _temporary[key] = f"Daily limit of {cap} price lookups reached; it continues tomorrow (Settings)."
+        return row if row is not None and row.ok else None
+
+    global _no_credit_at
     result = _call_gemini(settings, query, context)
     if not result.get("ok") and _is_temporary(result.get("error", "")):
         # No credit, rate limit or network: say nothing about the product and never wipe a price we already have.
         _temporary[key] = _explain_temporary(result["error"])
+        if "HTTP 402" in result["error"]:
+            _no_credit_at = _utcnow()
         return row if row is not None and row.ok else None
+    _no_credit_at = None
     _temporary.pop(key, None)
     row = _store(db, key, query, result)
     row.kind = pricebook.canonical(listing)[2]

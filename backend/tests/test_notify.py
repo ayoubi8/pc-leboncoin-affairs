@@ -289,17 +289,21 @@ def test_deals_command_lists_fresh_ads_newest_first_with_links(monkeypatch):
     assert win.notified_at is None  # showing a deal does not use up its alert
 
 
-def test_scan_summary_always_for_manual_and_rate_limited_for_auto(monkeypatch):
+def test_manual_scan_summary_and_one_digest_per_auto_round(monkeypatch):
+    from types import SimpleNamespace as Run
+
     db = _db()
     settings, search = _setup(db)
-    ad = _listing(db, "Laptop", 150_000)
-    _linked(db, search, ad)
+    _linked(db, search, _listing(db, "Laptop", 150_000))
     sink = Sink(monkeypatch)
-    deals._last_summary.clear()
 
-    assert deals.send_scan_summary(db, settings, search, "auto", 35, 0) is False  # auto + nothing new: silent
-    assert deals.send_scan_summary(db, settings, search, "manual", 35, 0) is True
+    assert deals.send_scan_summary(db, settings, search, 35, 0) is True
     assert "35 ads checked, 0 new" in sink.sent[0]["text"] and "Best fresh ad" in sink.sent[0]["text"]
-    assert deals.send_scan_summary(db, settings, search, "auto", 35, 2) is False  # within the hour
-    deals._last_summary.clear()
-    assert deals.send_scan_summary(db, settings, search, "auto", 35, 2) is True
+    sink.sent.clear()
+
+    quiet = [Run(new_count=0, status="success", alerts_sent=0)] * 7
+    assert deals.send_round_digest(db, settings, 7, quiet) is False and sink.sent == []  # nothing new: no spam
+    busy = [Run(new_count=12, status="success", alerts_sent=1)] + quiet[:5] + [Run(new_count=0, status="blocked", alerts_sent=0)]
+    assert deals.send_round_digest(db, settings, 7, busy) is True and len(sink.sent) == 1
+    assert "7 searches checked" in sink.sent[0]["text"] and "12 new ads" in sink.sent[0]["text"] and "1 good deal sent" in sink.sent[0]["text"]
+    assert "1 failed" in sink.sent[0]["text"]

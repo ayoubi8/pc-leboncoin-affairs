@@ -59,6 +59,7 @@ class Settings(Base):
     dz_price_enabled = Column(Boolean, default=True)
     gemini_model = Column(String(100), default="nvidia/nemotron-3-ultra-550b-a55b:free")  # Algerian price (web search)
     verdict_model = Column(String(100), default="anthropic/claude-haiku-5.5")
+    dz_lookups_per_day = Column(Integer, default=30)  # spending cap on web-search price lookups
 
     # Telegram deal alerts
     telegram_enabled = Column(Boolean, default=False)

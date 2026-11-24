@@ -10,7 +10,6 @@ Pipeline per run (cheap checks first, paid calls last):
 from __future__ import annotations
 
 import html
-import time
 from datetime import datetime, timedelta, timezone
 from typing import Any, Optional
 
@@ -267,8 +266,6 @@ def notify_run(
 # --- /deals command and scan summaries: free, they only read what is already stored ---
 
 CLOSED_STATUSES = ("bought", "shipped", "sold", "skipped")
-AUTO_SUMMARY_GAP_S = 60 * 60  # automatic scans can run every 10 min: at most one summary per search per hour
-_last_summary: dict[int, float] = {}
 
 
 def top_fresh(
@@ -361,18 +358,11 @@ def send_scan_summary(
     db: Session,
     settings: Settings,
     search: Search,
-    trigger: str,
     checked: int,
     new: int,
     stats: Optional[dict[str, Any]] = None,
 ) -> bool:
-    """A short note after a scan so silence never looks like a broken bot.
-
-    Manual scans always report. Automatic ones only when they found new ads, at most hourly, never in quiet hours.
-    """
-    if trigger != "manual":
-        if not new or in_quiet_hours(settings) or time.time() - _last_summary.get(search.id, 0) < AUTO_SUMMARY_GAP_S:
-            return False
+    """A short note after a scan you started yourself."""
     sent = int((stats or {}).get("sent") or 0)
     lines = [f"📊 <b>{_esc(search.name)}</b>: {checked} ads checked, {new} new, {sent} good deal{'' if sent == 1 else 's'} sent."]
     best = top_fresh(db, settings, search, limit=1, order="profit")
@@ -384,7 +374,25 @@ def send_scan_summary(
     else:
         lines.append("No fresh ad you could buy right now.")
     lines.append("Send /deals to see the 5 newest.")
-    result = telegram.send_message(settings, "\n".join(lines))
-    if result.get("ok"):
-        _last_summary[search.id] = time.time()
-    return bool(result.get("ok"))
+    return bool(telegram.send_message(settings, "\n".join(lines)).get("ok"))
+
+
+def send_round_digest(db: Session, settings: Settings, searched: int, runs: list[Any]) -> bool:
+    """One message for a whole automatic round. Silent when nothing new happened, so hourly scans do not spam."""
+    if not settings.telegram_enabled or not (settings.telegram_chat_id or "").strip() or in_quiet_hours(settings):
+        return False
+    new = sum(int(run.new_count or 0) for run in runs)
+    sent = sum(int(getattr(run, "alerts_sent", 0) or 0) for run in runs)
+    failed = searched - sum(1 for run in runs if run.status == "success")
+    if not new and not sent and not failed:
+        return False
+    line = f"🔁 <b>{searched} search{'' if searched == 1 else 'es'} checked</b> · {new} new ad{'' if new == 1 else 's'} · {sent} good deal{'' if sent == 1 else 's'} sent"
+    if failed:
+        line += f" · {failed} failed"
+    lines = [line]
+    best = top_fresh(db, settings, limit=1, order="profit")
+    numbers = verdict.compute_numbers(settings, best[0]) if best else None
+    if numbers:
+        lines.append(f"Best fresh ad: {_esc(best[0].subject)[:60]} · {_eur(best[0].price_eur)} · {_signed(numbers['profit_ask_eur'])} at asking price")
+    lines.append("Send /deals to see the 5 newest.")
+    return bool(telegram.send_message(settings, "\n".join(lines)).get("ok"))

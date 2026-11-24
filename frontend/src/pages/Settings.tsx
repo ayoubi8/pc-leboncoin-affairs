@@ -396,6 +396,12 @@ export default function Settings() {
             value={form.max_ad_age_hours}
             onChange={(value) => set("max_ad_age_hours", Math.max(1, Math.round(value)))}
           />
+          <NumberField
+            label="Algeria price lookups per day (about $0.007 each)"
+            value={form.dz_lookups_per_day}
+            step={5}
+            onChange={(value) => set("dz_lookups_per_day", Math.max(1, Math.round(value)))}
+          />
           <div className="grid grid-cols-2 gap-2">
             <div>
               <Label>Quiet from (Algeria hour)</Label>
