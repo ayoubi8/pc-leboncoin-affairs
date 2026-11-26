@@ -72,12 +72,16 @@ def cpu_tier(cpu: str) -> str:
 LAPTOP_WORDS = re.compile(r"portable|laptop|notebook|pc|ordinateur|macbook|thinkpad|gamer|gaming pc|tour|unit[ée] centrale", re.I)
 
 
+# a processor named in the title means a whole computer, not a bare card ("TUF F15 RTX 3060 i5 11e génération")
+CPU_IN_TITLE = re.compile(r"\b(?:core\s*)?i[3579]\b|\bi[3579]-\d{4,5}|\bryzen\b|\b(?:celeron|pentium)\b", re.I)
+
+
 def is_gpu_ad(specs: dict[str, Any], title: str = "") -> bool:
     """A bare graphics card ad: a dedicated GPU, no CPU, and no sign of a whole computer."""
     if not DGPU_RE.search(str(specs.get("gpu") or "")) or specs.get("cpu"):
         return False
     ram = specs.get("ram_gb")
-    return (ram is None or ram <= 24) and not LAPTOP_WORDS.search(title or "")
+    return (ram is None or ram <= 24) and not LAPTOP_WORDS.search(title or "") and not CPU_IN_TITLE.search(title or "")
 
 
 def gpu_name(specs: dict[str, Any]) -> str:
@@ -85,6 +89,62 @@ def gpu_name(specs: dict[str, Any]) -> str:
     if not match:
         return ""
     return " ".join(x for x in (match.group(1).upper(), match.group(2), (match.group(3) or "").upper()) if x)
+
+
+# Cards sold with two VRAM sizes at clearly different prices keep the size in their key; every other model
+# has one price, so "RTX 3070" and "RTX 3070 8 GB" share one price-book row.
+MULTI_VRAM = {
+    "gtx 1060", "rtx 2060", "rtx 3050", "rtx 3060", "rtx 3080", "rtx 4060 ti", "rtx 5060 ti",
+    "rx 470", "rx 480", "rx 570", "rx 580", "rx 6500 xt", "rx 7600 xt", "rx 9060 xt",
+}
+VRAM_STEPS = [2, 3, 4, 6, 8, 10, 11, 12, 16, 20, 24]
+
+
+def gpu_key(name: str, vram: Optional[float] = None) -> str:
+    name = name.lower()
+    size = _bucket(vram, VRAM_STEPS) if vram and name in MULTI_VRAM else None
+    return f"gpu|{name}|{size or ''}"
+
+
+# A second card in the same ad: "RTX 3070 et une 3090", "3060 + 3070", "lot de 2 RTX 3060".
+_SERIES = {f"{a}{b}0" for a in ("10", "16", "20", "30", "40", "50") for b in range(5, 10)} | {
+    str(n) for n in (470, 480, 570, 580, 590, 5500, 5600, 5700, 6400, 6500, 6600, 6650, 6700, 6750, 6800, 6900, 6950,
+                     7600, 7700, 7800, 7900, 9060, 9070)
+}
+_EXTRA_CARD = re.compile(r"(?:\bet(?:\s+une?)?|\+|&|\bavec(?:\s+une?)?|,|/)\s*(?:(?:rtx|gtx|rx)\s*)?(\d{3,4})\b", re.I)
+_LOT = re.compile(r"\blot\s+de\s+(\d)\b|\bx\s?([2-9])\b|\b([2-9])\s?x\s+(?:rtx|gtx|rx)", re.I)
+
+
+def bundle_items(title: str) -> list[str]:
+    """GPU models of an ad that sells several cards (["RTX 3070", "RTX 3090"]); [] for a single card."""
+    title = title or ""
+    found = [" ".join(x for x in (m.group(1).upper(), m.group(2), (m.group(3) or "").upper()) if x) for m in DGPU_RE.finditer(title)]
+    if not found:
+        return []
+    family = found[0].split()[0]
+    for match in _EXTRA_CARD.finditer(title):
+        number = match.group(1)
+        if number in _SERIES and not any(number in name.split() for name in found):
+            found.append(f"{family} {number}")
+    lot = _LOT.search(title)
+    if lot and len(found) == 1:
+        count = int(next(g for g in lot.groups() if g))
+        found = found * min(count, 4)
+    return found if len(found) >= 2 else []
+
+
+def key_from_text(text: str) -> tuple[str, str, str]:
+    """A product key typed by hand ("rtx 3070", "rtx 3060 12gb", "latitude 5440") -> (key, description, kind)."""
+    match = DGPU_RE.search(text or "")
+    if match:
+        name = " ".join(x for x in (match.group(1).upper(), match.group(2), (match.group(3) or "").upper()) if x)
+        vram = re.search(r"(\d{1,2})\s*(?:gb|go)\b", text, re.I)
+        key = gpu_key(name, float(vram.group(1)) if vram else None)
+        return key, f"used graphics card {name} (desktop GPU, bare card)", "gpu"
+    model = model_name(text or "")
+    if model:
+        return f"model|{model}", f"used laptop {model}", "laptop"
+    return "", "", ""
 
 
 def canonical(listing: Listing) -> tuple[str, str, str]:
@@ -97,11 +157,14 @@ def canonical(listing: Listing) -> tuple[str, str, str]:
     screen = specs.get("screen_inches")
 
     if is_gpu_ad(specs, listing.subject or ""):
+        items = bundle_items(listing.subject or "")
+        if items:  # several cards: priced as the sum of each card's own price
+            return "bundle|" + "+".join(sorted(i.lower() for i in items)), "bundle: " + " + ".join(items), "gpu"
         name = gpu_name(specs)
         if name:
-            vram = _bucket(ram, [2, 3, 4, 6, 8, 10, 11, 12, 16, 20, 24])
-            key = f"gpu|{name.lower()}|{vram or ''}"
-            vram_txt = f" {vram} GB" if vram else ""
+            key = gpu_key(name, ram)
+            size = key.rsplit("|", 1)[1]
+            vram_txt = f" {size} GB" if size else ""
             return key, f"used graphics card {name}{vram_txt} (desktop GPU, bare card)", "gpu"
 
     cpu = cpu or title_cpu(listing.subject or "")
@@ -142,7 +205,7 @@ def canonical(listing: Listing) -> tuple[str, str, str]:
 def is_specific(key: str) -> bool:
     """Can this key's price be reused for other ads? A card model or a named laptop model can, and so can a real
     CPU generation. "32 GB, CPU unknown" cannot: it also matches a pair of RAM sticks. Title keys belong to one ad."""
-    if key.startswith(("gpu|", "model|")):
+    if key.startswith(("gpu|", "model|", "bundle|")):
         return True
     if not key.startswith("laptop|"):
         return False
@@ -152,7 +215,7 @@ def is_specific(key: str) -> bool:
 
 def is_estimate(key: str) -> bool:
     """The exact configuration is unknown (no RAM stated, or only a model name), so the price is low confidence."""
-    return key.startswith("model|") or (key.startswith("laptop|") and key.split("|")[2] == "?")
+    return key.startswith(("model|", "bundle|")) or (key.startswith("laptop|") and key.split("|")[2] == "?")
 
 
 def kind_of(listing: Listing) -> str:

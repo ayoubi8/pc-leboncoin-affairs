@@ -1,4 +1,12 @@
+import os
+import tempfile
+
 import pytest
+
+# Tests never touch the real database (data/app.db): this runs before any app module reads DATABASE_URL.
+_TEST_DB = os.path.join(tempfile.mkdtemp(prefix="deal-finder-tests-"), "test.db")
+os.environ["DATABASE_URL"] = "sqlite:///" + _TEST_DB.replace("\\", "/")
+os.environ["SCHEDULER_ENABLED"] = "false"  # no background scans or Telegram polling during tests
 
 
 @pytest.fixture(autouse=True)

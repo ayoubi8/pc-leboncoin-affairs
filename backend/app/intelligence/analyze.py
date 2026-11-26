@@ -102,6 +102,9 @@ def analyze_listing(
     flags = list(checked["flags"])
     if screen_mod.scam_price(listing.price_eur, listing.market_median_eur) and (listing.market_samples or 0) >= 5:
         flags.append("suspiciously cheap (<35% of market)")
+    items = pricebook.bundle_items(listing.subject or "") if pricebook.kind_of(listing) == "gpu" else []
+    if items:
+        flags.append(f"{len(items)} items in one ad ({' + '.join(items)}): check what is really included")
     listing.ship_ok = checked["ship_ok"]
     listing.screen_skip = "; ".join(checked["reasons"])[:200]
     if any("marks it sold" in r or "marks it pending" in r or r.startswith("ad status") for r in checked["reasons"]):

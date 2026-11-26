@@ -31,7 +31,7 @@ def test_dz_score_uses_landed_vs_algerian_median(monkeypatch):
 
     calls = []
 
-    def fake(_settings, query, ctx=""):
+    def fake(_settings, query, ctx="", terms=""):
         calls.append(query)
         return {"ok": True, "data": {"low_dzd": 100000, "median_dzd": 120000, "high_dzd": 140000,
                                      "confidence": "high", "basis": "used", "note": "ok"},

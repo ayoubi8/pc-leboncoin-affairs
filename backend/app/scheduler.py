@@ -55,7 +55,8 @@ def housekeeping(db, settings, now: datetime) -> None:
     for name, func in (
         ("system alerts", lambda: system.check_and_alert(db, settings)),
         ("availability re-check", lambda: recheck_watchlist(db, now)),
-        ("telegram updates", lambda: poller.process_updates(db, settings)),
+        # the long-polling thread reads Telegram when it runs; two readers at once would make Telegram refuse both
+        ("telegram updates", lambda: None if polling() else poller.process_updates(db, settings)),
     ):
         try:
             func()
@@ -64,16 +65,51 @@ def housekeeping(db, settings, now: datetime) -> None:
             print(f"[scheduler] {name} failed: {type(exc).__name__}: {exc}")
 
 
-def poll_telegram() -> None:
-    """Button presses and commands, polled often (a few seconds) so taps feel instant."""
+LONG_POLL_SECONDS = 25
+_poll_thread: threading.Thread | None = None
+_stop_polling = threading.Event()
+
+
+def polling() -> bool:
+    return _poll_thread is not None and _poll_thread.is_alive()
+
+
+def poll_telegram(wait: int = 0) -> int:
+    """Button presses and commands. With ``wait``, Telegram holds the request until something arrives."""
     progress.tick("telegram_poll")
     try:
         with SessionLocal() as db:
             from .api.helpers import get_settings
 
-            poller.process_updates(db, get_settings(db))
+            return poller.process_updates(db, get_settings(db), wait)
     except Exception as exc:
         print(f"[telegram] poll failed: {type(exc).__name__}: {exc}")
+        return -1
+
+
+def _poll_forever() -> None:
+    """Long polling: a tap is handled as soon as Telegram receives it, and a slow reply never skips a poll."""
+    from .api.helpers import get_settings
+    from .notify import telegram
+
+    menu_set_for = ""
+    while not _stop_polling.is_set():
+        try:
+            with SessionLocal() as db:
+                settings = get_settings(db)
+                ready = poller.ready(settings)
+                token = settings.telegram_bot_token or ""
+            if not ready:
+                _stop_polling.wait(10)
+                continue
+            if menu_set_for != token and telegram.set_commands(token)["ok"]:
+                menu_set_for = token  # commands appear in Telegram's / menu
+            started = time.monotonic()
+            if poll_telegram(LONG_POLL_SECONDS) <= 0 and time.monotonic() - started < 2:
+                _stop_polling.wait(3)  # Telegram refused or the network is down: do not spin
+        except Exception as exc:  # the thread must never die
+            print(f"[telegram] poll loop: {type(exc).__name__}: {exc}")
+            _stop_polling.wait(5)
 
 
 def check_due_searches(budget_seconds: float | None = None) -> dict:
@@ -150,12 +186,15 @@ def start_scheduler() -> None:
         max_instances=1,
         coalesce=True,
     )
-    scheduler.add_job(
-        poll_telegram, "interval", seconds=5, id="telegram_poll", replace_existing=True, max_instances=1, coalesce=True
-    )
     scheduler.start()
+    global _poll_thread
+    if not polling():
+        _stop_polling.clear()
+        _poll_thread = threading.Thread(target=_poll_forever, daemon=True, name="telegram-poll")
+        _poll_thread.start()
 
 
 def stop_scheduler() -> None:
     if scheduler is not None and scheduler.running:
         scheduler.shutdown(wait=False)
+    _stop_polling.set()

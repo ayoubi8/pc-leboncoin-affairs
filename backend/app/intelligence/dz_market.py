@@ -81,18 +81,95 @@ def ad_context(listing: Listing) -> str:
 
 
 PROMPT = (
-    "Search the web for the current price in Algeria of this used (occasion) laptop: {query}.\n"
+    "Find the prices people pay in Algeria for: {query}.\n"
+    "Search with words like: {terms}\n"
     "{context}\n"
-    "Look at Algerian classifieds and shops (Ouedkniss first, then other Algerian sellers/"
-    "retailers) and use real listings or shop prices in Algerian dinars (DZD / DA). "
-    "Prefer USED prices; if you only find new prices, report them and lower your confidence.\n"
-    "Ignore prices outside Algeria and ignore obvious outliers or accessories.\n"
+    "Use Algerian classifieds and shops (Ouedkniss, SSH Computer, Soom, other Algerian sellers), prices in Algerian "
+    "dinars (DA / DZD). Ignore prices outside Algeria, accessories and parts.\n"
+    "List EVERY individual price you saw, one entry per listing or shop product, even when they differ. "
+    "Do not average them and do not leave any out: the median is computed from your list.\n"
     "Answer with ONLY this JSON, no prose, no markdown:\n"
-    '{{"low_dzd": number|null, "median_dzd": number|null, "high_dzd": number|null, '
-    '"samples": integer, "confidence": "high"|"medium"|"low", '
-    '"basis": "used"|"new"|"mixed", "note": "one short sentence"}}\n'
-    "Numbers are plain DZD amounts (e.g. 85000), not strings. Use null if you found nothing."
+    '{{"prices": [{{"title": "the listing or product title", "price_dzd": number, "condition": "used"|"new", '
+    '"source": "site name"}}], "note": "one short sentence"}}\n'
+    "price_dzd is a plain number like 86950, not a string. Use an empty list if you found nothing."
 )
+
+SUFFIXES = ("ti", "super", "xtx", "xt")
+PARTS_WORDS = re.compile(r"pour pi[eè]ces|\bhs\b|en panne|for parts|ventilateur|backplate|water ?block|bo[iî]te vide", re.I)
+LAPTOP_IN_TITLE = re.compile(r"portable|laptop|notebook|pc gamer|ordinateur", re.I)
+OUTLIER_LOW, OUTLIER_HIGH = 0.6, 1.6
+
+
+def search_terms(key: str, description: str) -> str:
+    """Words that make web results show real Algerian listing prices."""
+    if key.startswith("gpu|"):
+        name = key.split("|")[1].upper()
+        return f'"{name}" prix Algérie occasion DA ouedkniss · سعر {name} الجزائر'
+    product = description.removeprefix("used laptop ").removeprefix("laptop/PC: ").removeprefix("graphics card: ")
+    return f'"{product}" prix Algérie occasion DA ouedkniss'
+
+
+def _median(values: list[float]) -> float:
+    ordered = sorted(values)
+    middle = len(ordered) // 2
+    return ordered[middle] if len(ordered) % 2 else (ordered[middle - 1] + ordered[middle]) / 2
+
+
+def _same_card(title: str, name: str) -> bool:
+    """True when a listing title is the same card as ``name`` ("rtx 3070"): a 3070 Ti or a laptop is not."""
+    parts = name.lower().split()
+    number = next((p for p in parts if p.isdigit()), "")
+    wanted = parts[-1] if parts[-1] in SUFFIXES else ""
+    if not number:
+        return True
+    found = re.search(rf"(?<!\d){number}(?!\d)\s*-?\s*(ti|super|xtx|xt)?\b", title, re.I)
+    if found is None:
+        return False
+    return (found.group(1) or "").lower() == wanted and not LAPTOP_IN_TITLE.search(title)
+
+
+def summarize(data: dict[str, Any], key: str = "") -> Optional[dict[str, Any]]:
+    """Median and range from the prices the model listed, after dropping wrong variants and outliers.
+
+    Falls back to the model's own median when it answered in the old format. None when nothing usable is left.
+    """
+    items = data.get("prices")
+    if not isinstance(items, list):
+        median = _num(data.get("median_dzd"))
+        if median is None:
+            return None
+        low, high = _num(data.get("low_dzd")), _num(data.get("high_dzd"))
+        confidence = str(data.get("confidence") or "low").lower()
+        return {"median": median, "low": min(low or median * 0.85, median), "high": max(high or median * 1.15, median),
+                "samples": int(data.get("samples") or 0), "confidence": confidence if confidence in ("high", "medium", "low") else "low",
+                "basis": data.get("basis") or "", "dropped": 0}
+
+    name = key.split("|")[1] if key.startswith("gpu|") else ""
+    used: list[float] = []
+    new: list[float] = []
+    dropped = 0
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        price = _num(item.get("price_dzd"))
+        title = str(item.get("title") or "")
+        if price is None or PARTS_WORDS.search(title) or (name and title and not _same_card(title, name)):
+            dropped += 1
+            continue
+        (new if str(item.get("condition") or "").lower() == "new" else used).append(price)
+
+    pool, basis = (used, "used") if len(used) >= 2 else (used + new, "new" if not used else "mixed")
+    if not pool:
+        return None
+    middle = _median(pool)
+    kept = [p for p in pool if OUTLIER_LOW * middle <= p <= OUTLIER_HIGH * middle]
+    dropped += len(pool) - len(kept)
+    median = _median(kept)
+    confidence = "high" if len(kept) >= 4 else "medium" if len(kept) >= 2 else "low"
+    if basis != "used" and confidence != "low":
+        confidence = "medium" if confidence == "high" else "low"
+    return {"median": median, "low": min(kept), "high": max(kept), "samples": len(kept), "confidence": confidence,
+            "basis": basis, "dropped": dropped}
 
 
 def _parse_json(text: str) -> Optional[dict[str, Any]]:
@@ -117,7 +194,7 @@ def _num(value: Any) -> Optional[float]:
     return number if MIN_DZD <= number <= MAX_DZD else None
 
 
-def _call_gemini(settings: Settings, query: str, context: str = "") -> dict[str, Any]:
+def _call_gemini(settings: Settings, query: str, context: str = "", terms: str = "") -> dict[str, Any]:
     """Return {"ok": bool, "data": {...}, "sources": [...], "error": str}."""
     model = (getattr(settings, "gemini_model", "") or DEFAULT_MODEL).strip()
     if "/" not in model:
@@ -126,7 +203,7 @@ def _call_gemini(settings: Settings, query: str, context: str = "") -> dict[str,
     body = {
         "model": model,
         "plugins": [{"id": "web", "max_results": WEB_RESULTS}],
-        "messages": [{"role": "user", "content": PROMPT.format(query=query, context=context)}],
+        "messages": [{"role": "user", "content": PROMPT.format(query=query, context=context, terms=terms or query)}],
         "temperature": 0.1,
         "max_tokens": 3000,  # reasoning models spend tokens thinking before the JSON answer
         "reasoning": {"effort": "low"},
@@ -190,23 +267,16 @@ def _store(db: Session, key: str, query: str, result: dict[str, Any]) -> DzPrice
         row.confidence = "low"
     else:
         data = result["data"]
-        median = _num(data.get("median_dzd"))
-        low = _num(data.get("low_dzd"))
-        high = _num(data.get("high_dzd"))
-        if median is None and low is not None and high is not None:
-            median = (low + high) / 2
-        if median is None:
+        found = summarize(data, key)
+        if found is None:
             row.note = (data.get("note") or "No Algerian prices found.")[:500]
             row.confidence = "low"
         else:
-            low = min(low, median) if low is not None else median * 0.85
-            high = max(high, median) if high is not None else median * 1.15
-            row.low_dzd, row.median_dzd, row.high_dzd = round(low), round(median), round(high)
-            confidence = str(data.get("confidence") or "low").lower()
-            row.confidence = confidence if confidence in ("high", "medium", "low") else "low"
-            basis = data.get("basis")
-            note = data.get("note") or ""
-            row.note = (f"[{basis}] {note}" if basis else note)[:500]
+            row.low_dzd, row.median_dzd, row.high_dzd = round(found["low"]), round(found["median"]), round(found["high"])
+            row.confidence = found["confidence"]
+            counted = f"{found['samples']} price(s) kept" + (f", {found['dropped']} dropped (other variant or outlier)" if found["dropped"] else "")
+            basis = f"[{found['basis']}] " if found["basis"] else ""
+            row.note = f"{basis}{counted}. {data.get('note') or ''}".strip()[:500]
             row.sources = result.get("sources", [])
             row.ok = True
     db.commit()
@@ -275,10 +345,27 @@ def lookup(db: Session, settings: Settings, listing: Listing, force: bool = Fals
     """
     if not available(settings):
         return None
-    key, query = describe(listing)
+    key, query, kind = pricebook.canonical(listing)
     if not key:
         return None
+    if key.startswith("bundle|"):
+        return _bundle(db, settings, key, query, force, allow_call)
+    # Coarse keys are shared by many ads, so only title-keyed (vague) lookups get this ad's own text.
+    context = ad_context(listing) if key.startswith("title|") else ""
+    return lookup_key(db, settings, key, query, kind, context, force, allow_call)
 
+
+def lookup_key(
+    db: Session,
+    settings: Settings,
+    key: str,
+    query: str,
+    kind: str,
+    context: str = "",
+    force: bool = False,
+    allow_call: bool = True,
+) -> Optional[DzPrice]:
+    """Price-book row for one product key, calling the model only when allowed and needed."""
     row = _book_row(db, key)
     if row is not None and row.manual and row.ok:
         return row  # the user's own price always wins
@@ -292,15 +379,13 @@ def lookup(db: Session, settings: Settings, listing: Listing, force: bool = Fals
     if not allow_call:
         return row if row is not None and row.ok else None  # book only: an older price beats no price
 
-    # Coarse keys are shared by many ads, so only title-keyed (vague) lookups get this ad's own text.
-    context = ad_context(listing) if key.startswith("title|") else ""
     cap = int(getattr(settings, "dz_lookups_per_day", None) or DEFAULT_DAILY_LOOKUPS)
     if not force and lookups_today(db) >= cap:  # the Search price button (force) is your own decision
         _temporary[key] = f"Daily limit of {cap} price lookups reached; it continues tomorrow (Settings)."
         return row if row is not None and row.ok else None
 
     global _no_credit_at
-    result = _call_gemini(settings, query, context)
+    result = _call_gemini(settings, query, context, search_terms(key, query))
     if not result.get("ok") and _is_temporary(result.get("error", "")):
         # No credit, rate limit or network: say nothing about the product and never wipe a price we already have.
         _temporary[key] = _explain_temporary(result["error"])
@@ -310,9 +395,45 @@ def lookup(db: Session, settings: Settings, listing: Listing, force: bool = Fals
     _no_credit_at = None
     _temporary.pop(key, None)
     row = _store(db, key, query, result)
-    row.kind = pricebook.canonical(listing)[2]
+    row.kind = kind
     db.commit()
     return row if row.ok else None
+
+
+def _bundle(db: Session, settings: Settings, key: str, query: str, force: bool, allow_call: bool) -> Optional[DzPrice]:
+    """Several cards in one ad: your own price for the bundle, else the sum of each card's price (low confidence)."""
+    own = db.query(DzPrice).filter(DzPrice.cache_key == key).first()
+    if own is not None and own.manual and own.ok:
+        return own
+    rows = []
+    for name in key.removeprefix("bundle|").split("+"):
+        part = lookup_key(db, settings, pricebook.gpu_key(name), f"used graphics card {name.upper()} (desktop GPU, bare card)",
+                          "gpu", force=force, allow_call=allow_call)
+        if part is None or not part.median_dzd:
+            return None
+        rows.append(part)
+    total = DzPrice(cache_key=key, query=query, kind="gpu", ok=True, manual=False, confidence="low", sources=[])
+    total.low_dzd = sum(r.low_dzd or r.median_dzd for r in rows)
+    total.median_dzd = sum(r.median_dzd for r in rows)
+    total.high_dzd = sum(r.high_dzd or r.median_dzd for r in rows)
+    total.note = "Sum of " + " + ".join(f"{r.cache_key.split('|')[1].upper()} {r.median_dzd:,.0f} DA" for r in rows)
+    return total
+
+
+def set_manual_key(db: Session, key: str, query: str, kind: str, median_dzd: float) -> DzPrice:
+    """Your own price for a product key (e.g. from /price in Telegram). The AI never overwrites it."""
+    row = db.query(DzPrice).filter(DzPrice.cache_key == key).first()
+    if row is None:
+        row = DzPrice(cache_key=key)
+        db.add(row)
+    row.query, row.kind = query, kind
+    row.median_dzd = round(float(median_dzd))
+    row.low_dzd, row.high_dzd = round(row.median_dzd * 0.9), round(row.median_dzd * 1.1)
+    row.confidence, row.ok, row.manual, row.sources = "high", True, True, []
+    row.note = "Entered manually"
+    row.fetched_at = _utcnow()
+    db.commit()
+    return row
 
 
 def set_manual(db: Session, listing: Listing, median_dzd: float, low_dzd: Optional[float] = None, high_dzd: Optional[float] = None) -> DzPrice:

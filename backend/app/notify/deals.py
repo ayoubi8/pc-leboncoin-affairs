@@ -74,17 +74,35 @@ def _ship_line(listing: Listing) -> str:
     return {"yes": "📦 ships (Leboncoin delivery)", "no": "🚫 pickup only"}.get(listing.ship_ok or "", "📦 shipping not stated")
 
 
+def alert_buttons(listing: Listing) -> list[tuple[str, str]]:
+    """Buttons under an alert; once you act on it they show what you did, with an Undo."""
+    links = [("Open ad", listing.url or ""), ("Open in app", f"{APP_URL}/listings/{listing.id}")]
+    done = {"contacted": "📨 Contacted", "bought": "✅ Bought", "skipped": "⏭ Skipped"}.get(listing.pipeline_status or "")
+    if done:
+        return links + [(f"{done} · Undo", f"cb:u:{listing.id}")]
+    return links + [
+        ("📨 Contacted", f"cb:p:c:{listing.id}"),
+        ("✅ Bought", f"cb:p:b:{listing.id}"),
+        ("⏭ Skip", f"cb:p:s:{listing.id}"),
+    ]
+
+
 def format_message(
     listing: Listing,
     result: dict[str, Any],
     verified: Optional[str] = None,
     previous_price: Optional[float] = None,
+    search: Optional[Search] = None,
 ) -> str:
     n = result["numbers"]
     label = result["verdict"]
     info = freshness.compute(listing)
     online = {"active": "✅ still online (checked)", "unknown": "⚠️ availability not verified"}.get(verified or "", "")
     title = "PRICE DROP" if previous_price else f"{label.upper()} DEAL"
+    if search is not None:
+        from .browser import search_label
+
+        title += f" · {search_label(search)}"
     lines = [
         f"{'📉' if previous_price else EMOJI.get(label, '')} <b>{_esc(title)}</b> · {_esc(listing.subject)[:140]}",
         _spec_line(listing),
@@ -227,15 +245,9 @@ def notify_run(
         previous = listing.price_alerted_eur if realert else None
         first = telegram.send_message(
             settings,
-            format_message(listing, result, state, previous),
+            format_message(listing, result, state, previous, search),
             photo_url=photo,
-            buttons=[
-                ("Open ad", listing.url or ""),
-                ("Open in app", f"{APP_URL}/listings/{listing.id}"),
-                ("📨 Contacted", f"cb:p:c:{listing.id}"),
-                ("✅ Bought", f"cb:p:b:{listing.id}"),
-                ("⏭ Skip", f"cb:p:s:{listing.id}"),
-            ],
+            buttons=alert_buttons(listing),
         )
         if not first["ok"]:
             print(f"[notify] telegram send failed: {first['error']}")
@@ -248,6 +260,7 @@ def notify_run(
             reply_to=telegram.message_id(first),
         )
         listing.notified_at = _now()
+        listing.tg_seen_at = listing.tg_seen_at or listing.notified_at  # already on your phone: not "new" in /deals
         listing.price_alerted_eur = listing.price_eur
         sent += 1
     stats["sent"] = sent
@@ -255,10 +268,12 @@ def notify_run(
 
     extra = len(scored) - sent - stats["gone"]
     if extra > 0 and sent:
+        from .browser import search_label
+
         telegram.send_message(
             settings,
-            f"➕ {extra} more good deal(s) from “{_esc(search.name)}”.",
-            buttons=[("See all", f"{APP_URL}/deals")],
+            f"➕ {extra} more good deal(s) in {_esc(search_label(search))}.",
+            buttons=[("Go through them", f"cb:o:{search.id}:g")],
         )
     return stats
 
@@ -268,31 +283,43 @@ def notify_run(
 CLOSED_STATUSES = ("bought", "shipped", "sold", "skipped")
 
 
-def top_fresh(
-    db: Session, settings: Settings, search: Optional[Search] = None, limit: int = 5, order: str = "newest"
-) -> list[Listing]:
-    """Actionable fresh ads, losing ones included. ``order``: "newest" first, or "profit" (priced ads first)."""
+def fresh_pairs(
+    db: Session, settings: Settings, search: Optional[Search] = None
+) -> tuple[dict[int, tuple[Listing, Search]], int]:
+    """Actionable fresh ads (with the search that found them), and how many pickup-only ones were left out."""
     query = (
         select(Listing, Search)
         .join(SearchListing, SearchListing.listing_id == Listing.id)
         .join(Search, Search.id == SearchListing.search_id)
+        .order_by(Search.id)
     )
     if search is not None:
         query = query.where(Search.id == search.id)
     now = _now()
     max_age = float(settings.max_ad_age_hours or freshness.FRESH_HOURS)
-    chosen: dict[int, Listing] = {}
+    chosen: dict[int, tuple[Listing, Search]] = {}
+    pickup: set[int] = set()
     for listing, owner in db.execute(query).all():
         if listing.id in chosen or listing.gone_at is not None or listing.is_active is False or listing.screen_skip:
             continue
         if (listing.pipeline_status or "") in CLOSED_STATUSES or not listing.price_eur:
             continue
-        if listing.ship_ok == "no" and not settings.alert_pickup_only:
-            continue
         age = freshness.age_hours(listing, now)
         if (age is not None and age > max_age) or match.hard_fail(owner, listing):
             continue
-        chosen[listing.id] = listing
+        if listing.ship_ok == "no" and not settings.alert_pickup_only:
+            pickup.add(listing.id)
+            continue
+        chosen[listing.id] = (listing, owner)
+    return chosen, len(pickup - set(chosen))
+
+
+def top_fresh(
+    db: Session, settings: Settings, search: Optional[Search] = None, limit: int = 5, order: str = "newest"
+) -> list[Listing]:
+    """Actionable fresh ads, losing ones included. ``order``: "newest" first, or "profit" (priced ads first)."""
+    now = _now()
+    chosen = {lid: pair[0] for lid, pair in fresh_pairs(db, settings, search)[0].items()}
 
     def rank(listing: Listing) -> tuple[int, float]:
         age = freshness.age_hours(listing, now)
@@ -302,56 +329,6 @@ def top_fresh(
         return (1, age or 0.0) if numbers is None else (0, -numbers["profit_ask_eur"])
 
     return sorted(chosen.values(), key=rank)[:limit]
-
-
-def deal_card(settings: Settings, listing: Listing, position: int) -> str:
-    numbers = verdict.compute_numbers(settings, listing)
-    label = listing.ai_verdict_label if listing.ai_verdict_label in ORDER else ""
-    if not label and numbers:
-        label = verdict.label_for(numbers["margin_pct"], numbers["dz_confidence"])
-    age = freshness.age_label(freshness.age_hours(listing))
-    lines = [
-        f"{EMOJI.get(label, '⏳')} <b>{position}. {_esc(label.upper() or 'NOT PRICED YET')}</b> · {_esc(listing.subject)[:110]}",
-        _spec_line(listing),
-        f"🕒 {_esc(age)} · {_ship_line(listing)}",
-        f"💶 <b>Price:</b> {_eur(listing.price_eur)}",
-    ]
-    if numbers:
-        word = "Profit" if numbers["profit_ask_eur"] >= 0 else "Loss"
-        lines += [
-            f"🚚 <b>Landed:</b> {_eur(numbers['total_cost_ask_eur'])}",
-            f"🇩🇿 <b>Algeria:</b> {_dzd(numbers['dz_median_dzd'])} ({_esc(numbers['dz_confidence'] or '?')} confidence)",
-            f"📈 <b>{word} at asking price:</b> {_signed(numbers['profit_ask_eur'])} ({numbers['margin_ask_pct']}%)",
-            f"🎯 <b>Max to pay:</b> {_eur(numbers['max_buy_for_good_eur'])}",
-        ]
-    else:
-        lines.append("No Algerian price for this product yet.")
-    stored = listing.ai_verdict or {}
-    if stored.get("source") == "ai" and stored.get("headline"):
-        lines.append(f"💬 {_esc(stored['headline'])}")
-    return "\n".join(lines)
-
-
-def send_top_deals(db: Session, settings: Settings, limit: int = 5) -> int:
-    """Answer /deals: one message per ad, each with its link. Returns how many ads were sent."""
-    listings = top_fresh(db, settings, limit=limit)
-    if not listings:
-        telegram.send_message(settings, "No fresh ad to show: everything is older than the max age, gone, pickup only, or off-search. Run a scan first.")
-        return 0
-    max_age = float(settings.max_ad_age_hours or freshness.FRESH_HOURS)
-    telegram.send_message(settings, f"📋 <b>{len(listings)} newest fresh ads</b> (under {max_age / 24:.0f} days). Losing ads are shown too, marked as such.")
-    for position, listing in enumerate(listings, start=1):
-        telegram.send_message(
-            settings,
-            deal_card(settings, listing, position),
-            buttons=[
-                ("Open ad", listing.url or ""),
-                ("Open in app", f"{APP_URL}/listings/{listing.id}"),
-                ("📨 Contacted", f"cb:p:c:{listing.id}"),
-                ("⏭ Skip", f"cb:p:s:{listing.id}"),
-            ],
-        )
-    return len(listings)
 
 
 def send_scan_summary(
@@ -364,7 +341,9 @@ def send_scan_summary(
 ) -> bool:
     """A short note after a scan you started yourself."""
     sent = int((stats or {}).get("sent") or 0)
-    lines = [f"📊 <b>{_esc(search.name)}</b>: {checked} ads checked, {new} new, {sent} good deal{'' if sent == 1 else 's'} sent."]
+    from .browser import search_label
+
+    lines = [f"📊 <b>{_esc(search_label(search))}</b>: {checked} ads checked, {new} new, {sent} good deal{'' if sent == 1 else 's'} sent."]
     best = top_fresh(db, settings, search, limit=1, order="profit")
     numbers = verdict.compute_numbers(settings, best[0]) if best else None
     if numbers:
@@ -373,8 +352,7 @@ def send_scan_summary(
         lines.append("Fresh ads are waiting for an Algerian price.")
     else:
         lines.append("No fresh ad you could buy right now.")
-    lines.append("Send /deals to see the 5 newest.")
-    return bool(telegram.send_message(settings, "\n".join(lines)).get("ok"))
+    return bool(telegram.send_message(settings, "\n".join(lines), buttons=[("Go through its deals", f"cb:o:{search.id}:g")]).get("ok"))
 
 
 def send_round_digest(db: Session, settings: Settings, searched: int, runs: list[Any]) -> bool:
@@ -390,9 +368,28 @@ def send_round_digest(db: Session, settings: Settings, searched: int, runs: list
     if failed:
         line += f" · {failed} failed"
     lines = [line]
-    best = top_fresh(db, settings, limit=1, order="profit")
-    numbers = verdict.compute_numbers(settings, best[0]) if best else None
-    if numbers:
-        lines.append(f"Best fresh ad: {_esc(best[0].subject)[:60]} · {_eur(best[0].price_eur)} · {_signed(numbers['profit_ask_eur'])} at asking price")
-    lines.append("Send /deals to see the 5 newest.")
-    return bool(telegram.send_message(settings, "\n".join(lines)).get("ok"))
+    from .browser import queue, search_label
+
+    buttons: list[tuple[str, str]] = []
+    by_search: dict[int, int] = {}
+    for run in runs:
+        if getattr(run, "search_id", None) is not None:
+            by_search[run.search_id] = by_search.get(run.search_id, 0) + int(run.new_count or 0)
+    for search_id, new_ads in by_search.items():
+        search = db.get(Search, search_id)
+        if search is None:
+            continue
+        _, counts = queue(db, settings, search_id, "g")
+        if not new_ads and not counts["new_good"]:
+            continue
+        fire = "🔥 " if counts["new_good"] else ""
+        lines.append(f"{fire}<b>{_esc(search_label(search))}</b>: {new_ads} new · {counts['good']} good ({counts['new_good']} unseen)")
+        if counts["good"]:
+            buttons += [(f"{fire}{search_label(search)} · {counts['good']} good", f"cb:o:{search_id}:g"), ("", telegram.ROW)]
+    if len(lines) == 1:
+        best = top_fresh(db, settings, limit=1, order="profit")
+        numbers = verdict.compute_numbers(settings, best[0]) if best else None
+        if numbers:
+            lines.append(f"Best fresh ad: {_esc(best[0].subject)[:60]} · {_eur(best[0].price_eur)} · {_signed(numbers['profit_ask_eur'])} at asking price")
+    buttons.append(("📋 All searches", "cb:m"))
+    return bool(telegram.send_message(settings, "\n".join(lines), buttons=buttons).get("ok"))

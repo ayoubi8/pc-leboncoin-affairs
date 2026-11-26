@@ -268,27 +268,6 @@ def _linked(db, search, *listings):
     db.commit()
 
 
-def test_deals_command_lists_fresh_ads_newest_first_with_links(monkeypatch):
-    from app.notify import poller
-
-    db = _db()
-    settings, search = _setup(db)
-    loss = _listing(db, "Losing laptop", 40_000, hours_ago=24 * 13)  # 13 days old is still fresh
-    win = _listing(db, "Winning laptop", 150_000, hours_ago=2)
-    old = _listing(db, "Old laptop", 150_000, hours_ago=24 * 15)
-    pickup = _listing(db, "Pickup laptop", 150_000)
-    pickup.ship_ok = "no"
-    _linked(db, search, loss, win, old, pickup)
-    sink = Sink(monkeypatch)
-
-    poller._handle_message(db, settings, {"chat": {"id": 1}, "text": "/deals"})
-    cards = sink.sent[1:]
-    assert len(cards) == 2 and "Winning laptop" in cards[0]["text"] and "Losing laptop" in cards[1]["text"]
-    assert "Loss at asking price" in cards[1]["text"]
-    assert "Open ad" in [b[0] for b in cards[0]["buttons"]]
-    assert win.notified_at is None  # showing a deal does not use up its alert
-
-
 def test_manual_scan_summary_and_one_digest_per_auto_round(monkeypatch):
     from types import SimpleNamespace as Run
 

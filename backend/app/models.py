@@ -207,6 +207,7 @@ class Listing(Base):
     ai_verdict_label = Column(String(20), nullable=True)
     ai_profit_eur = Column(Float, nullable=True)
     notified_at = Column(DateTime, nullable=True)  # Telegram alert sent
+    tg_seen_at = Column(DateTime, nullable=True)  # its card was shown in Telegram (alert or browser)
     price_alerted_eur = Column(Float, nullable=True)  # price when the last alert went out (price-drop re-alert)
 
     # freshness / availability (see intelligence/freshness.py)

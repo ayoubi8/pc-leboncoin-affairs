@@ -77,7 +77,7 @@ def test_buttons_and_commands_update_the_pipeline(monkeypatch):
         _update(13, message={"chat": chat, "text": f"/sold {ad.id} 120000"}),
         _update(14, message={"chat": {"id": 999}, "text": f"/paid {ad.id} 1"}),  # stranger
     ]
-    monkeypatch.setattr(telegram, "get_updates", lambda token, offset=0: {"ok": True, "result": updates})
+    monkeypatch.setattr(telegram, "get_updates", lambda token, offset=0, wait=0: {"ok": True, "result": updates})
 
     assert poller.process_updates(db, settings) == 5
     assert settings.telegram_update_offset == 15
@@ -114,7 +114,7 @@ def test_manual_price_overrides_gemini_for_every_similar_ad(monkeypatch):
     db.add_all([a, b])
     db.commit()
     gemini = []
-    monkeypatch.setattr(dz_market, "_call_gemini", lambda *x: gemini.append(1) or {"ok": True, "data": {"median_dzd": 90000}, "sources": []})
+    monkeypatch.setattr(dz_market, "_call_gemini", lambda *x, **k: gemini.append(1) or {"ok": True, "data": {"median_dzd": 90000}, "sources": []})
 
     app = FastAPI()
     app.include_router(ops.router)

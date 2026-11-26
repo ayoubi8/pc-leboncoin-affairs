@@ -89,7 +89,9 @@ def fill_from_book(db: Session, settings: Settings, listings: list[Listing], sea
             continue
         if search is not None and match.hard_fail(search, listing):
             continue
-        if not listing.dz_price_median_dzd:
+        # The ad follows its product's current price, so a re-priced (or hand-set) product reaches every ad of it.
+        row = dz_market.lookup(db, settings, listing, allow_call=False) if dz_market.available(settings) else None
+        if not listing.dz_price_median_dzd or (row is not None and row.median_dzd != listing.dz_price_median_dzd):
             analyze.apply_dz_comparison(db, settings, listing, allow_call=False)
         if verdict.apply_math(settings, listing):
             done += 1
@@ -113,16 +115,55 @@ def pick(db: Session, search: Search, settings: Settings, limit: int = TOP_N, fu
     return _freshest_needing_ai(rows, search, settings, limit, full)
 
 
-def run_for(db: Session, settings: Settings, search: Search, listings: list[Listing], limit: int = TOP_N) -> int:
-    """Before Telegram alerts: one price request per new product, then maths for every ad. Returns requests made."""
+PRICES_PER_RUN = 10  # new products priced per scan (the daily cap still applies)
+SPECS_PER_RUN = 8  # ads read by the spec model per scan (free models allow ~20 requests a minute)
+
+
+def _unknown_product(listing: Listing) -> bool:
+    key = dz_market.describe(listing)[0]
+    return not key or not pricebook.is_specific(key)
+
+
+def identify(db: Session, settings: Settings, search: Search, rows: list[Listing], limit: int = SPECS_PER_RUN) -> int:
+    """Let the spec model read fresh ads whose product is unclear ("i5 11e génération", CPU only in the
+    description), so they can get a price. Each ad is read once. Returns ads read."""
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
+    max_age = float(settings.max_ad_age_hours or freshness.FRESH_HOURS)
+    todo = []
+    for listing in rows:
+        if listing.screen_skip or listing.gone_at is not None or listing.is_active is False or listing.dz_price_median_dzd:
+            continue
+        if (listing.spec_notes or {}).get("model") or (listing.id, "specs") in _failed or not _unknown_product(listing):
+            continue
+        age = freshness.age_hours(listing, now)
+        if (age is not None and age > max_age) or match.hard_fail(search, listing):
+            continue
+        todo.append((age if age is not None else 1e9, listing))
+    todo.sort(key=lambda pair: pair[0])
+    for _, listing in todo[:limit]:
+        item: dict[str, Any] = {"steps": {name: "pending" for name in STEPS}, "notes": {}, "verdict": None}
+        _specs_step(db, settings, listing, search, item)
+    return min(len(todo), limit)
+
+
+def run_for(db: Session, settings: Settings, search: Search, listings: list[Listing], limit: int = PRICES_PER_RUN) -> int:
+    """Before Telegram alerts: identify unclear ads, one price request per new product, then maths for every ad
+    of the search (fresh ads left unpriced by earlier scans included). Returns price requests made."""
     if not dz_market.api_key(settings):
         return 0
-    fill_from_book(db, settings, listings, search)
-    chosen = _freshest_needing_ai(listings, search, settings, limit, full=False)
+    seen = {listing.id for listing in listings}
+    rows = list(listings) + [listing for listing in _search_rows(db, search) if listing.id not in seen]
+    fill_from_book(db, settings, rows, search)
+    try:
+        identify(db, settings, search, rows)
+    except Exception as exc:  # the price step still runs for ads that are already clear
+        db.rollback()
+        print(f"[enrich] spec step failed: {type(exc).__name__}: {exc}")
+    chosen = _freshest_needing_ai(rows, search, settings, limit, full=False)
     for listing in chosen:
         item: dict[str, Any] = {"steps": {name: "pending" for name in STEPS}, "notes": {}, "verdict": None}
         enrich_listing(db, settings, listing, search, item, full=False)
-    fill_from_book(db, settings, listings, search)
+    fill_from_book(db, settings, rows, search)
     return len(chosen)
 
 
@@ -156,6 +197,29 @@ def _merge_specs(listing: Listing, found: dict[str, Any]) -> list[str]:
     return filled
 
 
+def _specs_step(db: Session, settings: Settings, listing: Listing, search: Optional[Search], item: dict[str, Any]) -> None:
+    """The spec model fills missing specs and writes a description; the ad's product key is then rebuilt."""
+    item["steps"]["specs"] = "running"
+    text = " ".join(part for part in (listing.subject, listing.description) if part)
+    try:
+        res = llm.extract_specs_detailed(db, settings, text, listing.specs or {})
+    except Exception as exc:  # pragma: no cover - defensive
+        res = {"ok": False, "error": f"{type(exc).__name__}: {exc}", "model": settings.spec_model}
+    if res["ok"]:
+        filled = _merge_specs(listing, res["specs"])
+        listing.ai_description = res["description"] or listing.ai_description or ""
+        listing.spec_notes = {"model": res["model"], "at": _iso(), "evidence": res["evidence"], "filled": filled}
+        db.commit()
+        analyze.analyze_listing(db, settings, listing, search, force=False, use_ai=False)  # refresh keys, match, screen
+        db.commit()
+        item["steps"]["specs"] = "done"
+        item["notes"]["specs"] = f"{res['model']} filled: {', '.join(filled) or 'nothing new'}"
+    else:
+        _failed.add((listing.id, "specs"))
+        item["steps"]["specs"] = "error"
+        item["notes"]["specs"] = res["error"]
+
+
 def enrich_listing(
     db: Session, settings: Settings, listing: Listing, search: Optional[Search], item: dict[str, Any], full: bool = True
 ) -> None:
@@ -169,23 +233,7 @@ def enrich_listing(
 
     # 1. specs + description, by the free model
     if "specs" in todo:
-        step("specs", "running")
-        text = " ".join(part for part in (listing.subject, listing.description) if part)
-        try:
-            res = llm.extract_specs_detailed(db, settings, text, listing.specs or {})
-        except Exception as exc:  # pragma: no cover - defensive
-            res = {"ok": False, "error": f"{type(exc).__name__}: {exc}", "model": settings.spec_model}
-        if res["ok"]:
-            filled = _merge_specs(listing, res["specs"])
-            listing.ai_description = res["description"] or listing.ai_description or ""
-            listing.spec_notes = {"model": res["model"], "at": _iso(), "evidence": res["evidence"], "filled": filled}
-            db.commit()
-            analyze.analyze_listing(db, settings, listing, search, force=False, use_ai=False)  # refresh keys, match, screen
-            db.commit()
-            step("specs", "done", f"{res['model']} filled: {', '.join(filled) or 'nothing new'}")
-        else:
-            _failed.add((listing.id, "specs"))
-            step("specs", "error", res["error"])
+        _specs_step(db, settings, listing, search, item)
     else:
         step("specs", "skipped", "already done" if full else "not needed for the price")
 
