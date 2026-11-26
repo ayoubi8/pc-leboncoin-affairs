@@ -434,18 +434,29 @@ def test_daily_lookup_cap_stops_spending_but_not_the_price_button(monkeypatch):
     dz_market._temporary.clear()
 
 
-def test_out_of_credit_raises_a_system_alert(monkeypatch):
+import pytest
+
+
+@pytest.mark.parametrize("error", [
+    "OpenRouter HTTP 402: limit",
+    "OpenRouter HTTP 403: Key limit exceeded (total limit). $1.51 of $1.50 used; does not reset.",
+])
+def test_out_of_credit_raises_a_system_alert(monkeypatch, error):
     from app.intelligence import dz_market
+    from app.models import DzPrice
     from app.notify import system
 
     db = _db()
     settings = Settings(id=1, llm_api_key="k")
     db.add(settings)
     db.commit()
-    monkeypatch.setattr(dz_market, "_call_gemini", lambda *a, **k: {"ok": False, "error": "OpenRouter HTTP 402: limit"})
-    dz_market.lookup(db, settings, Listing(list_id="1", subject="RTX 3070", specs={"gpu": "RTX 3070"}))
+    monkeypatch.setattr(dz_market, "_call_gemini", lambda *a, **k: {"ok": False, "error": error})
+    ad = Listing(list_id="1", subject="RTX 3070", specs={"gpu": "RTX 3070"})
+    assert dz_market.lookup(db, settings, ad) is None
     kinds = [p["kind"] for p in system.compute_health(db, settings)["problems"]]
     assert "openrouter_no_credit" in kinds
+    assert db.query(DzPrice).count() == 0  # the product is not marked as "no price found"
+    assert "out of credit" in dz_market.last_error(db, ad)
     dz_market._no_credit_at = None
     dz_market._temporary.clear()
 

@@ -283,12 +283,21 @@ def _store(db: Session, key: str, query: str, result: dict[str, Any]) -> DzPrice
     return row
 
 
+def _no_credit(error: str) -> bool:
+    """OpenRouter says 402 when the account is empty and 403 "Key limit exceeded" when the key's own cap is used up."""
+    return "HTTP 402" in error or ("HTTP 403" in error and "limit" in error.lower())
+
+
 def _is_temporary(error: str) -> bool:
-    return error.startswith("request failed") or any(f"HTTP {code}" in error for code in (402, 408, 429, 500, 502, 503, 504))
+    return (
+        error.startswith("request failed")
+        or _no_credit(error)
+        or any(f"HTTP {code}" in error for code in (408, 429, 500, 502, 503, 504))
+    )
 
 
 def _explain_temporary(error: str) -> str:
-    if "HTTP 402" in error:
+    if _no_credit(error):
         return "OpenRouter key is out of credit: raise its limit at openrouter.ai/keys"
     return error[:200]
 
@@ -389,7 +398,7 @@ def lookup_key(
     if not result.get("ok") and _is_temporary(result.get("error", "")):
         # No credit, rate limit or network: say nothing about the product and never wipe a price we already have.
         _temporary[key] = _explain_temporary(result["error"])
-        if "HTTP 402" in result["error"]:
+        if _no_credit(result["error"]):
             _no_credit_at = _utcnow()
         return row if row is not None and row.ok else None
     _no_credit_at = None
