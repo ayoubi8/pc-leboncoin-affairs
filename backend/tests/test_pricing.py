@@ -42,6 +42,18 @@ def test_median_comes_from_the_listed_prices_without_other_variants_or_outliers(
     assert dz_market.summarize({"median_dzd": 80000, "confidence": "high"}, "gpu|rtx 3070|")["median"] == 80000  # old format
 
 
+def test_a_recheck_that_finds_nothing_keeps_the_old_price(monkeypatch):
+    db = _db()
+    settings = Settings(id=1, llm_api_key="k")
+    db.add_all([settings, DzPrice(cache_key="gpu|rtx 4050|", ok=True, median_dzd=60000, low_dzd=55000, high_dzd=65000, confidence="medium", kind="gpu")])
+    db.commit()
+    monkeypatch.setattr(dz_market, "_call_gemini", lambda *a, **k: {"ok": True, "data": {"prices": [], "note": "nothing"}, "sources": []})
+    row = dz_market.lookup_key(db, settings, "gpu|rtx 4050|", "RTX 4050", "gpu", force=True)
+    assert row is not None and row.ok and row.median_dzd == 60000 and "kept the price" in row.note
+    fresh = dz_market.lookup_key(db, settings, "gpu|rtx 9999|", "RTX 9999", "gpu", force=True)
+    assert fresh is None  # a product never priced stays unpriced
+
+
 def test_one_price_per_card_model_but_vram_variants_stay_apart():
     assert pricebook.canonical(_card("RTX 3070"))[0] == pricebook.canonical(_card("RTX 3070 8 Go", vram=8))[0] == "gpu|rtx 3070|"
     a = Listing(subject="RTX 3060 12 Go", price_eur=200, specs={"gpu": "RTX 3060", "ram_gb": 12})

@@ -256,6 +256,15 @@ def _store(db: Session, key: str, query: str, result: dict[str, Any]) -> DzPrice
         row = DzPrice(cache_key=key)
         db.add(row)
 
+    found = summarize(result["data"], key) if result.get("ok") else None
+    if found is None and row.ok and row.median_dzd:
+        # a re-check that finds nothing keeps the price we had: an empty web search says nothing about the product
+        why = result.get("error") or (result.get("data") or {}).get("note") or "no price found"
+        row.note = f"Last re-check found nothing ({str(why)[:120]}); kept the price from {row.fetched_at:%Y-%m-%d}."[:500]
+        row.fetched_at = _utcnow()
+        db.commit()
+        return row
+
     row.query = query
     row.fetched_at = _utcnow()
     row.low_dzd = row.median_dzd = row.high_dzd = None
@@ -267,7 +276,6 @@ def _store(db: Session, key: str, query: str, result: dict[str, Any]) -> DzPrice
         row.confidence = "low"
     else:
         data = result["data"]
-        found = summarize(data, key)
         if found is None:
             row.note = (data.get("note") or "No Algerian prices found.")[:500]
             row.confidence = "low"
